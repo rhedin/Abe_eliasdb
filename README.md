@@ -1,16 +1,11 @@
 EliasDB
 =======
-EliasDB is a graph-based database which aims to provide a lightweight solution for projects which want to store their data as a graph. EliasDB does not require any third-party libraries.
+EliasDB is a graph-based database which aims to provide a lightweight solution for projects which want to store their data as a graph.
 
 <p>
-<a href="https://devt.de/build_status.html"><img src="https://devt.de/nightly/build.eliasdb.svg" alt="Build status"></a>
-<a href="https://devt.de/nightly/test.eliasdb.html"><img src="https://devt.de/nightly/test.eliasdb.svg" alt="Code coverage"></a>
+<a href="https://void.devt.de/pub/eliasdb/coverage.txt"><img src="https://void.devt.de/pub/eliasdb/test_result.svg" alt="Code coverage"></a>
 <a href="https://goreportcard.com/report/github.com/krotik/eliasdb">
 <img src="https://goreportcard.com/badge/github.com/krotik/eliasdb?style=flat-square" alt="Go Report Card"></a>
-<a href="http://devt.de/docs/pkg/devt.de/eliasdb/">
-<img src="https://devt.de/nightly/godoc_badge.svg" alt="Go Doc"></a>
-<a href="https://gitter.im/eliasdb/Lobby">
-<img src="https://badges.gitter.im/gitterHQ/gitter.svg" alt="Gitter Chat"></a>
 </p>
 
 Features
@@ -21,7 +16,8 @@ Features
 - Stored graphs support cascading deletions - delete one node and all its "children".
 - All stored data is indexed and can be quickly searched via a full text phrase search.
 - For more complex queries EliasDB has an own query language called EQL with an sql-like syntax.
-- Written in Go from scratch. No third party libraries were used apart from Go's standard library.
+- EliasDB has a GraphQL interface which can be used to store and retrieve data.
+- Written in Go from scratch. Only uses gorilla/websocket to support websockets for GraphQL subscriptions.
 - The database can be embedded or used as a standalone application.
 - When used as a standalone application it comes with an internal HTTPS webserver which
   provides a REST API and a basic file server.
@@ -137,7 +133,7 @@ To build EliasDB from source you need to have Go installed. There a are two opti
 
 Create a directory, change into it and run:
 ```
-git clone https://github.com/krotik/eliasdb/ .
+git clone https://devt.de/krotik/eliasdb/ .
 ```
 
 Assuming your GOPATH is set to the new directory you should be able to build the binary with:
@@ -159,9 +155,9 @@ go build devt.de/eliasdb/cli
 
 Further Reading
 ---------------
-- A design document which describes the different components of the graph database. [Link](/doc/elias_db_design.md)
-- A reference for the EliasDB query language EQL. [Link](/doc/eql.md)
-- A quick overview of what you can do when you embed EliasDB in your own Go project. [Link](/doc/embedding.md)
+- A design document which describes the different components of the graph database. [Link](/elias_db_design.md)
+- A reference for the EliasDB query language EQL. [Link](eql.md)
+- A quick overview of what you can do when you embed EliasDB in your own Go project. [Link](/embedding.md)
 
 License
 -------

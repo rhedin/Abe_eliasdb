@@ -1,0 +1,8 @@
+.cache
+.cover
+coverage.txt
+coverage.out
+coverage.html
+test
+dist
+build
