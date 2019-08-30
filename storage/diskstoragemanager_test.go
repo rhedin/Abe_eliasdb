@@ -261,7 +261,7 @@ func TestDiskStorageManager2(t *testing.T) {
 		checkLocation(t, loc2, 1, uint16(18+i*8))
 	}
 
-	record, err := dsm.logicalSlotsSf.Get(2)
+	record, _ := dsm.logicalSlotsSf.Get(2)
 
 	_, err = dsm.Insert("This is a test")
 	if err != file.ErrAlreadyInUse {
@@ -283,7 +283,7 @@ func TestDiskStorageManager2(t *testing.T) {
 		return
 	}
 
-	record, err = dsm.logicalSlotsSf.Get(1)
+	record, _ = dsm.logicalSlotsSf.Get(1)
 
 	err = dsm.Update(loc, "test")
 	if err != file.ErrAlreadyInUse {
@@ -324,7 +324,7 @@ func TestDiskStorageManager2(t *testing.T) {
 		return
 	}
 
-	record, err = dsm.physicalSlotsSf.Get(1)
+	record, _ = dsm.physicalSlotsSf.Get(1)
 
 	var testres2 testutil.GobTestObject
 	err = dsm.Fetch(loc, &testres2)

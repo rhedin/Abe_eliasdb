@@ -505,7 +505,7 @@ func (gt *baseTrans) commitEdges(nodePartsAndKinds map[string]string, edgePartsA
 		} else if end1ht == nil {
 			return &util.GraphError{
 				Type:   util.ErrInvalidData,
-				Detail: fmt.Sprintf("Can't store edge to non-existend node kind: %v", edge.End1Kind()),
+				Detail: fmt.Sprintf("Can't store edge to non-existing node kind: %v", edge.End1Kind()),
 			}
 		} else if end1, err := end1nodeht.Get([]byte(PrefixNSAttrs + edge.End1Key())); err != nil || end1 == nil {
 			return &util.GraphError{
@@ -521,7 +521,7 @@ func (gt *baseTrans) commitEdges(nodePartsAndKinds map[string]string, edgePartsA
 		} else if end2ht == nil {
 			return &util.GraphError{
 				Type:   util.ErrInvalidData,
-				Detail: "Can't store edge to non-existend node kind: " + edge.End2Kind()}
+				Detail: "Can't store edge to non-existing node kind: " + edge.End2Kind()}
 		} else if end2, err := end2nodeht.Get([]byte(PrefixNSAttrs + edge.End2Key())); err != nil || end2 == nil {
 			return &util.GraphError{
 				Type:   util.ErrInvalidData,

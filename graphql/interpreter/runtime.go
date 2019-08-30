@@ -408,7 +408,7 @@ func (rt *operationDefinitionRuntime) Eval() (map[string]interface{}, error) {
 		resErr = append(resErr, map[string]interface{}{
 			"message": rterr.Detail,
 			"locations": []map[string]interface{}{
-				map[string]interface{}{
+				{
 					"line":   rterr.Line,
 					"column": rterr.Pos,
 				},

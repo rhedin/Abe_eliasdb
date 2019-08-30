@@ -513,9 +513,9 @@ func TestParserErrorCases(t *testing.T) {
 	// Test "Get" parsing with invalid lexer output
 
 	res, err := testParserRun([]LexToken{
-		LexToken{TokenGET, 1, "", 1, 1},
-		LexToken{TokenGET, 1, "", 1, 1},
-		LexToken{TokenEOF, 1, "", 1, 1},
+		{TokenGET, 1, "", 1, 1},
+		{TokenGET, 1, "", 1, 1},
+		{TokenEOF, 1, "", 1, 1},
 	})
 	if err.Error() != "Parse error in special test: Unexpected term (Line:1 Pos:1)" {
 		t.Error("Unexpected result", res, err)
@@ -523,9 +523,9 @@ func TestParserErrorCases(t *testing.T) {
 	}
 
 	res, err = testParserRun([]LexToken{
-		LexToken{TokenLOOKUP, 1, "", 1, 1},
-		LexToken{TokenGET, 1, "", 1, 1},
-		LexToken{TokenEOF, 1, "", 1, 1},
+		{TokenLOOKUP, 1, "", 1, 1},
+		{TokenGET, 1, "", 1, 1},
+		{TokenEOF, 1, "", 1, 1},
 	})
 	if err.Error() != "Parse error in special test: Unexpected term (Line:1 Pos:1)" {
 		t.Error("Unexpected result", res, err)
@@ -631,8 +631,8 @@ func TestParserErrorCases(t *testing.T) {
 	var TokenUnknown LexTokenID = -5
 
 	res, err = testParserRun([]LexToken{
-		LexToken{TokenUnknown, 1, "", 1, 1},
-		LexToken{TokenEOF, 1, "", 1, 1},
+		{TokenUnknown, 1, "", 1, 1},
+		{TokenEOF, 1, "", 1, 1},
 	})
 	if err.Error() != "Parse error in special test: Unknown term (id:-5 (\"\")) (Line:1 Pos:1)" {
 		t.Error("Unexpected result", res, err)
@@ -640,10 +640,10 @@ func TestParserErrorCases(t *testing.T) {
 	}
 
 	res, err = testParserRun([]LexToken{
-		LexToken{TokenVALUE, 1, "", 1, 1},
-		LexToken{TokenMINUS, 1, "", 1, 1},
-		LexToken{TokenUnknown, 1, "", 1, 1},
-		LexToken{TokenEOF, 1, "", 1, 1},
+		{TokenVALUE, 1, "", 1, 1},
+		{TokenMINUS, 1, "", 1, 1},
+		{TokenUnknown, 1, "", 1, 1},
+		{TokenEOF, 1, "", 1, 1},
 	})
 	if err.Error() != "Parse error in special test: Unknown term (id:-5 (\"\")) (Line:1 Pos:1)" {
 		t.Error("Unexpected result", res, err)
@@ -897,7 +897,7 @@ get
 	if _, err := ASTFromPlain(map[string]interface{}{
 		"name":  "bla",
 		"value": "",
-		"children": []map[string]interface{}{map[string]interface{}{
+		"children": []map[string]interface{}{{
 			"fame": "bla",
 		}},
 	}); err.Error() != "Found plain ast node without a name: map[fame:bla]" {

@@ -313,10 +313,10 @@ func TestCachedDiskStorageManagerCacheManagement(t *testing.T) {
 
 	// Insert values
 
-	loc1, err := cdsm.Insert("test1")
-	loc2, err := cdsm.Insert("test2")
-	loc3, err := cdsm.Insert("test3")
-	loc4, err := cdsm.Insert("test4")
+	loc1, _ := cdsm.Insert("test1")
+	loc2, _ := cdsm.Insert("test2")
+	loc3, _ := cdsm.Insert("test3")
+	loc4, _ := cdsm.Insert("test4")
 
 	// Load all entries into the cache
 

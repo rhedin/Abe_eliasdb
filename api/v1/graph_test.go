@@ -68,15 +68,15 @@ func TestNestedStorage(t *testing.T) {
 
 	nf, err := datautil.GetNestedValue(nested.(map[string]interface{}), []string{"nested_float"})
 
-	if nft := fmt.Sprintf("%T %v", nf, nf); nft != "float64 1.234" {
-		t.Error("Unexpected type:", nft)
+	if nft := fmt.Sprintf("%T %v", nf, nf); nft != "float64 1.234" || err != nil {
+		t.Error("Unexpected type:", nft, err)
 		return
 	}
 
 	ns, err := datautil.GetNestedValue(nested.(map[string]interface{}), []string{"more nesting", "atom"})
 
-	if nst := fmt.Sprintf("%T %v", ns, ns); nst != "string value42" {
-		t.Error("Unexpected type:", nst)
+	if nst := fmt.Sprintf("%T %v", ns, ns); nst != "string value42" || err != nil {
+		t.Error("Unexpected type:", nst, err)
 		return
 	}
 
@@ -759,8 +759,8 @@ func TestGraphOperation(t *testing.T) {
 	edge.SetAttr("name", "updateedge")
 
 	jsonString, err = json.Marshal(map[string][]map[string]interface{}{
-		"nodes": []map[string]interface{}{node.Data(), node2.Data()},
-		"edges": []map[string]interface{}{edge.Data()},
+		"nodes": {node.Data(), node2.Data()},
+		"edges": {edge.Data()},
 	})
 
 	if err != nil {
@@ -795,10 +795,10 @@ func TestGraphOperation(t *testing.T) {
 
 	// Delete edge
 
-	jsonString, err = json.Marshal(map[string][]map[string]interface{}{
-		"nodes": []map[string]interface{}{},
-		"edges": []map[string]interface{}{
-			map[string]interface{}{
+	jsonString, _ = json.Marshal(map[string][]map[string]interface{}{
+		"nodes": {},
+		"edges": {
+			{
 				"key":  edge.Key(),
 				"kind": edge.Kind(),
 			},
@@ -827,10 +827,10 @@ func TestGraphOperation(t *testing.T) {
 
 	// Delete node
 
-	jsonString, err = json.Marshal(map[string][]map[string]interface{}{
-		"edges": []map[string]interface{}{},
-		"nodes": []map[string]interface{}{
-			map[string]interface{}{
+	jsonString, _ = json.Marshal(map[string][]map[string]interface{}{
+		"edges": {},
+		"nodes": {
+			{
 				"key":  node.Key(),
 				"kind": node.Kind(),
 			},

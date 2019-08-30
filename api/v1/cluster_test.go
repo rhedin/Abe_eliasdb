@@ -157,7 +157,7 @@ func TestClusterQuery(t *testing.T) {
 	manager.MemberErrors = make(map[string]error)
 	manager.MemberErrors[cluster2[1].Name()] = errors.New("testerror")
 
-	st, _, res = sendTestRequest(queryURL+"eject", "PUT", jsonString)
+	sendTestRequest(queryURL+"eject", "PUT", jsonString)
 
 	st, _, res = sendTestRequest(queryURL+"ping", "PUT", jsonString)
 

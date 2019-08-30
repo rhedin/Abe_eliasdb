@@ -70,7 +70,7 @@ const LoginSRC = `
         }
 
         #login-panel .btn {
-            width: 100%;
+            width: 30%;
         }
 
     </style>
@@ -79,7 +79,7 @@ const LoginSRC = `
     <div id="wrapper">
         <div id="login-panel">
             <h4>Login</h4>
-            <form action="/api/login/" method="post">
+            <form action="/db/login/" method="post">
                 <input class="form-input input-lg" name="user" placeholder="Enter Login" autofocus><br>
                 <input class="form-input input-lg" name="pass" type="password" placeholder="Enter Password"><br>
 

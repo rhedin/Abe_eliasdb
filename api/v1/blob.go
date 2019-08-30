@@ -591,7 +591,7 @@ SwaggerDefs is used to describe the endpoint in swagger.
 func (be *blobEndpoint) SwaggerDefs(s map[string]interface{}) {
 
 	idParams := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "id",
 			"in":          "path",
 			"description": "ID of the binary blob.",
@@ -601,7 +601,7 @@ func (be *blobEndpoint) SwaggerDefs(s map[string]interface{}) {
 	}
 
 	partitionParams := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "partition",
 			"in":          "path",
 			"description": "Partition to select.",
@@ -611,7 +611,7 @@ func (be *blobEndpoint) SwaggerDefs(s map[string]interface{}) {
 	}
 
 	binaryData := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "data",
 			"in":          "body",
 			"description": "The data to store.",

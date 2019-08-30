@@ -89,7 +89,17 @@ SwaggerDefs is used to describe the endpoint in swagger.
 */
 func (e *graphQLEndpoint) SwaggerDefs(s map[string]interface{}) {
 
-	s["paths"].(map[string]interface{})["/v1/graphql"] = map[string]interface{}{
+	graphqlRequestParam := map[string]interface{}{
+		"name":        "graphql_request",
+		"in":          "body",
+		"description": "GraphQL request",
+		"required":    true,
+		"schema": map[string]interface{}{
+			"$ref": "#/definitions/GraphQLRequest",
+		},
+	}
+
+	s["paths"].(map[string]interface{})["/v1/graphql/{partition}"] = map[string]interface{}{
 		"post": map[string]interface{}{
 			"summary":     "GraphQL interface.",
 			"description": "The GraphQL interface can be used to query and modify data.",
@@ -101,38 +111,14 @@ func (e *graphQLEndpoint) SwaggerDefs(s map[string]interface{}) {
 				"application/json",
 			},
 			"parameters": []map[string]interface{}{
-				map[string]interface{}{
+				{
 					"name":        "partition",
 					"in":          "path",
 					"description": "Partition to query.",
-					"required":    false,
-					"type":        "string",
-				},
-				map[string]interface{}{
-					"name":        "partition",
-					"in":          "body",
-					"description": "Partition to query.",
-					"required":    false,
-					"type":        "string",
-				},
-				map[string]interface{}{
-					"name":        "operationName",
-					"in":          "body",
-					"description": "GraphQL query operation name.",
-					"required":    false,
-				},
-				map[string]interface{}{
-					"name":        "query",
-					"in":          "body",
-					"description": "GraphQL query.",
 					"required":    true,
+					"type":        "string",
 				},
-				map[string]interface{}{
-					"name":        "variables",
-					"in":          "body",
-					"description": "GraphQL query variable values.",
-					"required":    false,
-				},
+				graphqlRequestParam,
 			},
 			"responses": map[string]interface{}{
 				"200": map[string]interface{}{
@@ -144,6 +130,24 @@ func (e *graphQLEndpoint) SwaggerDefs(s map[string]interface{}) {
 						"$ref": "#/definitions/Error",
 					},
 				},
+			},
+		},
+	}
+
+	s["definitions"].(map[string]interface{})["GraphQLRequest"] = map[string]interface{}{
+		"type": "object",
+		"properties": map[string]interface{}{
+			"operationName": map[string]interface{}{
+				"description": "GraphQL query operation name.",
+				"type":        "string",
+			},
+			"query": map[string]interface{}{
+				"description": "GraphQL query.",
+				"type":        "string",
+			},
+			"variables": map[string]interface{}{
+				"description": "GraphQL query variable values.",
+				"type":        "object",
 			},
 		},
 	}

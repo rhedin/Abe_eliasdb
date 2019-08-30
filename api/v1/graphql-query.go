@@ -98,7 +98,7 @@ SwaggerDefs is used to describe the endpoint in swagger.
 */
 func (e *graphQLQueryEndpoint) SwaggerDefs(s map[string]interface{}) {
 
-	s["paths"].(map[string]interface{})["/v1/graphql-query"] = map[string]interface{}{
+	s["paths"].(map[string]interface{})["/v1/graphql-query/{partition}"] = map[string]interface{}{
 		"get": map[string]interface{}{
 			"summary":     "GraphQL interface which only executes non-modifying queries.",
 			"description": "The GraphQL interface can be used to query data.",
@@ -110,37 +110,33 @@ func (e *graphQLQueryEndpoint) SwaggerDefs(s map[string]interface{}) {
 				"application/json",
 			},
 			"parameters": []map[string]interface{}{
-				map[string]interface{}{
+				{
 					"name":        "partition",
 					"in":          "path",
 					"description": "Partition to query.",
-					"required":    false,
+					"required":    true,
 					"type":        "string",
 				},
-				map[string]interface{}{
-					"name":        "partition",
-					"in":          "query",
-					"description": "Partition to query.",
-					"required":    false,
-					"type":        "string",
-				},
-				map[string]interface{}{
+				{
 					"name":        "operationName",
 					"in":          "query",
 					"description": "GraphQL query operation name.",
 					"required":    false,
+					"type":        "string",
 				},
-				map[string]interface{}{
+				{
 					"name":        "query",
 					"in":          "query",
 					"description": "GraphQL query.",
 					"required":    true,
+					"type":        "string",
 				},
-				map[string]interface{}{
+				{
 					"name":        "variables",
 					"in":          "query",
 					"description": "GraphQL query variable values.",
 					"required":    false,
+					"type":        "string",
 				},
 			},
 			"responses": map[string]interface{}{

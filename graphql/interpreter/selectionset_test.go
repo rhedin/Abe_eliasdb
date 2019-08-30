@@ -895,7 +895,7 @@ func TestListQueries(t *testing.T) {
 		"variables": nil,
 	}
 
-	res, err := runQuery("test", "main", query, gm, nil, false)
+	_, err := runQuery("test", "main", query, gm, nil, false)
 	if err == nil || err.Error() != "Fatal GraphQL operation error in test: Missing operation (Operation foo not found) (Line:2 Pos:2)" {
 		t.Error("Unexpected result:", err)
 		return
@@ -913,7 +913,7 @@ fragment friendFields on User {
 		"variables": nil,
 	}
 
-	res, err = runQuery("test", "main", query, gm, nil, false)
+	res, err := runQuery("test", "main", query, gm, nil, false)
 	if err == nil || err.Error() != "Fatal GraphQL operation error in test: Missing operation (No executable expression found) (Line:2 Pos:2)" {
 		t.Error("Unexpected result:", res, err)
 		return

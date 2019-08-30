@@ -183,28 +183,28 @@ func (le *loginEndpoint) SwaggerDefs(s map[string]interface{}) {
 				"text/plain",
 			},
 			"parameters": []map[string]interface{}{
-				map[string]interface{}{
+				{
 					"name":        "user",
 					"in":          "formData",
 					"description": "Username to log in.",
 					"required":    true,
 					"type":        "string",
 				},
-				map[string]interface{}{
+				{
 					"name":        "pass",
 					"in":          "formData",
 					"description": "Cleartext password of the username.",
 					"required":    true,
 					"type":        "string",
 				},
-				map[string]interface{}{
+				{
 					"name":        "redirect_ok",
 					"in":          "formData",
 					"description": "Redirect URL if the log in is successful.",
 					"required":    false,
 					"type":        "string",
 				},
-				map[string]interface{}{
+				{
 					"name":        "redirect_notok",
 					"in":          "formData",
 					"description": "Redirect URL if the log in is not successful.",

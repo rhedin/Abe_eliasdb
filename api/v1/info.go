@@ -139,7 +139,7 @@ func (ie *infoEndpoint) SwaggerDefs(s map[string]interface{}) {
 				"application/json",
 			},
 			"parameters": []map[string]interface{}{
-				map[string]interface{}{
+				{
 					"name":        "kind",
 					"in":          "path",
 					"description": "Node or edge kind to be queried.",

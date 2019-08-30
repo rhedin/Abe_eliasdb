@@ -376,7 +376,7 @@ func TestQuery(t *testing.T) {
 
 	// Test first real query
 
-	st, _, res := sendTestRequest(queryURL+"//main?q=get+Song+with+ordering(ascending+key)", "GET", nil)
+	_, _, res = sendTestRequest(queryURL+"//main?q=get+Song+with+ordering(ascending+key)", "GET", nil)
 	st, _, res2 := sendTestRequest(queryURL+"//main?q=get+Song+with+ordering(ascending+key)&offset=0&limit=9", "GET", nil)
 
 	if st != "200 OK" || res2 != res || res != `

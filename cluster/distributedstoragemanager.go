@@ -195,7 +195,8 @@ func (dsm *DistributedStorageManager) insertOrUpdate(insert bool, loc uint64, o 
 		return cloc.(uint64), err
 
 	}
-	// An error has occured we need to use another member
+
+	// An error has occurred we need to use another member
 
 	if rtype == RTInsert {
 

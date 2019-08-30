@@ -512,7 +512,7 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 
 	edge.SetAttr(data.EdgeEnd2Cascading, false)
 
-	if err := gm.StoreEdge("main", edge); err.Error() != "GraphError: Invalid data (Can't store edge to non-existend node kind: xxx)" {
+	if err := gm.StoreEdge("main", edge); err.Error() != "GraphError: Invalid data (Can't store edge to non-existing node kind: xxx)" {
 		t.Error("Unexpected store result:", err)
 		return
 	}
@@ -520,7 +520,7 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 	edge.SetAttr(data.EdgeEnd2Kind, node2.Kind())
 	edge.SetAttr(data.EdgeEnd1Kind, "xxx")
 
-	if err := gm.StoreEdge("main", edge); err.Error() != "GraphError: Invalid data (Can't store edge to non-existend node kind: xxx)" {
+	if err := gm.StoreEdge("main", edge); err.Error() != "GraphError: Invalid data (Can't store edge to non-existing node kind: xxx)" {
 		t.Error("Unexpected store result:", err)
 		return
 	}

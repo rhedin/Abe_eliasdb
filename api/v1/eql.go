@@ -128,7 +128,7 @@ func (e *eqlEndpoint) SwaggerDefs(s map[string]interface{}) {
 				"application/json",
 			},
 			"parameters": []map[string]interface{}{
-				map[string]interface{}{
+				{
 					"name":        "data",
 					"in":          "body",
 					"description": "Query or AST which should be converted.",

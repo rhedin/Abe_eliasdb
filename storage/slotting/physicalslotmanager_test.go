@@ -597,7 +597,7 @@ func TestPhysicalSlotManagerAllocateNew(t *testing.T) {
 		return
 	}
 
-	loc, err := psm.allocateNew(size, 0)
+	_, err = psm.allocateNew(size, 0)
 	if err != file.ErrAlreadyInUse {
 		t.Error(err)
 		return
@@ -607,7 +607,7 @@ func TestPhysicalSlotManagerAllocateNew(t *testing.T) {
 
 	// Test first allocation
 
-	loc, err = psm.allocateNew(size, 0)
+	loc, err := psm.allocateNew(size, 0)
 	if err != nil {
 		t.Error(err)
 		return
@@ -623,7 +623,7 @@ func TestPhysicalSlotManagerAllocateNew(t *testing.T) {
 		return
 	}
 
-	loc, err = psm.allocateNew(10, 1)
+	_, err = psm.allocateNew(10, 1)
 	if err != file.ErrAlreadyInUse {
 		t.Error(err)
 		return
@@ -775,7 +775,7 @@ func TestPhysicalSlotManagerAllocateNew(t *testing.T) {
 		return
 	}
 
-	loc, err = psm.allocateNew(8147, 5)
+	_, err = psm.allocateNew(8147, 5)
 	if err != file.ErrAlreadyInUse {
 		t.Error(err)
 		return
@@ -800,7 +800,7 @@ func TestPhysicalSlotManagerAllocateNew(t *testing.T) {
 		return
 	}
 
-	loc, err = psm.allocateNew(8147, 12)
+	_, err = psm.allocateNew(8147, 12)
 	if err != file.ErrAlreadyInUse {
 		t.Error(err)
 		return

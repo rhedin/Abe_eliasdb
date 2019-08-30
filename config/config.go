@@ -25,7 +25,7 @@ import (
 /*
 ProductVersion is the current version of EliasDB
 */
-const ProductVersion = "0.0.0"
+const ProductVersion = "1.0.0"
 
 /*
 DefaultConfigFile is the default config file which will be used to configure EliasDB
@@ -77,7 +77,7 @@ var DefaultConfig = map[string]interface{}{
 	LocationWebFolder:        "web",
 	LocationUserDB:           "users.db",
 	LocationAccessDB:         "access.db",
-	HTTPSHost:                "localhost",
+	HTTPSHost:                "127.0.0.1",
 	HTTPSPort:                "9090",
 	CookieMaxAgeSeconds:      "86400",
 	HTTPSCertificate:         "cert.pem",

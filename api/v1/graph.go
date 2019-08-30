@@ -393,7 +393,7 @@ SwaggerDefs is used to describe the endpoint in swagger.
 func (ge *graphEndpoint) SwaggerDefs(s map[string]interface{}) {
 
 	partitionParams := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "partition",
 			"in":          "path",
 			"description": "Partition to select.",
@@ -403,7 +403,7 @@ func (ge *graphEndpoint) SwaggerDefs(s map[string]interface{}) {
 	}
 
 	entityParams := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name": "entity_type",
 			"in":   "path",
 			"description": "Datastore entity type which should selected. " +
@@ -414,7 +414,7 @@ func (ge *graphEndpoint) SwaggerDefs(s map[string]interface{}) {
 	}
 
 	defaultParams := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "kind",
 			"in":          "path",
 			"description": "Node or edge kind to be queried.",
@@ -426,7 +426,7 @@ func (ge *graphEndpoint) SwaggerDefs(s map[string]interface{}) {
 	defaultParams = append(defaultParams, entityParams...)
 
 	optionalQueryParams := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "limit",
 			"in":          "query",
 			"description": "How many list items to return.",
@@ -434,7 +434,7 @@ func (ge *graphEndpoint) SwaggerDefs(s map[string]interface{}) {
 			"type":        "number",
 			"format":      "integer",
 		},
-		map[string]interface{}{
+		{
 			"name":        "offset",
 			"in":          "query",
 			"description": "Offset in the dataset.",
@@ -445,7 +445,7 @@ func (ge *graphEndpoint) SwaggerDefs(s map[string]interface{}) {
 	}
 
 	keyParam := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "key",
 			"in":          "path",
 			"description": "Node or edge key to be queried.",
@@ -455,7 +455,7 @@ func (ge *graphEndpoint) SwaggerDefs(s map[string]interface{}) {
 	}
 
 	travParam := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "traversal_spec",
 			"in":          "path",
 			"description": "Traversal to be followed from a single node.",
@@ -465,7 +465,7 @@ func (ge *graphEndpoint) SwaggerDefs(s map[string]interface{}) {
 	}
 
 	graphPost := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "entities",
 			"in":          "body",
 			"description": "Nodes and Edges which should be stored",
@@ -495,7 +495,7 @@ func (ge *graphEndpoint) SwaggerDefs(s map[string]interface{}) {
 	}
 
 	entitiesPost := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "entities",
 			"in":          "body",
 			"description": "Nodes or Edges which should be stored",

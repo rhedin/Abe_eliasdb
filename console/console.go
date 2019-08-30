@@ -315,7 +315,8 @@ func (c *EliasDBConsole) RunCommand(cmdString string) (bool, error) {
 
 				fmt.Fprintln(c.out, "Current user logged out.")
 
-			} else if cmd != "ver" && cmd != "whoami" && cmd != "help" && cmd != "export" {
+			} else if cmd != "ver" && cmd != "whoami" && cmd != "help" &&
+				cmd != "?" && cmd != "export" {
 
 				// Do not authenticate if running local commands
 
@@ -326,8 +327,10 @@ func (c *EliasDBConsole) RunCommand(cmdString string) (bool, error) {
 			}
 		}
 
-		if cmd, ok := c.CommandMap[cmd]; ok {
-			return true, cmd.Run(args, c)
+		if cmdObj, ok := c.CommandMap[cmd]; ok {
+			return true, cmdObj.Run(args, c)
+		} else if cmd == "?" {
+			return true, c.CommandMap["help"].Run(args, c)
 		}
 	}
 
@@ -443,6 +446,7 @@ func (c *EliasDBConsole) SendRequest(endpoint string, contentType string, method
 
 	var bodyStr string
 	var req *http.Request
+	var resp *http.Response
 	var err error
 
 	if content != nil {
@@ -450,36 +454,40 @@ func (c *EliasDBConsole) SendRequest(endpoint string, contentType string, method
 	} else {
 		req, err = http.NewRequest(method, c.url+endpoint, nil)
 	}
-	req.Header.Set("Content-Type", contentType)
-
-	// Set auth cookie
-
-	if c.authCookie != nil {
-		req.AddCookie(c.authCookie)
-	}
-
-	if reqMod != nil {
-		reqMod(req)
-	}
-
-	// Console client does not verify the SSL keys
-
-	tlsConfig := &tls.Config{
-		InsecureSkipVerify: true,
-	}
-	transport := &http.Transport{TLSClientConfig: tlsConfig}
-
-	client := &http.Client{
-		Transport: transport,
-	}
-
-	resp, err := client.Do(req)
 
 	if err == nil {
-		defer resp.Body.Close()
 
-		body, _ := ioutil.ReadAll(resp.Body)
-		bodyStr = strings.Trim(string(body), " \n")
+		req.Header.Set("Content-Type", contentType)
+
+		// Set auth cookie
+
+		if c.authCookie != nil {
+			req.AddCookie(c.authCookie)
+		}
+
+		if reqMod != nil {
+			reqMod(req)
+		}
+
+		// Console client does not verify the SSL keys
+
+		tlsConfig := &tls.Config{
+			InsecureSkipVerify: true,
+		}
+		transport := &http.Transport{TLSClientConfig: tlsConfig}
+
+		client := &http.Client{
+			Transport: transport,
+		}
+
+		resp, err = client.Do(req)
+
+		if err == nil {
+			defer resp.Body.Close()
+
+			body, _ := ioutil.ReadAll(resp.Body)
+			bodyStr = strings.Trim(string(body), " \n")
+		}
 	}
 
 	// Just return the body

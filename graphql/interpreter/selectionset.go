@@ -194,112 +194,115 @@ func (rt *selectionSetRuntime) ProcessNodes(path []string, kind string,
 		err = rt.handleMutationArgs(path, args, kind)
 	}
 
-	ascending, descending, from, items, last, err = rt.handleOutputArgs(args)
-
 	if err == nil {
 
-		if key, ok := args["key"]; ok && it == nil {
-			var node data.Node
-
-			// Lookup a single node
-
-			if node, err = rt.rtp.FetchNode(rt.rtp.part, fmt.Sprint(key), kind); err == nil && node != nil {
-				addToRes(node)
-			}
-
-		} else {
-			matchesRegexMap := make(map[string]*regexp.Regexp)
-			matchAttrs := make([]string, 0)
-
-			// Handle matches expression
-
-			matches, matchesOk := args["matches"]
-			matchesMap, matchesMapOk := matches.(map[string]interface{})
-
-			if matchesOk {
-				if matchesMapOk {
-					for k, v := range matchesMap {
-						matchAttrs = append(matchAttrs, k)
-
-						if re, rerr := regexp.Compile(fmt.Sprint(v)); rerr == nil {
-							matchesRegexMap[k] = re
-						} else {
-							rt.rtp.handleRuntimeError(fmt.Errorf("Regex %s did not compile: %s", v, rerr.Error()),
-								path, rt.node)
-						}
-					}
-
-				} else {
-					rt.rtp.handleRuntimeError(fmt.Errorf("Matches expression is not a map"),
-						path, rt.node)
-				}
-			}
-
-			// Lookup a list of nodes
-
-			if it == nil {
-				var kit *graph.NodeKeyIterator
-				kit, err = rt.rtp.gm.NodeKeyIterator(rt.rtp.part, kind)
-				if kit != nil {
-					it = &nodeKeyIteratorWrapper{kind, kit}
-				}
-			}
-
-			if it != nil && err == nil {
-
-				for err == nil && it.HasNext() {
-					var node data.Node
-
-					if err = it.Error(); err == nil {
-						nkey, nkind := it.Next()
-
-						if kind == "" {
-
-							// If the kind is not fixed we need to reevaluate the attributes
-							// to query for every node
-
-							attrs, aliasMap, traversalMap = rt.GetPlainFieldsAndAliases(path, nkind)
-						}
-
-						if node, err = rt.rtp.FetchNodePart(rt.rtp.part, nkey,
-							nkind, append(attrs, matchAttrs...)); err == nil && node != nil {
-
-							if matchesOk && !rt.matchNode(node, matchesRegexMap) {
-								continue
-							}
-
-							err = addToRes(node)
-						}
-					}
-				}
-			}
-		}
-
-		// Check if the result should be sorted
+		ascending, descending, from, items, last, err = rt.handleOutputArgs(args)
 
 		if err == nil {
 
-			if _, aok := args["ascending"]; aok {
-				dataSort(res, ascending, true)
-			} else if _, dok := args["descending"]; dok {
-				dataSort(res, descending, false)
-			}
-		}
+			if key, ok := args["key"]; ok && it == nil {
+				var node data.Node
 
-		// Check if the result should be truncated
+				// Lookup a single node
 
-		if last > 0 && last < len(res) {
-			res = res[len(res)-last:]
-		}
+				if node, err = rt.rtp.FetchNode(rt.rtp.part, fmt.Sprint(key), kind); err == nil && node != nil {
+					addToRes(node)
+				}
 
-		if from > 0 || items > 0 {
-			if from >= len(res) {
-				from = 0
-			}
-			if from+items > len(res) {
-				res = res[from:]
 			} else {
-				res = res[from : from+items]
+				matchesRegexMap := make(map[string]*regexp.Regexp)
+				matchAttrs := make([]string, 0)
+
+				// Handle matches expression
+
+				matches, matchesOk := args["matches"]
+				matchesMap, matchesMapOk := matches.(map[string]interface{})
+
+				if matchesOk {
+					if matchesMapOk {
+						for k, v := range matchesMap {
+							matchAttrs = append(matchAttrs, k)
+
+							if re, rerr := regexp.Compile(fmt.Sprint(v)); rerr == nil {
+								matchesRegexMap[k] = re
+							} else {
+								rt.rtp.handleRuntimeError(fmt.Errorf("Regex %s did not compile: %s", v, rerr.Error()),
+									path, rt.node)
+							}
+						}
+
+					} else {
+						rt.rtp.handleRuntimeError(fmt.Errorf("Matches expression is not a map"),
+							path, rt.node)
+					}
+				}
+
+				// Lookup a list of nodes
+
+				if it == nil {
+					var kit *graph.NodeKeyIterator
+					kit, err = rt.rtp.gm.NodeKeyIterator(rt.rtp.part, kind)
+					if kit != nil {
+						it = &nodeKeyIteratorWrapper{kind, kit}
+					}
+				}
+
+				if it != nil && err == nil {
+
+					for err == nil && it.HasNext() {
+						var node data.Node
+
+						if err = it.Error(); err == nil {
+							nkey, nkind := it.Next()
+
+							if kind == "" {
+
+								// If the kind is not fixed we need to reevaluate the attributes
+								// to query for every node
+
+								attrs, aliasMap, traversalMap = rt.GetPlainFieldsAndAliases(path, nkind)
+							}
+
+							if node, err = rt.rtp.FetchNodePart(rt.rtp.part, nkey,
+								nkind, append(attrs, matchAttrs...)); err == nil && node != nil {
+
+								if matchesOk && !rt.matchNode(node, matchesRegexMap) {
+									continue
+								}
+
+								err = addToRes(node)
+							}
+						}
+					}
+				}
+			}
+
+			// Check if the result should be sorted
+
+			if err == nil {
+
+				if _, aok := args["ascending"]; aok {
+					dataSort(res, ascending, true)
+				} else if _, dok := args["descending"]; dok {
+					dataSort(res, descending, false)
+				}
+			}
+
+			// Check if the result should be truncated
+
+			if last > 0 && last < len(res) {
+				res = res[len(res)-last:]
+			}
+
+			if from > 0 || items > 0 {
+				if from >= len(res) {
+					from = 0
+				}
+				if from+items > len(res) {
+					res = res[from:]
+				} else {
+					res = res[from : from+items]
+				}
 			}
 		}
 	}

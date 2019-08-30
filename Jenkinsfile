@@ -145,6 +145,7 @@ pipeline {
                   
                   // Copy distribution packages in place
                   sh 'scp -P 7000 -o StrictHostKeyChecking=no dist/*.tar.gz krotik@devt.de:~/pub/eliasdb'
+                  sh 'scp -P 7000 -o StrictHostKeyChecking=no dist/checksums.txt krotik@devt.de:~/pub/eliasdb'
 
                   // Copy coverage in place
                   sh 'scp -P 7000 -o StrictHostKeyChecking=no coverage.* krotik@devt.de:~/pub/eliasdb'

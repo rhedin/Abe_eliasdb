@@ -91,6 +91,11 @@ func sendTestRequest(url string, method string, content []byte) (string, http.He
 	} else {
 		req, err = http.NewRequest(method, url, nil)
 	}
+
+	if err != nil {
+		panic(err)
+	}
+
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}

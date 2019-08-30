@@ -122,7 +122,7 @@ func (mat *memberAddressTable) NewClusterLoc(dsname string) (uint64, error) {
 
 	// Get counter
 
-	newLocCounter, _, err := mat.newlocCounter(dsname)
+	newLocCounter, _, _ := mat.newlocCounter(dsname)
 
 	// Check that rangeCounter is sensible
 

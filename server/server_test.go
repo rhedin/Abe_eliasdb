@@ -204,21 +204,21 @@ Starting datastore in testdb/db
 Reading cluster config
 Opening cluster state info
 Starting cluster (log history: 100)
-[Cluster] member1: Starting member manager member1 rpc server on: localhost:9030
+[Cluster] member1: Starting member manager member1 rpc server on: 127.0.0.1:9030
 Creating GraphManager instance
 Creating key (key.pem) and certificate (cert.pem) in: ssl
 Ensuring web folder: testdb/web
 Ensuring login page: testdb/web/login.html
 Ensuring web terminal: testdb/web/db/term.html
 Ensuring cluster terminal: testdb/web/db/cluster.html
-Starting server on: localhost:9090
+Starting server on: 127.0.0.1:9090
 Writing fingerprint file: testdb/web/fingerprint.json
 Waiting for shutdown
 Lockfile was modified
 Shutting down
 [Cluster] member1: Housekeeping stopped
-[Cluster] member1: Shutdown rpc server on: localhost:9030
-[Cluster] member1: Connection closed: localhost:9030
+[Cluster] member1: Shutdown rpc server on: 127.0.0.1:9030
+[Cluster] member1: Connection closed: 127.0.0.1:9030
 Closing datastore` {
 		t.Error("Unexpected log:", logString)
 		return

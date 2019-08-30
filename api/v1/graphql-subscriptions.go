@@ -14,6 +14,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -62,6 +63,13 @@ func (e *graphQLSubscriptionsEndpoint) HandleGET(w http.ResponseWriter, r *http.
 	// If the upgrade fails then the client gets an HTTP error response.
 
 	conn, err := upgrader.Upgrade(w, r, nil)
+
+	// Websocket connections support one concurrent reader and one concurrent writer.
+	// See: https://godoc.org/github.com/gorilla/websocket#hdr-Concurrency
+
+	connRMutex := &sync.Mutex{}
+	connWMutex := &sync.Mutex{}
+
 	if err != nil {
 
 		// We give details here on what went wrong
@@ -80,11 +88,15 @@ func (e *graphQLSubscriptionsEndpoint) HandleGET(w http.ResponseWriter, r *http.
 	}
 
 	if partition == "" {
+		connWMutex.Lock()
 		e.WriteError(conn, subID, "Need a 'partition' in path or as url parameter", true)
+		connWMutex.Unlock()
 		return
 	}
 
+	connWMutex.Lock()
 	conn.WriteMessage(websocket.TextMessage, []byte(`{"type":"init_success","payload":{}}`))
+	connWMutex.Unlock()
 
 	// Create the callback handler for the subscription
 
@@ -108,11 +120,15 @@ func (e *graphQLSubscriptionsEndpoint) HandleGET(w http.ResponseWriter, r *http.
 			}
 
 			if err != nil {
+				connWMutex.Lock()
 				e.WriteError(conn, subID, err.Error(), true)
+				connWMutex.Unlock()
 				return
 			}
 
+			connWMutex.Lock()
 			conn.WriteMessage(websocket.TextMessage, res)
+			connWMutex.Unlock()
 		},
 	}
 
@@ -120,7 +136,10 @@ func (e *graphQLSubscriptionsEndpoint) HandleGET(w http.ResponseWriter, r *http.
 
 		// Read websocket message
 
+		connRMutex.Lock()
 		_, msg, err := conn.ReadMessage()
+		connRMutex.Unlock()
+
 		if err != nil {
 
 			// Unregister the callback handler
@@ -130,14 +149,21 @@ func (e *graphQLSubscriptionsEndpoint) HandleGET(w http.ResponseWriter, r *http.
 			// If the client is still listening write the error message
 			// This is a NOP if the client hang up
 
+			connWMutex.Lock()
 			e.WriteError(conn, subID, err.Error(), true)
+			connWMutex.Unlock()
+
 			return
 		}
 
 		data := make(map[string]interface{})
 
 		if err := json.Unmarshal(msg, &data); err != nil {
+
+			connWMutex.Lock()
 			e.WriteError(conn, subID, err.Error(), false)
+			connWMutex.Unlock()
+
 			continue
 		}
 
@@ -172,14 +198,22 @@ func (e *graphQLSubscriptionsEndpoint) HandleGET(w http.ResponseWriter, r *http.
 				}
 
 				if err != nil {
+
+					connWMutex.Lock()
 					e.WriteError(conn, subID, err.Error(), false)
+					connWMutex.Unlock()
+
 					continue
 				}
+
+				connWMutex.Lock()
 
 				conn.WriteMessage(websocket.TextMessage, []byte(
 					fmt.Sprintf(`{"id":"%s","type":"subscription_success","payload":{}}`, subID)))
 
 				conn.WriteMessage(websocket.TextMessage, res)
+
+				connWMutex.Unlock()
 			}
 		}
 	}

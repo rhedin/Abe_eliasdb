@@ -272,9 +272,8 @@ func getHostPortFromConfig() (string, string) {
 	host := fileutil.ConfStr(config.DefaultConfig, config.HTTPSHost)
 	port := fileutil.ConfStr(config.DefaultConfig, config.HTTPSPort)
 
-	configFile := filepath.Join(filepath.Dir(os.Args[0]), config.DefaultConfigFile)
-	if ok, _ := fileutil.PathExists(configFile); ok {
-		cfg, _ := fileutil.LoadConfig(configFile, config.DefaultConfig)
+	if ok, _ := fileutil.PathExists(config.DefaultConfigFile); ok {
+		cfg, _ := fileutil.LoadConfig(config.DefaultConfigFile, config.DefaultConfig)
 		if cfg != nil {
 
 			host = fileutil.ConfStr(cfg, config.HTTPSHost)

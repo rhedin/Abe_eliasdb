@@ -248,7 +248,7 @@ func (ms *memberStorage) handleInsertRequest(distTable *DistributionTable, reque
 
 					// Add transfer request for replication
 
-					// At this point the operation has succedded. We still need to
+					// At this point the operation has succeeded. We still need to
 					// replicate the change to all the replicating members but
 					// any errors happening during this shall not fail this operation.
 					// The next rebalancing will then synchronize all members again.
@@ -338,7 +338,7 @@ func (ms *memberStorage) handleUpdateRequest(distTable *DistributionTable, reque
 
 						// Add transfer request for replication
 
-						// At this point the operation has succedded. We still need to
+						// At this point the operation has succeeded. We still need to
 						// replicate the change to all the replicating members but
 						// any errors happening during this shall not fail this operation.
 						// The next rebalancing will then synchronize all members again.
@@ -406,7 +406,7 @@ func (ms *memberStorage) handleFreeRequest(distTable *DistributionTable, request
 
 					// Add transfer request for replication
 
-					// At this point the operation has succedded. We still need to
+					// At this point the operation has succeeded. We still need to
 					// replicate the change to all the replicating members but
 					// any errors happening during this shall not fail this operation.
 					// The next rebalancing will then synchronize all members again.
@@ -519,7 +519,6 @@ func (ms *memberStorage) handleRebalanceRequest(distTable *DistributionTable, re
 		// Check if there was an error from the previous iteration
 
 		handleError(err)
-		err = nil
 
 		smname := smnames.([]string)[i]
 		ver := vers.([]uint64)[i]
@@ -624,7 +623,7 @@ func (ms *memberStorage) handleRebalanceRequest(distTable *DistributionTable, re
 					fmt.Sprintf("(Store): Rebalance removes %v location: %v from member %v",
 						smname, tr.loc, rsource))
 
-				res, err = ms.ds.sendDataRequest(rsource, &DataRequest{RTFree, map[DataRequestArg]interface{}{
+				_, err = ms.ds.sendDataRequest(rsource, &DataRequest{RTFree, map[DataRequestArg]interface{}{
 					RPStoreName: smname,
 					RPLoc:       cloc,
 				}, nil, true})

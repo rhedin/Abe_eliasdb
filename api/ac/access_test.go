@@ -213,6 +213,11 @@ func sendTestRequestResponse(contentType string, url string, method string,
 	} else {
 		req, err = http.NewRequest(method, url, nil)
 	}
+
+	if err != nil {
+		panic(err)
+	}
+
 	req.Header.Set("Content-Type", contentType)
 
 	if reqMod != nil {

@@ -229,14 +229,14 @@ func (ce *clusterEndpoint) SwaggerDefs(s map[string]interface{}) {
 				"application/json",
 			},
 			"parameters": []map[string]interface{}{
-				map[string]interface{}{
+				{
 					"name":        "command",
 					"in":          "path",
 					"description": "Valid commands are: ping, join and eject.",
 					"required":    true,
 					"type":        "string",
 				},
-				map[string]interface{}{
+				{
 					"name":        "args",
 					"in":          "body",
 					"description": "Arguments for a command",

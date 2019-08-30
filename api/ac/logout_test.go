@@ -77,7 +77,7 @@ func TestLogoutEndpoint(t *testing.T) {
 		t.Error("Unexpected response:", res, resp)
 	}
 
-	res, resp = sendTestRequestResponse("application/json", queryURL+"/foo?abc=123", "GET", nil,
+	_, resp = sendTestRequestResponse("application/json", queryURL+"/foo?abc=123", "GET", nil,
 		func(req *http.Request) {
 			req.AddCookie(authCookie)
 		})

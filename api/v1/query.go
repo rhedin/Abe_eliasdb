@@ -304,21 +304,21 @@ func (eq *queryEndpoint) SwaggerDefs(s map[string]interface{}) {
 				"application/json",
 			},
 			"parameters": []map[string]interface{}{
-				map[string]interface{}{
+				{
 					"name":        "partition",
 					"in":          "path",
 					"description": "Partition to query.",
 					"required":    true,
 					"type":        "string",
 				},
-				map[string]interface{}{
+				{
 					"name":        "q",
 					"in":          "query",
 					"description": "URL encoded query to execute.",
 					"required":    false,
 					"type":        "string",
 				},
-				map[string]interface{}{
+				{
 					"name":        "rid",
 					"in":          "query",
 					"description": "Result ID to retrieve from the result cache.",
@@ -326,7 +326,7 @@ func (eq *queryEndpoint) SwaggerDefs(s map[string]interface{}) {
 					"type":        "number",
 					"format":      "integer",
 				},
-				map[string]interface{}{
+				{
 					"name":        "limit",
 					"in":          "query",
 					"description": "How many list items to return.",
@@ -334,7 +334,7 @@ func (eq *queryEndpoint) SwaggerDefs(s map[string]interface{}) {
 					"type":        "number",
 					"format":      "integer",
 				},
-				map[string]interface{}{
+				{
 					"name":        "offset",
 					"in":          "query",
 					"description": "Offset in the dataset.",
@@ -342,7 +342,7 @@ func (eq *queryEndpoint) SwaggerDefs(s map[string]interface{}) {
 					"type":        "number",
 					"format":      "integer",
 				},
-				map[string]interface{}{
+				{
 					"name":        "groups",
 					"in":          "query",
 					"description": "Include group information in the result if set to any value.",

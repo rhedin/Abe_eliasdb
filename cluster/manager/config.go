@@ -68,7 +68,7 @@ const ConfigReplicationFactor = "ReplicationFactor"
 DefaultConfig is the defaut configuration
 */
 var DefaultConfig = map[string]interface{}{
-	ConfigRPC:               "localhost:9030",
+	ConfigRPC:               "127.0.0.1:9030",
 	ConfigMemberName:        "member1",
 	ConfigClusterSecret:     "secret123",
 	ConfigReplicationFactor: 1.0,

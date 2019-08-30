@@ -289,18 +289,18 @@ func TestHTreePageRemove(t *testing.T) {
 		return
 	}
 
-	res, err := page.Remove([]byte("testkey8"))
+	_, err := page.Remove([]byte("testkey8"))
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	res, _ = page.Remove([]byte("testkey7"))
-	res, _ = page.Remove([]byte("testkey6"))
-	res, _ = page.Remove([]byte("testkey5"))
-	res, _ = page.Remove([]byte("testkey4"))
-	res, _ = page.Remove([]byte("testkey3"))
-	res, _ = page.Remove([]byte("testkey2"))
+	page.Remove([]byte("testkey7"))
+	page.Remove([]byte("testkey6"))
+	page.Remove([]byte("testkey5"))
+	page.Remove([]byte("testkey4"))
+	page.Remove([]byte("testkey3"))
+	page.Remove([]byte("testkey2"))
 
 	// Test error output when printing the tree
 
@@ -383,14 +383,14 @@ func TestHTreePageRemove(t *testing.T) {
 
 	delete(sm.AccessMap, 1)
 
-	res, _ = page.Remove([]byte("testkey1"))
-	res, _ = page.Remove([]byte("testkey8"))
-	res, _ = page.Remove([]byte("testkey7"))
-	res, _ = page.Remove([]byte("testkey6"))
-	res, _ = page.Remove([]byte("testkey5"))
-	res, _ = page.Remove([]byte("testkey4"))
-	res, _ = page.Remove([]byte("testkey3"))
-	res, _ = page.Remove([]byte("testkey2"))
+	page.Remove([]byte("testkey1"))
+	page.Remove([]byte("testkey8"))
+	page.Remove([]byte("testkey7"))
+	page.Remove([]byte("testkey6"))
+	page.Remove([]byte("testkey5"))
+	page.Remove([]byte("testkey4"))
+	page.Remove([]byte("testkey3"))
+	page.Remove([]byte("testkey2"))
 
 	sm.AccessMap[1] = storage.AccessUpdateError
 

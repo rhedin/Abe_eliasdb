@@ -80,7 +80,7 @@ const (
 
 	// General arguments
 
-	RequestTARGET       RequestArgument = iota // Required argument which identifies the target cluster memeber
+	RequestTARGET       RequestArgument = iota // Required argument which identifies the target cluster member
 	RequestTOKEN                               // Client token which is used for authorization checks
 	RequestLOCK                                // Lock name which a member requests to take
 	RequestMEMBERNAME                          // Name for a member

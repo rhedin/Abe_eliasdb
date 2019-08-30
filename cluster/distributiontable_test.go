@@ -116,7 +116,6 @@ f: [a b c]
 		return
 	}
 
-
 	// 2 members with replication factor of 2 (location range of 30)
 
 	dt, _ = createDistributionTable([]string{"a", "b"}, 2, 30)

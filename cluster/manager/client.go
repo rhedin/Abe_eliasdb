@@ -409,7 +409,7 @@ func (mc *Client) SendAcquireClusterLock(lockName string) error {
 /*
 SendReleaseClusterLock tries to release a named lock on all members of the cluster.
 It is not an error if a lock is not takfen (or has expired) on this member or any other
-target memeber.
+target member.
 */
 func (mc *Client) SendReleaseClusterLock(lockName string) error {
 

@@ -466,7 +466,7 @@ func TestRulesErrors(t *testing.T) {
 	tr.commitError = true
 
 	if err := gm.StoreNode("main", node1); err.Error() !=
-		"GraphError: Invalid data (Can't store edge to non-existend node kind: bla)" {
+		"GraphError: Invalid data (Can't store edge to non-existing node kind: bla)" {
 		t.Error(err)
 		return
 	}
@@ -500,7 +500,7 @@ func TestRulesErrors(t *testing.T) {
 	tr.commitError = true
 
 	if _, err := gm.RemoveNode("main", node1.Key(), node1.Kind()); err.Error() !=
-		"GraphError: Invalid data (Can't store edge to non-existend node kind: bla)" {
+		"GraphError: Invalid data (Can't store edge to non-existing node kind: bla)" {
 		t.Error(err)
 		return
 	}
@@ -540,7 +540,7 @@ func TestRulesErrors(t *testing.T) {
 	tr.commitError = true
 
 	if err := gm.StoreEdge("main", edge); err.Error() !=
-		"GraphError: Invalid data (Can't store edge to non-existend node kind: bla)" {
+		"GraphError: Invalid data (Can't store edge to non-existing node kind: bla)" {
 		t.Error(err)
 		return
 	}
@@ -557,7 +557,7 @@ func TestRulesErrors(t *testing.T) {
 	tr.commitError = true
 
 	if _, err := gm.RemoveEdge("main", edge.Key(), edge.Kind()); err.Error() !=
-		"GraphError: Invalid data (Can't store edge to non-existend node kind: bla)" {
+		"GraphError: Invalid data (Can't store edge to non-existing node kind: bla)" {
 		t.Error(err)
 		return
 	}
@@ -608,7 +608,7 @@ func TestRulesErrors(t *testing.T) {
 	trans.StoreNode("main", node1)
 
 	if err := trans.Commit(); err.Error() !=
-		"GraphError: Invalid data (Can't store edge to non-existend node kind: bla)" {
+		"GraphError: Invalid data (Can't store edge to non-existing node kind: bla)" {
 		t.Error(err)
 		return
 	}
@@ -638,7 +638,7 @@ func TestRulesErrors(t *testing.T) {
 	trans.RemoveNode("main", node1.Key(), node1.Kind())
 
 	if err := trans.Commit(); err.Error() !=
-		"GraphError: Invalid data (Can't store edge to non-existend node kind: bla)" {
+		"GraphError: Invalid data (Can't store edge to non-existing node kind: bla)" {
 		t.Error(err)
 		return
 	}
@@ -668,7 +668,7 @@ func TestRulesErrors(t *testing.T) {
 	trans.StoreEdge("main", edge)
 
 	if err := trans.Commit(); err.Error() !=
-		"GraphError: Invalid data (Can't store edge to non-existend node kind: bla)" {
+		"GraphError: Invalid data (Can't store edge to non-existing node kind: bla)" {
 		t.Error(err)
 		return
 	}
@@ -687,7 +687,7 @@ func TestRulesErrors(t *testing.T) {
 	trans.RemoveEdge("main", edge.Key(), edge.Kind())
 
 	if err := trans.Commit(); err.Error() !=
-		"GraphError: Invalid data (Can't store edge to non-existend node kind: bla)" {
+		"GraphError: Invalid data (Can't store edge to non-existing node kind: bla)" {
 		t.Error(err)
 		return
 	}

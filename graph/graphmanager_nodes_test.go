@@ -317,7 +317,7 @@ func TestSimpleNodeUpdate(t *testing.T) {
 		return
 	}
 
-	fetchedNode, err := gm.FetchNode("main", "nodeToUpdate", "nodeupdatekind")
+	fetchedNode, _ := gm.FetchNode("main", "nodeToUpdate", "nodeupdatekind")
 	if !data.NodeCompare(node1, fetchedNode, nil) {
 		t.Error("Node should have been stored completely")
 		return

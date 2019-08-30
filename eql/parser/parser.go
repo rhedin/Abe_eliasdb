@@ -64,7 +64,7 @@ func ASTFromPlain(plainAST map[string]interface{}) (*ASTNode, error) {
 		if ic, ok := children.([]interface{}); ok {
 
 			// Do a list conversion if necessary - this is necessary when we parse
-			// JSON with map[string]interface{} this 
+			// JSON with map[string]interface{} this
 
 			childrenList := make([]map[string]interface{}, len(ic))
 			for i := range ic {
@@ -174,81 +174,81 @@ const TokenSHOWTERM = LexTokenID(-1)
 
 func init() {
 	astNodeMap = map[LexTokenID]*ASTNode{
-		TokenEOF:           &ASTNode{NodeEOF, nil, nil, nil, 0, ndTerm, nil},
-		TokenVALUE:         &ASTNode{NodeVALUE, nil, nil, nil, 0, ndTerm, nil},
-		TokenNODEKIND:      &ASTNode{NodeVALUE, nil, nil, nil, 0, ndTerm, nil},
-		TokenTRUE:          &ASTNode{NodeTRUE, nil, nil, nil, 0, ndTerm, nil},
-		TokenFALSE:         &ASTNode{NodeFALSE, nil, nil, nil, 0, ndTerm, nil},
-		TokenNULL:          &ASTNode{NodeNULL, nil, nil, nil, 0, ndTerm, nil},
-		TokenAT:            &ASTNode{NodeFUNC, nil, nil, nil, 0, ndFunc, nil},
-		TokenORDERING:      &ASTNode{NodeORDERING, nil, nil, nil, 0, ndWithFunc, nil},
-		TokenFILTERING:     &ASTNode{NodeFILTERING, nil, nil, nil, 0, ndWithFunc, nil},
-		TokenNULLTRAVERSAL: &ASTNode{NodeNULLTRAVERSAL, nil, nil, nil, 0, ndWithFunc, nil},
+		TokenEOF:           {NodeEOF, nil, nil, nil, 0, ndTerm, nil},
+		TokenVALUE:         {NodeVALUE, nil, nil, nil, 0, ndTerm, nil},
+		TokenNODEKIND:      {NodeVALUE, nil, nil, nil, 0, ndTerm, nil},
+		TokenTRUE:          {NodeTRUE, nil, nil, nil, 0, ndTerm, nil},
+		TokenFALSE:         {NodeFALSE, nil, nil, nil, 0, ndTerm, nil},
+		TokenNULL:          {NodeNULL, nil, nil, nil, 0, ndTerm, nil},
+		TokenAT:            {NodeFUNC, nil, nil, nil, 0, ndFunc, nil},
+		TokenORDERING:      {NodeORDERING, nil, nil, nil, 0, ndWithFunc, nil},
+		TokenFILTERING:     {NodeFILTERING, nil, nil, nil, 0, ndWithFunc, nil},
+		TokenNULLTRAVERSAL: {NodeNULLTRAVERSAL, nil, nil, nil, 0, ndWithFunc, nil},
 
 		// Special tokens - always handled in a denotation function
 
-		TokenCOMMA:  &ASTNode{NodeCOMMA, nil, nil, nil, 0, nil, nil},
-		TokenGROUP:  &ASTNode{NodeGROUP, nil, nil, nil, 0, nil, nil},
-		TokenEND:    &ASTNode{NodeEND, nil, nil, nil, 0, nil, nil},
-		TokenAS:     &ASTNode{NodeAS, nil, nil, nil, 0, nil, nil},
-		TokenFORMAT: &ASTNode{NodeFORMAT, nil, nil, nil, 0, nil, nil},
+		TokenCOMMA:  {NodeCOMMA, nil, nil, nil, 0, nil, nil},
+		TokenGROUP:  {NodeGROUP, nil, nil, nil, 0, nil, nil},
+		TokenEND:    {NodeEND, nil, nil, nil, 0, nil, nil},
+		TokenAS:     {NodeAS, nil, nil, nil, 0, nil, nil},
+		TokenFORMAT: {NodeFORMAT, nil, nil, nil, 0, nil, nil},
 
 		// Keywords
 
-		TokenGET:    &ASTNode{NodeGET, nil, nil, nil, 0, ndGet, nil},
-		TokenLOOKUP: &ASTNode{NodeLOOKUP, nil, nil, nil, 0, ndLookup, nil},
-		TokenFROM:   &ASTNode{NodeFROM, nil, nil, nil, 0, ndFrom, nil},
-		TokenWHERE:  &ASTNode{NodeWHERE, nil, nil, nil, 0, ndPrefix, nil},
+		TokenGET:    {NodeGET, nil, nil, nil, 0, ndGet, nil},
+		TokenLOOKUP: {NodeLOOKUP, nil, nil, nil, 0, ndLookup, nil},
+		TokenFROM:   {NodeFROM, nil, nil, nil, 0, ndFrom, nil},
+		TokenWHERE:  {NodeWHERE, nil, nil, nil, 0, ndPrefix, nil},
 
-		TokenUNIQUE:      &ASTNode{NodeUNIQUE, nil, nil, nil, 0, ndPrefix, nil},
-		TokenUNIQUECOUNT: &ASTNode{NodeUNIQUECOUNT, nil, nil, nil, 0, ndPrefix, nil},
-		TokenISNOTNULL:   &ASTNode{NodeISNOTNULL, nil, nil, nil, 0, ndPrefix, nil},
-		TokenASCENDING:   &ASTNode{NodeASCENDING, nil, nil, nil, 0, ndPrefix, nil},
-		TokenDESCENDING:  &ASTNode{NodeDESCENDING, nil, nil, nil, 0, ndPrefix, nil},
+		TokenUNIQUE:      {NodeUNIQUE, nil, nil, nil, 0, ndPrefix, nil},
+		TokenUNIQUECOUNT: {NodeUNIQUECOUNT, nil, nil, nil, 0, ndPrefix, nil},
+		TokenISNOTNULL:   {NodeISNOTNULL, nil, nil, nil, 0, ndPrefix, nil},
+		TokenASCENDING:   {NodeASCENDING, nil, nil, nil, 0, ndPrefix, nil},
+		TokenDESCENDING:  {NodeDESCENDING, nil, nil, nil, 0, ndPrefix, nil},
 
-		TokenTRAVERSE: &ASTNode{NodeTRAVERSE, nil, nil, nil, 0, ndTraverse, nil},
-		TokenPRIMARY:  &ASTNode{NodePRIMARY, nil, nil, nil, 0, ndPrefix, nil},
-		TokenSHOW:     &ASTNode{NodeSHOW, nil, nil, nil, 0, ndShow, nil},
-		TokenSHOWTERM: &ASTNode{NodeSHOWTERM, nil, nil, nil, 0, ndShow, nil},
-		TokenWITH:     &ASTNode{NodeWITH, nil, nil, nil, 0, ndWith, nil},
-		TokenLIST:     &ASTNode{NodeLIST, nil, nil, nil, 0, nil, nil},
+		TokenTRAVERSE: {NodeTRAVERSE, nil, nil, nil, 0, ndTraverse, nil},
+		TokenPRIMARY:  {NodePRIMARY, nil, nil, nil, 0, ndPrefix, nil},
+		TokenSHOW:     {NodeSHOW, nil, nil, nil, 0, ndShow, nil},
+		TokenSHOWTERM: {NodeSHOWTERM, nil, nil, nil, 0, ndShow, nil},
+		TokenWITH:     {NodeWITH, nil, nil, nil, 0, ndWith, nil},
+		TokenLIST:     {NodeLIST, nil, nil, nil, 0, nil, nil},
 
 		// Boolean operations
 
-		TokenNOT: &ASTNode{NodeNOT, nil, nil, nil, 20, ndPrefix, nil},
-		TokenOR:  &ASTNode{NodeOR, nil, nil, nil, 30, nil, ldInfix},
-		TokenAND: &ASTNode{NodeAND, nil, nil, nil, 40, nil, ldInfix},
+		TokenNOT: {NodeNOT, nil, nil, nil, 20, ndPrefix, nil},
+		TokenOR:  {NodeOR, nil, nil, nil, 30, nil, ldInfix},
+		TokenAND: {NodeAND, nil, nil, nil, 40, nil, ldInfix},
 
-		TokenGEQ: &ASTNode{NodeGEQ, nil, nil, nil, 60, nil, ldInfix},
-		TokenLEQ: &ASTNode{NodeLEQ, nil, nil, nil, 60, nil, ldInfix},
-		TokenNEQ: &ASTNode{NodeNEQ, nil, nil, nil, 60, nil, ldInfix},
-		TokenEQ:  &ASTNode{NodeEQ, nil, nil, nil, 60, nil, ldInfix},
-		TokenGT:  &ASTNode{NodeGT, nil, nil, nil, 60, nil, ldInfix},
-		TokenLT:  &ASTNode{NodeLT, nil, nil, nil, 60, nil, ldInfix},
+		TokenGEQ: {NodeGEQ, nil, nil, nil, 60, nil, ldInfix},
+		TokenLEQ: {NodeLEQ, nil, nil, nil, 60, nil, ldInfix},
+		TokenNEQ: {NodeNEQ, nil, nil, nil, 60, nil, ldInfix},
+		TokenEQ:  {NodeEQ, nil, nil, nil, 60, nil, ldInfix},
+		TokenGT:  {NodeGT, nil, nil, nil, 60, nil, ldInfix},
+		TokenLT:  {NodeLT, nil, nil, nil, 60, nil, ldInfix},
 
-		TokenLIKE:        &ASTNode{NodeLIKE, nil, nil, nil, 60, nil, ldInfix},
-		TokenIN:          &ASTNode{NodeIN, nil, nil, nil, 60, nil, ldInfix},
-		TokenCONTAINS:    &ASTNode{NodeCONTAINS, nil, nil, nil, 60, nil, ldInfix},
-		TokenBEGINSWITH:  &ASTNode{NodeBEGINSWITH, nil, nil, nil, 60, nil, ldInfix},
-		TokenENDSWITH:    &ASTNode{NodeENDSWITH, nil, nil, nil, 60, nil, ldInfix},
-		TokenCONTAINSNOT: &ASTNode{NodeCONTAINSNOT, nil, nil, nil, 60, nil, ldInfix},
-		TokenNOTIN:       &ASTNode{NodeNOTIN, nil, nil, nil, 60, nil, ldInfix},
+		TokenLIKE:        {NodeLIKE, nil, nil, nil, 60, nil, ldInfix},
+		TokenIN:          {NodeIN, nil, nil, nil, 60, nil, ldInfix},
+		TokenCONTAINS:    {NodeCONTAINS, nil, nil, nil, 60, nil, ldInfix},
+		TokenBEGINSWITH:  {NodeBEGINSWITH, nil, nil, nil, 60, nil, ldInfix},
+		TokenENDSWITH:    {NodeENDSWITH, nil, nil, nil, 60, nil, ldInfix},
+		TokenCONTAINSNOT: {NodeCONTAINSNOT, nil, nil, nil, 60, nil, ldInfix},
+		TokenNOTIN:       {NodeNOTIN, nil, nil, nil, 60, nil, ldInfix},
 
 		// Simple arithmetic expressions
 
-		TokenPLUS:   &ASTNode{NodePLUS, nil, nil, nil, 110, ndPrefix, ldInfix},
-		TokenMINUS:  &ASTNode{NodeMINUS, nil, nil, nil, 110, ndPrefix, ldInfix},
-		TokenTIMES:  &ASTNode{NodeTIMES, nil, nil, nil, 120, nil, ldInfix},
-		TokenDIV:    &ASTNode{NodeDIV, nil, nil, nil, 120, nil, ldInfix},
-		TokenMODINT: &ASTNode{NodeMODINT, nil, nil, nil, 120, nil, ldInfix},
-		TokenDIVINT: &ASTNode{NodeDIVINT, nil, nil, nil, 120, nil, ldInfix},
+		TokenPLUS:   {NodePLUS, nil, nil, nil, 110, ndPrefix, ldInfix},
+		TokenMINUS:  {NodeMINUS, nil, nil, nil, 110, ndPrefix, ldInfix},
+		TokenTIMES:  {NodeTIMES, nil, nil, nil, 120, nil, ldInfix},
+		TokenDIV:    {NodeDIV, nil, nil, nil, 120, nil, ldInfix},
+		TokenMODINT: {NodeMODINT, nil, nil, nil, 120, nil, ldInfix},
+		TokenDIVINT: {NodeDIVINT, nil, nil, nil, 120, nil, ldInfix},
 
 		// Brackets
 
-		TokenLPAREN: &ASTNode{NodeLPAREN, nil, nil, nil, 150, ndInner, nil},
-		TokenRPAREN: &ASTNode{NodeRPAREN, nil, nil, nil, 0, nil, nil},
-		TokenLBRACK: &ASTNode{NodeLBRACK, nil, nil, nil, 150, ndList, nil},
-		TokenRBRACK: &ASTNode{NodeRBRACK, nil, nil, nil, 0, nil, nil},
+		TokenLPAREN: {NodeLPAREN, nil, nil, nil, 150, ndInner, nil},
+		TokenRPAREN: {NodeRPAREN, nil, nil, nil, 0, nil, nil},
+		TokenLBRACK: {NodeLBRACK, nil, nil, nil, 150, ndList, nil},
+		TokenRBRACK: {NodeRBRACK, nil, nil, nil, 0, nil, nil},
 	}
 }
 

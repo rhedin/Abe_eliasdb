@@ -180,7 +180,7 @@ func TestFreeLogicalSlotManager(t *testing.T) {
 		return
 	}
 
-	loc, err = flsm.Get()
+	_, err = flsm.Get()
 	if err != file.ErrAlreadyInUse {
 		t.Error(err)
 		return

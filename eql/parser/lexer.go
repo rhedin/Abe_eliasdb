@@ -408,10 +408,10 @@ r' ... ' or r" ... "
 Characters are parsed plain between quote
 */
 func lexValue(l *lexer) lexFunc {
-	l.startNew()
+	var endToken rune
 
+	l.startNew()
 	allowEscapes := false
-	endToken := ' '
 
 	r := l.next(false)
 

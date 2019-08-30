@@ -75,7 +75,7 @@ func TestUserEndpoint(t *testing.T) {
 		return
 	}
 
-	res, resp = sendTestRequestResponse("application/json", queryURL+EndpointUser+"u/elias", "GET", nil,
+	sendTestRequestResponse("application/json", queryURL+EndpointUser+"u/elias", "GET", nil,
 		func(req *http.Request) {
 			req.AddCookie(authCookie)
 		})

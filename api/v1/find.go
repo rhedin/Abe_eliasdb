@@ -174,28 +174,28 @@ func (ie *findEndpoint) SwaggerDefs(s map[string]interface{}) {
 				"application/json",
 			},
 			"parameters": []map[string]interface{}{
-				map[string]interface{}{
+				{
 					"name":        "text",
 					"in":          "query",
 					"description": "A word or phrase to search for.",
 					"required":    false,
 					"type":        "string",
 				},
-				map[string]interface{}{
+				{
 					"name":        "value",
 					"in":          "query",
 					"description": "A node value to search for.",
 					"required":    false,
 					"type":        "string",
 				},
-				map[string]interface{}{
+				{
 					"name":        "lookup",
 					"in":          "query",
 					"description": "Flag if a complete node lookup should be done (otherwise only key and kind are returned).",
 					"required":    false,
 					"type":        "boolean",
 				},
-				map[string]interface{}{
+				{
 					"name":        "part",
 					"in":          "query",
 					"description": "Limit the search to a partition (without the option all partitions are searched).",

@@ -138,14 +138,14 @@ func (ie *indexEndpoint) SwaggerDefs(s map[string]interface{}) {
 				"application/json",
 			},
 			"parameters": []map[string]interface{}{
-				map[string]interface{}{
+				{
 					"name":        "partition",
 					"in":          "path",
 					"description": "Partition to query.",
 					"required":    true,
 					"type":        "string",
 				},
-				map[string]interface{}{
+				{
 					"name": "entity_type",
 					"in":   "path",
 					"description": "Datastore entity type which should selected. " +
@@ -153,35 +153,35 @@ func (ie *indexEndpoint) SwaggerDefs(s map[string]interface{}) {
 					"required": true,
 					"type":     "string",
 				},
-				map[string]interface{}{
+				{
 					"name":        "kind",
 					"in":          "path",
 					"description": "Node or edge kind to be queried.",
 					"required":    true,
 					"type":        "string",
 				},
-				map[string]interface{}{
+				{
 					"name":        "attr",
 					"in":          "query",
 					"description": "Attribute which should contain the word, phrase or value.",
 					"required":    true,
 					"type":        "string",
 				},
-				map[string]interface{}{
+				{
 					"name":        "word",
 					"in":          "query",
 					"description": "Word to search for in word queries.",
 					"required":    false,
 					"type":        "string",
 				},
-				map[string]interface{}{
+				{
 					"name":        "phrase",
 					"in":          "query",
 					"description": "Phrase to search for in phrase queries.",
 					"required":    false,
 					"type":        "string",
 				},
-				map[string]interface{}{
+				{
 					"name":        "value",
 					"in":          "query",
 					"description": "Value (node/edge attribute value) to search for in value queries.",

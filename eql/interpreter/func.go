@@ -130,16 +130,19 @@ func whereParseDate(astNode *parser.ASTNode, rtp *eqlRuntimeProvider,
 		layout = fmt.Sprint(datestr)
 	}
 
-	// Convert the date string
-
-	datestr, err = astNode.Children[1].Runtime.(CondRuntime).CondEval(node, edge)
-
 	if err == nil {
 
-		t, err = time.Parse(layout, fmt.Sprint(datestr))
+		// Convert the date string
+
+		datestr, err = astNode.Children[1].Runtime.(CondRuntime).CondEval(node, edge)
 
 		if err == nil {
-			ret = t.Unix()
+
+			t, err = time.Parse(layout, fmt.Sprint(datestr))
+
+			if err == nil {
+				ret = t.Unix()
+			}
 		}
 	}
 

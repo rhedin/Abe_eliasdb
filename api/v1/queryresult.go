@@ -535,7 +535,7 @@ SwaggerDefs is used to describe the endpoint in swagger.
 func (qre *queryResultEndpoint) SwaggerDefs(s map[string]interface{}) {
 
 	required := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "rid",
 			"in":          "path",
 			"description": "Result ID of a query result.",

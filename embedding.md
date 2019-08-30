@@ -1,38 +1,38 @@
 EliasDB Code Tutorial
 =====================
-The following text will give you an introduction to EliasDB's code structure and how to embed EliasDB in another Go project.
+The following text will give you an introduction on how to embed EliasDB in another Go project.
 
-Getting the source code
------------------------
-The easiest way to get the source code of EliasDB is to use go get. Assuming you have a normal go project with GOROOT pointing to its root.
-You can checkout the source code of EliasDB with:
+Prerequisites
+-------------
+You have a `go modules` (see [here](https://golang.org/cmd/go/#hdr-Modules__module_versions__and_more)) based go project.
+
+You can create a simple one by running:
 ```
-go get -d devt.de/common devt.de/eliasdb
+go mod init example.com/test
 ```
-For the rest of this tutorial it is assumed that you have the following directory structure:
+and creating a file called `main.go` with the following content:
+```
+package main
 
-| Path | Description |
-| --- | --- |
-| src/devt.de/common | Common code used by EliasDB |
-| src/devt.de/eliasdb/cli | Main directory for EliasDB containing the main package for the standalone server |
-| src/devt.de/eliasdb/api | HTTP endpoints for EliasDB's REST API |
-| src/devt.de/eliasdb/eql | Parser and interpreter for EQL |
-| src/devt.de/eliasdb/graph | API to the graph storage |
-| src/devt.de/eliasdb/hash | H-Tree implementation for EliasDB's underlying key-value store |
-| src/devt.de/eliasdb/storage | Low level storage API |
+import "fmt"
 
-For this tutorial we create a demo file:
-
-src/devt.de/demo/demo.go
-
+func main() {
+	fmt.Println("Test")
+}
+```
+Running `go build` should create a `test` executable in the current folder. Running `./test` will just output `Test`.
 
 Simple graph database setup
 ---------------------------
-The first step is to create a graph storage which will store the data. The following code will
-create a disk storage in the db/ subdirectory (the false flag opens the store in read / write mode):
+The first step is to create a graph storage which will store the data. The following code will create a disk storage in the db/ subdirectory (the false flag opens the store in read / write mode):
 ```
-func main() {
+import (
+	...
+		"devt.de/krotik/eliasdb/graph/graphstorage"
+)
 
+func main() {
+...
 	// Create a graph storage
 
 	gs, err := graphstorage.NewDiskGraphStorage("db", false)
@@ -43,6 +43,20 @@ func main() {
 	defer gs.Close()
 ...
 ```
+Running `go build` again should now download eliasdb as additional dependency (the actual versions might be different):
+```
+go: finding devt.de/krotik/eliasdb/graph/graphstorage latest
+go: finding devt.de/krotik/eliasdb/graph latest
+go: finding devt.de/krotik/eliasdb v1.0.0
+go: downloading devt.de/krotik/eliasdb v1.0.0
+go: extracting devt.de/krotik/eliasdb v1.0.0
+go: finding github.com/gorilla/websocket v1.4.1
+go: finding devt.de/krotik/common v1.0.0
+go: downloading devt.de/krotik/common v1.0.0
+go: extracting devt.de/krotik/common v1.0.0
+```
+The `go build` command will have modified the `go.mod` file and created a `go.sum` file.
+
 It is important to close a disk storage before shutdown. It is also possible to create a memory-only storage with:
 ```
 	gs = graphstorage.NewMemoryGraphStorage("memdb")
@@ -125,7 +139,7 @@ To iterate over all nodes of a specific kind you can use a node iterator:
 it, err := gm.NodeKeyIterator("main", "mynode")
 for it.HasNext() {
 	key := it.Next()
-	
+
 	if it.LastError != nil {
 		break
 	}
@@ -154,7 +168,7 @@ if idxerr == nil {
 	}
 }
 ```
-For even more complex searches you can use EQL (see also the EQL manual):
+For even more complex searches you can use EQL (see also the EQL manual  [here](https://devt.de/krotik/eliasdb/src/master/eql.md)):
 ```
 res, err := eql.RunQuery("myquery", "main", "get mynode where name = 'Node2'", gm)
 
@@ -173,16 +187,16 @@ Example source
 --------------
 An example demo.go could look like this:
 ```
-package demo
+package main
 
 import (
 	"fmt"
 	"log"
 
-	"devt.de/eliasdb/eql"
-	"devt.de/eliasdb/graph"
-	"devt.de/eliasdb/graph/data"
-	"devt.de/eliasdb/graph/graphstorage"
+	"devt.de/krotik/eliasdb/eql"
+	"devt.de/krotik/eliasdb/graph"
+	"devt.de/krotik/eliasdb/graph/data"
+	"devt.de/krotik/eliasdb/graph/graphstorage"
 )
 
 func main() {

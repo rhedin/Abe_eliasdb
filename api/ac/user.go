@@ -471,7 +471,7 @@ SwaggerDefs is used to describe the endpoint in swagger.
 func (ue *userEndpoint) SwaggerDefs(s map[string]interface{}) {
 
 	username := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "name",
 			"in":          "path",
 			"description": "Name of user.",
@@ -481,7 +481,7 @@ func (ue *userEndpoint) SwaggerDefs(s map[string]interface{}) {
 	}
 
 	groupname := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "name",
 			"in":          "path",
 			"description": "Name of group.",
@@ -491,7 +491,7 @@ func (ue *userEndpoint) SwaggerDefs(s map[string]interface{}) {
 	}
 
 	createParams := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "user_creation_data",
 			"in":          "body",
 			"description": "Additional data to create a user account",
@@ -520,7 +520,7 @@ func (ue *userEndpoint) SwaggerDefs(s map[string]interface{}) {
 	}
 
 	updateParams := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "user_update_data",
 			"in":          "body",
 			"description": "Additional data to update a user account",
@@ -549,7 +549,7 @@ func (ue *userEndpoint) SwaggerDefs(s map[string]interface{}) {
 	}
 
 	permParams := []map[string]interface{}{
-		map[string]interface{}{
+		{
 			"name":        "permission_data",
 			"in":          "body",
 			"description": "Resource paths and their permissions.",

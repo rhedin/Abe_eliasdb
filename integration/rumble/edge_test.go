@@ -109,7 +109,7 @@ func TestStoreAndRemoveEdge(t *testing.T) {
 		"end2role":      "role2",
 	}}, nil, mr)
 
-	if err == nil || err.Error() != "Invalid state Cannot store edge: GraphError: Invalid data (Can't store edge to non-existend node kind: b1)" {
+	if err == nil || err.Error() != "Invalid state Cannot store edge: GraphError: Invalid data (Can't store edge to non-existing node kind: b1)" {
 		t.Error(err)
 		return
 	}
@@ -172,7 +172,7 @@ GraphEdge:
 		return
 	}
 
-	res, err = tr.Execute([]interface{}{"main", "c", "d", "::"}, nil, mr)
+	_, err = tr.Execute([]interface{}{"main", "c", "d", "::"}, nil, mr)
 	if err == nil || err.Error() != "Invalid state Cannot traverse: GraphError: Invalid data (Invalid spec: ::)" {
 		t.Error(err)
 		return
@@ -321,7 +321,7 @@ func TestStoreEdgeTrans(t *testing.T) {
 		return
 	}
 
-	_, err = se.Execute([]interface{}{"main", map[interface{}]interface{}{
+	se.Execute([]interface{}{"main", map[interface{}]interface{}{
 		"key":           "123",
 		"kind":          "e",
 		"end1cascading": true,
