@@ -26,7 +26,7 @@ Features
 
 Getting Started (standalone application)
 ----------------------------------------
-You can download a precompiled package for Windows (win64) or Linux (amd64) [here](https://void.devt.de/pub/eliasdb).
+You can download a pre-compiled package for Windows (win64) or Linux (amd64) [here](https://void.devt.de/pub/eliasdb).
 
 Extract it and execute the executable with:
 ```

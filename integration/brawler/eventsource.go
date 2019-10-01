@@ -9,16 +9,16 @@
  */
 
 /*
-Package rambazamba contains an eventsource for Rambazamba which forwards
-internal EliasDB events to Rambazamba engines.
+Package brawler contains an eventsource for Brawler which forwards
+internal EliasDB events to Brawler engines.
 */
-package rambazamba
+package brawler
 
 import (
 	"fmt"
 	"io"
 
-	"devt.de/krotik/common/defs/rambazamba"
+	"devt.de/krotik/common/defs/brawler"
 	"devt.de/krotik/eliasdb/graph"
 	"devt.de/krotik/eliasdb/graph/data"
 )
@@ -26,12 +26,12 @@ import (
 /*
 AddEventPublisher adds an EventPublisher to a given Manager using an EventBridge.
 */
-func AddEventPublisher(gm *graph.Manager, publisher rambazamba.EventPublisher, errOut io.Writer) {
+func AddEventPublisher(gm *graph.Manager, publisher brawler.EventPublisher, errOut io.Writer) {
 	gm.SetGraphRule(&EventBridge{publisher, errOut})
 }
 
 /*
-EventMapping is a mapping between EliasDB event types to Rambazamba event kinds.
+EventMapping is a mapping between EliasDB event types to Brawler event kinds.
 */
 var EventMapping = map[int]string{
 
@@ -78,15 +78,15 @@ var EventMapping = map[int]string{
 	graph.EventEdgeDeleted: "db.edge.deleted",
 }
 
-// Event bridge between EliasDB and Rambazamba
+// Event bridge between EliasDB and Brawler
 // ===========================================
 
 /*
 EventBridge is a rule for a graph manager to forward all graph events to
-Rambazamba.
+Brawler.
 */
 type EventBridge struct {
-	publisher rambazamba.EventPublisher
+	publisher brawler.EventPublisher
 	errOut    io.Writer
 }
 
@@ -94,7 +94,7 @@ type EventBridge struct {
 Name returns the name of the rule.
 */
 func (r *EventBridge) Name() string {
-	return "rambazamba.eventbridge"
+	return "brawler.eventbridge"
 }
 
 /*

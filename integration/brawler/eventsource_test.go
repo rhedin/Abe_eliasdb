@@ -8,7 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package rambazamba
+package brawler
 
 import (
 	"bytes"
@@ -43,7 +43,7 @@ func TestEventSource(t *testing.T) {
 
 	AddEventPublisher(gm, ep, &log)
 
-	if res := fmt.Sprint(gm.GraphRules()); res != "[rambazamba.eventbridge system.deletenodeedges system.updatenodestats]" {
+	if res := fmt.Sprint(gm.GraphRules()); res != "[brawler.eventbridge system.deletenodeedges system.updatenodestats]" {
 		t.Error("Unexpected result:", res)
 		return
 	}
