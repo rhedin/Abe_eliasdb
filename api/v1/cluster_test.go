@@ -30,6 +30,9 @@ import (
 )
 
 func TestClusterStorage(t *testing.T) {
+	clusterQueryURL := "http://localhost" + TESTPORT + EndpointClusterQuery
+	graphURL := "http://localhost" + TESTPORT + EndpointGraph
+
 	cluster2 := createCluster(2)
 
 	oldGM := api.GM
@@ -45,6 +48,48 @@ func TestClusterStorage(t *testing.T) {
 		api.DD = nil
 		api.DDLog = nil
 	}()
+
+	// We should now get back a state
+
+	st, _, res := sendTestRequest(clusterQueryURL, "GET", nil)
+
+	if st != "200 OK" || res != `
+{
+  "failed": null,
+  "members": [
+    "TestClusterMember-0",
+    "localhost:9020"
+  ],
+  "replication": 1,
+  "ts": [
+    "TestClusterMember-0",
+    "1"
+  ],
+  "tsold": [
+    "",
+    "0"
+  ]
+}`[1:] {
+		t.Error("Unexpected response:", st, res)
+		return
+	}
+
+	// Insert some data
+
+	st, _, res = sendTestRequest(graphURL+"i41health/n", "POST", []byte(`
+[{
+	"key":"3",
+	"kind":"Upload",
+	"parcel": "12345"
+}]
+`[1:]))
+
+	cluster.WaitForTransfer()
+	fmt.Println(cluster.DumpMemoryClusterLayout("i41healthUpload.nodes"))
+
+	n, err := api.GM.FetchNode("i41health", "3", "Upload")
+
+	fmt.Println("res:", n, err)
 
 }
 
@@ -377,6 +422,8 @@ func createCluster(n int) []*cluster.DistributedStorage {
 
 	var mgs []*graphstorage.MemoryGraphStorage
 	var cs []*cluster.DistributedStorage
+
+	cluster.ClearMSMap()
 
 	for i := 0; i < n; i++ {
 		mgs = append(mgs, graphstorage.NewMemoryGraphStorage(fmt.Sprintf("mgs%v", i+1)).(*graphstorage.MemoryGraphStorage))
