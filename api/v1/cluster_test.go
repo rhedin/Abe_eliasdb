@@ -25,8 +25,28 @@ import (
 	"devt.de/krotik/eliasdb/api"
 	"devt.de/krotik/eliasdb/cluster"
 	"devt.de/krotik/eliasdb/cluster/manager"
+	"devt.de/krotik/eliasdb/graph"
 	"devt.de/krotik/eliasdb/graph/graphstorage"
 )
+
+func TestClusterStorage(t *testing.T) {
+	cluster2 := createCluster(2)
+
+	oldGM := api.GM
+	oldGS := api.GS
+	api.GS = cluster2[0]
+	api.GM = graph.NewGraphManager(cluster2[0])
+	api.DD = cluster2[0]
+	api.DDLog = datautil.NewRingBuffer(10)
+
+	defer func() {
+		api.GM = oldGM
+		api.GS = oldGS
+		api.DD = nil
+		api.DDLog = nil
+	}()
+
+}
 
 func TestClusterQuery(t *testing.T) {
 	queryURL := "http://localhost" + TESTPORT + EndpointClusterQuery
@@ -53,8 +73,19 @@ func TestClusterQuery(t *testing.T) {
 
 	cluster2 := createCluster(2)
 
+	oldGM := api.GM
+	oldGS := api.GS
+	api.GS = cluster2[0]
+	api.GM = graph.NewGraphManager(cluster2[0])
 	api.DD = cluster2[0]
 	api.DDLog = datautil.NewRingBuffer(10)
+
+	defer func() {
+		api.GM = oldGM
+		api.GS = oldGS
+		api.DD = nil
+		api.DDLog = nil
+	}()
 
 	// We should now get back a state
 
