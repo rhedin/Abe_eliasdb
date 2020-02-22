@@ -35,6 +35,8 @@ func TestClusterStorage(t *testing.T) {
 
 	cluster2 := createCluster(2)
 
+	joinCluster(cluster2, t)
+
 	oldGM := api.GM
 	oldGS := api.GS
 	api.GS = cluster2[0]
@@ -58,16 +60,18 @@ func TestClusterStorage(t *testing.T) {
   "failed": null,
   "members": [
     "TestClusterMember-0",
-    "localhost:9020"
+    "localhost:9020",
+    "TestClusterMember-1",
+    "localhost:9021"
   ],
   "replication": 1,
   "ts": [
     "TestClusterMember-0",
-    "1"
+    "2"
   ],
   "tsold": [
-    "",
-    "0"
+    "TestClusterMember-0",
+    "1"
   ]
 }`[1:] {
 		t.Error("Unexpected response:", st, res)
@@ -85,12 +89,17 @@ func TestClusterStorage(t *testing.T) {
 `[1:]))
 
 	cluster.WaitForTransfer()
-	fmt.Println(cluster.DumpMemoryClusterLayout("i41healthUpload.nodes"))
 
 	n, err := api.GM.FetchNode("i41health", "3", "Upload")
 
-	fmt.Println("res:", n, err)
-
+	if err != nil || n.String() != `GraphNode:
+       key : 3
+      kind : Upload
+    parcel : 12345
+` {
+		t.Error("Unexpected result:", n, err)
+		return
+	}
 }
 
 func TestClusterQuery(t *testing.T) {
@@ -420,6 +429,10 @@ Create a cluster with n members (all storage is in memory)
 */
 func createCluster(n int) []*cluster.DistributedStorage {
 
+	// By default no log output
+
+	log.SetOutput(ioutil.Discard)
+
 	var mgs []*graphstorage.MemoryGraphStorage
 	var cs []*cluster.DistributedStorage
 
@@ -439,6 +452,26 @@ func createCluster(n int) []*cluster.DistributedStorage {
 	}
 
 	return cs
+}
+
+/*
+joinCluster joins up a given cluster.
+*/
+func joinCluster(cluster []*cluster.DistributedStorage, t *testing.T) {
+
+	for i, dd := range cluster {
+		dd.Start()
+		defer dd.Close()
+
+		if i > 0 {
+			err := dd.MemberManager.JoinCluster(cluster[0].MemberManager.Name(),
+				cluster[0].MemberManager.NetAddr())
+			if err != nil {
+				t.Error(err)
+				return
+			}
+		}
+	}
 }
 
 func checkStateInfo(mm *manager.MemberManager, expectedStateInfo string) error {

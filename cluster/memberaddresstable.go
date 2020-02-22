@@ -168,7 +168,7 @@ func (mat *memberAddressTable) NewClusterLoc(dsname string) (uint64, error) {
 
 				ok, err = locExists(dsname, i)
 
-				if err == nil && !ok {
+				if err == nil && !ok && i != 0 {
 					ret = i
 					goto SearchResult
 
@@ -200,7 +200,7 @@ func (mat *memberAddressTable) NewClusterLoc(dsname string) (uint64, error) {
 			// Reset range counter - next time we test which if there is anything
 			// left in this range
 
-			newLocCounter = 0
+			newLocCounter = 1
 		}
 
 		mat.setNewlocCounter(dsname, newLocCounter)
@@ -334,7 +334,7 @@ func (mat *memberAddressTable) newlocCounter(dsname string) (uint64, bool, error
 
 	v, err := mat.translation.Get(newlocCounterKey(dsname))
 	if v == nil {
-		return 0, false, err
+		return 1, false, err
 	}
 
 	ret := v.(uint64)
