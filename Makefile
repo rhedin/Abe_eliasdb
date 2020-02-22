@@ -12,7 +12,10 @@ mod:
 	go mod tidy
 test:
 	go test -p 1 ./...
-
+cover:
+	go test -p 1 --coverprofile=coverage.out ./...
+	go tool cover --html=coverage.out -o coverage.html
+	sh -c "open coverage.html || xdg-open coverage.html" 2>/dev/null
 fmt:
 	gofmt -l -w -s .
 

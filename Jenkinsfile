@@ -55,7 +55,6 @@ pipeline {
                     sh 'git fetch --tags'
                 }
 
-                sh 'mkdir -p .cache'
                 sh '/opt/env-go/bin/env-go make dist'
             }
         }

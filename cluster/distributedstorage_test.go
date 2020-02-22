@@ -118,8 +118,8 @@ func TestMainDBDistribution(t *testing.T) {
 
 	// Setup a cluster
 
-	// Housekeeping frequency is low so the test runs fast and we have it
-	// interfering - try to produce dead locks, etc ...
+	// Housekeeping frequency is high so we have it interfering - try to
+	// produce dead locks, etc ...
 
 	manager.FreqHousekeeping = 5
 	defer func() { manager.FreqHousekeeping = 1000 }()
