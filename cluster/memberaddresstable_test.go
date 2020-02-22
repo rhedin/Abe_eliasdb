@@ -43,7 +43,7 @@ func TestAddressTableClusterLoc(t *testing.T) {
 	cluster1, ms1 = createCluster(1, 1)
 
 	loc, err := ms1[0].at.NewClusterLoc("test1")
-	if loc != 0 || err != nil {
+	if loc != 1 || err != nil {
 		t.Error("Unexpected result:", loc, err)
 		return
 	}
@@ -52,7 +52,7 @@ func TestAddressTableClusterLoc(t *testing.T) {
 	// Starting an unrelated counter should have no effect
 
 	loc, err = ms1[0].at.NewClusterLoc("test2")
-	if loc != 0 || err != nil {
+	if loc != 1 || err != nil {
 		t.Error("Unexpected result:", loc, err)
 		return
 	}
@@ -62,31 +62,24 @@ func TestAddressTableClusterLoc(t *testing.T) {
 	// Advance the counter
 
 	loc, err = ms1[0].at.NewClusterLoc("test1")
-	if loc != 1 || err != nil {
-		t.Error("Unexpected result:", loc, err)
-		return
-	}
-	ms1[0].at.SetTransClusterLoc("test1", loc, 123, 1)
-
-	loc, err = ms1[0].at.NewClusterLoc("test1")
 	if loc != 2 || err != nil {
 		t.Error("Unexpected result:", loc, err)
 		return
 	}
-
-	// Not filling the location 2
+	ms1[0].at.SetTransClusterLoc("test1", loc, 123, 1)
 
 	loc, err = ms1[0].at.NewClusterLoc("test1")
 	if loc != 3 || err != nil {
 		t.Error("Unexpected result:", loc, err)
 		return
 	}
-	ms1[0].at.SetTransClusterLoc("test1", loc, 123, 1)
 
-	// The next call should find the free location 2
+	// Not filling the location 3
+
+	// The next call should find the free location 3
 
 	loc, err = ms1[0].at.NewClusterLoc("test1")
-	if loc != 2 || err != nil {
+	if loc != 3 || err != nil {
 		t.Error("Unexpected result:", loc, err)
 		return
 	}

@@ -43,7 +43,7 @@ Root returns a root value.
 func (dsm *DistributedStorageManager) Root(root int) uint64 {
 	var ret uint64
 
-	// Do not do anything is the cluster is not operational
+	// Do not do anything if the cluster is not operational
 
 	distTable, distTableErr := dsm.ds.DistributionTable()
 

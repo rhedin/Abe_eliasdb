@@ -721,7 +721,7 @@ func (ms *memberStorage) dump(smname string) string {
 				k, v := it.Next()
 				key := string(k)
 
-				if strings.HasPrefix(key, transPrefix) {
+				if strings.HasPrefix(key, fmt.Sprint(transPrefix, smname, "#")) {
 					key = string(key[len(fmt.Sprint(transPrefix, smname, "#")):])
 
 					locmap[v.(*translationRec).loc] = fmt.Sprintf("%v (v:%v)",
