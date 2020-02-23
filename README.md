@@ -66,6 +66,10 @@ There is a separate [tutorial](https://devt.de/krotik/eliasdb/src/master/example
 
 The terminal uses a REST API to communicate with the backend. The REST API can be browsed using a dynamically generated swagger.json definition (https://localhost:9090/db/swagger.json). You can browse the API of EliasDB's latest version [here](http://petstore.swagger.io/?url=https://devt.de/krotik/eliasdb/raw/master/swagger.json).
 
+### Clustering:
+
+EliasDB supports to be run in a cluster by joining multiple instances of EliasDB together. You can read more about it [here](https://devt.de/krotik/eliasdb/src/master/cluster.md).
+
 ### Command line options
 The main EliasDB executable has two main tools:
 ```
@@ -219,6 +223,7 @@ Further Reading
 ---------------
 - A design document which describes the different components of the graph database. [Link](https://devt.de/krotik/eliasdb/src/master/eliasdb_design.md)
 - A reference for the EliasDB query language EQL. [Link](https://devt.de/krotik/eliasdb/src/master/eql.md)
+- A reference for the EliasDB's support for GraphQL. [Link](https://devt.de/krotik/eliasdb/src/master/graphql.md)
 - A quick overview of what you can do when you embed EliasDB in your own Go project. [Link](https://devt.de/krotik/eliasdb/src/master/embedding.md)
 
 License
