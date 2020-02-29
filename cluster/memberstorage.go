@@ -189,7 +189,7 @@ func (ms *memberStorage) handleSetRootRequest(distTable *DistributionTable, requ
 
 	sm := ms.dataStorage(dsname, true)
 
-	sm.SetRoot(root, request.Value.(uint64))
+	sm.SetRoot(root, toUInt64(request.Value))
 
 	if !request.Transfer {
 		ms.at.AddTransferRequest(distTable.OtherReplicationMembers(0, ms.ds.MemberManager.Name()),
@@ -227,7 +227,7 @@ func (ms *memberStorage) handleInsertRequest(distTable *DistributionTable, reque
 
 		// If this is a transfer request we know already the cluster location
 
-		cloc = request.Args[RPLoc].(uint64)
+		cloc = toUInt64(request.Args[RPLoc])
 	}
 
 	if err == nil {
@@ -285,7 +285,7 @@ func (ms *memberStorage) handleUpdateRequest(distTable *DistributionTable, reque
 	var newVersion uint64
 
 	dsname := request.Args[RPStoreName].(string)
-	cloc := request.Args[RPLoc].(uint64)
+	cloc := toUInt64(request.Args[RPLoc])
 	*response = 0
 
 	// Get the translation
@@ -305,7 +305,7 @@ func (ms *memberStorage) handleUpdateRequest(distTable *DistributionTable, reque
 				newVersion = transRec.ver + 1
 
 			} else {
-				newVersion = request.Args[RPVer].(uint64)
+				newVersion = toUInt64(request.Args[RPVer])
 
 				if newVersion >= transRec.ver {
 					err = sm.Update(transRec.loc, request.Value)
@@ -380,7 +380,7 @@ func (ms *memberStorage) handleFreeRequest(distTable *DistributionTable, request
 	var err error
 
 	dsname := request.Args[RPStoreName].(string)
-	cloc := request.Args[RPLoc].(uint64)
+	cloc := toUInt64(request.Args[RPLoc])
 
 	// Get the translation
 
@@ -439,7 +439,7 @@ func (ms *memberStorage) handleFetchRequest(distTable *DistributionTable,
 	var err error
 
 	dsname := request.Args[RPStoreName].(string)
-	cloc := request.Args[RPLoc].(uint64)
+	cloc := toUInt64(request.Args[RPLoc])
 
 	// Get the translation
 

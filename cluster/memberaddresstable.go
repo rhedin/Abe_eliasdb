@@ -337,7 +337,7 @@ func (mat *memberAddressTable) newlocCounter(dsname string) (uint64, bool, error
 		return 1, false, err
 	}
 
-	ret := v.(uint64)
+	ret := toUInt64(v)
 
 	// Store counter in the cache
 
