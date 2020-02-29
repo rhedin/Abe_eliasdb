@@ -58,9 +58,9 @@ docker run --rm --network="host" -it -v $PWD:/data --user $(id -u):$(id -g) -v $
 
 ### Tutorial:
 
-To get an idea of what EliasDB is about have a look at the [tutorial](https://devt.de/krotik/eliasdb/src/master/examples/tutorial/doc/tutorial.md). This tutorial will cover the basics of EQL and show how data is organized.
+To get an idea of what EliasDB is about have a look at the [tutorial](examples/tutorial/doc/tutorial.md). This tutorial will cover the basics of EQL and show how data is organized.
 
-There is a separate [tutorial](https://devt.de/krotik/eliasdb/src/master/examples/tutorial/doc/tutorial_graphql.md) on using ELiasDB with GraphQL.
+There is a separate [tutorial](examples/tutorial/doc/tutorial_graphql.md) on using ELiasDB with GraphQL.
 
 ### REST API:
 
@@ -68,7 +68,7 @@ The terminal uses a REST API to communicate with the backend. The REST API can b
 
 ### Clustering:
 
-EliasDB supports to be run in a cluster by joining multiple instances of EliasDB together. You can read more about it [here](https://devt.de/krotik/eliasdb/src/master/cluster.md).
+EliasDB supports to be run in a cluster by joining multiple instances of EliasDB together. You can read more about it [here](cluster.md).
 
 ### Command line options
 The main EliasDB executable has two main tools:
@@ -216,7 +216,8 @@ docker build --tag krotik/eliasdb .
 
 Example Applications
 --------------------
-[Chat](https://devt.de/krotik/eliasdb/src/master/examples/chat/doc/chat.md) - A simple chat application showing user management and subscriptions.
+- [Chat](examples/chat/doc/chat.md) - A simple chat application showing user /management and subscriptions.
+- [Data-mining](examples/data-mining/doc/data-mining.md) - A more complex application which uses the cluster feature of EliasDB and GraphQL for data queries.
 
 
 Further Reading

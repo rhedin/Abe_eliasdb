@@ -2,17 +2,31 @@
 cd "$(dirname "$0")"
 export ROOT_PATH=`pwd`
 
-cd ../..
-docker build --tag data-mining/eliasdb .
+# This build script should build the following images in the local Docker registry:
+#
+# data-mining/frontend
+# data-mining/eliasdb1
+# data-mining/eliasdb2
+# data-mining/eliasdb3
+# data-mining/collector
+
+echo Building Collector
+echo ==================
+cd ./docker-images/collector
+./build.sh
 cd $ROOT_PATH
 
-pwd
+echo
+echo Building Eliasdb Cluster
+echo ========================
+cd docker-images/eliasdb
+./build.sh
+cd $ROOT_PATH
 
-#if ! [ -d "run" ]; then
-#  mkdir -p run/web
-#  cp -fR res/chat/* run/web
-#  cp -fR res/eliasdb.config.json run
-#  cp -fR res/access.db run
-#fi
-#cd run
-#../../../eliasdb server
+echo
+echo Building Frontend
+echo =================
+cd docker-images/frontend
+./build.sh
+cd $ROOT_PATH
+

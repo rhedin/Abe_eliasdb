@@ -1,7 +1,7 @@
 FROM python:alpine
 RUN apk update && apk add --no-cache supervisor
 
-RUN pip install schedule request
+RUN pip install schedule requests
 
 ADD etc/supervisord.conf /etc/supervisord.conf
 ADD app/main.py /app/main.py

@@ -1,8 +1,17 @@
 version: "3"
 
-# Sample file to just spin up the eliasdb cluster
-
 services:
+  frontend:
+    image: data-mining/frontend:latest
+    container_name: frontend
+    ports:
+      - 4040:80
+    # Uncomment to directly edit the frontend
+    # volumes:
+    #   - ./docker-images/frontend/app:/usr/share/nginx/html
+    networks:
+      - back-tier
+
   eliasdb1:
     image: data-mining/eliasdb1:latest
     container_name: eliasdb1
@@ -24,6 +33,12 @@ services:
     container_name: eliasdb3
     ports:
       - 4043:9090
+    networks:
+      - back-tier
+
+  collector:
+    image: data-mining/collector:latest
+    container_name: collector
     networks:
       - back-tier
 
