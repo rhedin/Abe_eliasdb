@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.3](https://devt.de///compare/v1.0.2...v1.0.3) (2020-03-08)
+
+
+### Bug Fixes
+
+* Adding compose files and frontend files ([f33d23f](https://devt.de///commit/f33d23f912a3e3d05192a88afadb592b05229040))
+* Adding mining example ([c585876](https://devt.de///commit/c585876025a37539aed7f81c514f0f802baf9c9f))
+* Adding UInt64 conversion function ([a63fe0f](https://devt.de///commit/a63fe0f575fe977e06c6f534718b184d40817128))
+* Make cluster translationRec and transferRec gobable ([34623d8](https://devt.de///commit/34623d897286960180474fb466cec499ec1e0188))
+
 ### [1.0.2](https://devt.de///compare/v1.0.1...v1.0.2) (2020-02-22)
 
 
