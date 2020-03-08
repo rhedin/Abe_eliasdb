@@ -11,6 +11,7 @@
 package cluster
 
 import (
+	"encoding/gob"
 	"errors"
 	"fmt"
 	"sync"
@@ -21,6 +22,14 @@ import (
 	"devt.de/krotik/eliasdb/hash"
 	"devt.de/krotik/eliasdb/storage"
 )
+
+func init() {
+
+	// Make sure we can use the relevant types in a gob operation
+
+	gob.Register(&translationRec{})
+	gob.Register(&transferRec{})
+}
 
 /*
 rootIDTranslationTree is the root id for the translation map
@@ -47,16 +56,16 @@ translationRec is a translation record which stores a local storage location wit
 version number.
 */
 type translationRec struct {
-	loc uint64 // Local storage location
-	ver uint64 // Version of the local stored data
+	Loc uint64 // Local storage location
+	Ver uint64 // Version of the local stored data
 }
 
 /*
 transferRec is a transfer record which stores a data transfer request.
 */
 type transferRec struct {
-	members []string     // Target members
-	request *DataRequest // Data request
+	Members []string     // Target members
+	Request *DataRequest // Data request
 }
 
 /*
@@ -337,7 +346,7 @@ func (mat *memberAddressTable) newlocCounter(dsname string) (uint64, bool, error
 		return 1, false, err
 	}
 
-	ret := v.(uint64)
+	ret := toUInt64(v)
 
 	// Store counter in the cache
 

@@ -424,6 +424,150 @@ func TestClusterQuery(t *testing.T) {
 	}
 }
 
+func TestClusterQueryBigCluster(t *testing.T) {
+	queryURL := "http://localhost" + TESTPORT + EndpointClusterQuery
+
+	// Create a big cluster
+
+	cluster3 := createCluster(3)
+
+	for _, dd := range cluster3 {
+		dd.Start()
+		defer dd.Close()
+	}
+
+	oldGM := api.GM
+	oldGS := api.GS
+	api.GS = cluster3[0]
+	api.GM = graph.NewGraphManager(cluster3[0])
+	api.DD = cluster3[0]
+	api.DDLog = datautil.NewRingBuffer(10)
+
+	defer func() {
+		api.GM = oldGM
+		api.GS = oldGS
+		api.DD = nil
+		api.DDLog = nil
+	}()
+
+	// We should now get back a state
+
+	st, _, res := sendTestRequest(queryURL, "GET", nil)
+
+	if st != "200 OK" || res != `
+{
+  "failed": null,
+  "members": [
+    "TestClusterMember-0",
+    "localhost:9020"
+  ],
+  "replication": 1,
+  "ts": [
+    "TestClusterMember-0",
+    "1"
+  ],
+  "tsold": [
+    "",
+    "0"
+  ]
+}`[1:] {
+		t.Error("Unexpected response:", st, res)
+		return
+	}
+
+	// Join more cluster members
+
+	api.DD = cluster3[1]
+	api.DDLog = datautil.NewRingBuffer(10)
+
+	jsonString, err := json.Marshal(map[string]interface{}{
+		"name":    cluster3[0].MemberManager.Name(),
+		"netaddr": cluster3[0].MemberManager.NetAddr(),
+	})
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	st, _, res = sendTestRequest(queryURL+"join", "PUT", jsonString)
+
+	if st != "200 OK" || res != "" {
+		t.Error("Unexpected response:", st, res)
+		return
+	}
+
+	st, _, res = sendTestRequest(queryURL, "GET", nil)
+
+	if st != "200 OK" || res != `
+{
+  "failed": null,
+  "members": [
+    "TestClusterMember-1",
+    "localhost:9021",
+    "TestClusterMember-0",
+    "localhost:9020"
+  ],
+  "replication": 1,
+  "ts": [
+    "TestClusterMember-0",
+    "2"
+  ],
+  "tsold": [
+    "TestClusterMember-0",
+    "1"
+  ]
+}`[1:] {
+		t.Error("Unexpected response:", st, res)
+		return
+	}
+
+	api.DD = cluster3[2]
+	api.DDLog = datautil.NewRingBuffer(10)
+
+	jsonString, err = json.Marshal(map[string]interface{}{
+		"name":    cluster3[0].MemberManager.Name(),
+		"netaddr": cluster3[0].MemberManager.NetAddr(),
+	})
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	st, _, res = sendTestRequest(queryURL+"join", "PUT", jsonString)
+
+	if st != "200 OK" || res != "" {
+		t.Error("Unexpected response:", st, res)
+		return
+	}
+
+	st, _, res = sendTestRequest(queryURL, "GET", nil)
+
+	if st != "200 OK" || res != `
+{
+  "failed": null,
+  "members": [
+    "TestClusterMember-2",
+    "localhost:9022",
+    "TestClusterMember-0",
+    "localhost:9020",
+    "TestClusterMember-1",
+    "localhost:9021"
+  ],
+  "replication": 1,
+  "ts": [
+    "TestClusterMember-0",
+    "3"
+  ],
+  "tsold": [
+    "TestClusterMember-0",
+    "2"
+  ]
+}`[1:] {
+		t.Error("Unexpected response:", st, res)
+		return
+	}
+}
+
 /*
 Create a cluster with n members (all storage is in memory)
 */

@@ -144,7 +144,7 @@ func TestAddressTableClusterLoc(t *testing.T) {
 
 	// Now check the translation lookup
 
-	if tr, ok, err := ms1[0].at.TransClusterLoc("test1", 50); tr.loc != 123 || tr.ver != 1 || !ok || err != nil {
+	if tr, ok, err := ms1[0].at.TransClusterLoc("test1", 50); tr.Loc != 123 || tr.Ver != 1 || !ok || err != nil {
 		t.Error("Unexpected translation:", tr, ok, err)
 		return
 	}
@@ -154,17 +154,17 @@ func TestAddressTableClusterLoc(t *testing.T) {
 		return
 	}
 
-	if tr, ok, err := ms1[0].at.SetTransClusterLoc("test1", 50, 555, 2); tr.loc != 123 || tr.ver != 1 || !ok || err != nil {
+	if tr, ok, err := ms1[0].at.SetTransClusterLoc("test1", 50, 555, 2); tr.Loc != 123 || tr.Ver != 1 || !ok || err != nil {
 		t.Error("Unexpected translation:", tr, ok, err)
 		return
 	}
 
-	if tr, ok, err := ms1[0].at.TransClusterLoc("test1", 50); tr.loc != 555 || tr.ver != 2 || !ok || err != nil {
+	if tr, ok, err := ms1[0].at.TransClusterLoc("test1", 50); tr.Loc != 555 || tr.Ver != 2 || !ok || err != nil {
 		t.Error("Unexpected translation:", tr, ok, err)
 		return
 	}
 
-	if tr, ok, err := ms1[0].at.RemoveTransClusterLoc("test1", 50); tr.loc != 555 || tr.ver != 2 || !ok || err != nil {
+	if tr, ok, err := ms1[0].at.RemoveTransClusterLoc("test1", 50); tr.Loc != 555 || tr.Ver != 2 || !ok || err != nil {
 		t.Error("Unexpected translation:", tr, ok, err)
 		return
 	}
