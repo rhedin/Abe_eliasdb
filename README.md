@@ -17,6 +17,7 @@ Features
 - Stored graphs can be separated via partitions.
 - Stored graphs support cascading deletions - delete one node and all its "children".
 - All stored data is indexed and can be quickly searched via a full text phrase search.
+- Text search supports logographic laguages (CJK) using word dictionaries
 - EliasDB has a GraphQL interface which can be used to store and retrieve data.
 - For more complex queries EliasDB has an own query language called EQL with an sql-like syntax.
 - Written in Go from scratch. Only uses gorilla/websocket to support websockets for GraphQL subscriptions.
