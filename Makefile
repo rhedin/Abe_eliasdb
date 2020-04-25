@@ -23,7 +23,7 @@ vet:
 	go vet ./...
 
 build: clean mod fmt vet
-	go build -o $(NAME) cli/eliasdb.go
+	go build -ldflags "-s -w" -o $(NAME) cli/eliasdb.go
 
 build-win: clean mod fmt vet
 	GOOS=windows GOARCH=amd64 go build -o $(NAME).exe cli/eliasdb.go
