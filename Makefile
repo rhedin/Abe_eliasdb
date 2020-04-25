@@ -28,6 +28,9 @@ build: clean mod fmt vet
 build-win: clean mod fmt vet
 	GOOS=windows GOARCH=amd64 go build -o $(NAME).exe cli/eliasdb.go
 
+build-pi: clean mod fmt vet
+	GOOS=linux GOARCH=arm GOARM=7 go build -o $(NAME) cli/eliasdb.go
+
 dist: build build-win
 	rm -fR dist
 
