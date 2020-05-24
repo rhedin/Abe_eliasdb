@@ -25,13 +25,19 @@ vet:
 build: clean mod fmt vet
 	go build -ldflags "-s -w" -o $(NAME) cli/eliasdb.go
 
+build-mac: clean mod fmt vet
+	GOOS=darwin GOARCH=amd64 go build -o $(NAME).mac cli/eliasdb.go
+
 build-win: clean mod fmt vet
 	GOOS=windows GOARCH=amd64 go build -o $(NAME).exe cli/eliasdb.go
 
-build-pi: clean mod fmt vet
-	GOOS=linux GOARCH=arm GOARM=7 go build -o $(NAME) cli/eliasdb.go
+build-arm7: clean mod fmt vet
+	GOOS=linux GOARCH=arm GOARM=7 go build -o $(NAME).arm7 cli/eliasdb.go
 
-dist: build build-win
+build-arm8: clean mod fmt vet
+	GOOS=linux GOARCH=arm64 go build -o $(NAME).arm8 cli/eliasdb.go
+
+dist: build build-win build-mac build-arm7 build-arm8
 	rm -fR dist
 
 	mkdir -p dist/$(NAME)_linux_amd64
@@ -40,10 +46,28 @@ dist: build build-win
 	cp NOTICE dist/$(NAME)_linux_amd64
 	tar --directory=dist -cz $(NAME)_linux_amd64 > dist/$(NAME)_$(TAG)_linux_amd64.tar.gz
 
+	mkdir -p dist/$(NAME)_darwin_amd64
+	mv $(NAME).mac dist/$(NAME)_darwin_amd64/$(NAME)
+	cp LICENSE dist/$(NAME)_darwin_amd64
+	cp NOTICE dist/$(NAME)_darwin_amd64
+	tar --directory=dist -cz $(NAME)_darwin_amd64 > dist/$(NAME)_$(TAG)_darwin_amd64.tar.gz
+
 	mkdir -p dist/$(NAME)_windows_amd64
 	mv $(NAME).exe dist/$(NAME)_windows_amd64
 	cp LICENSE dist/$(NAME)_windows_amd64
 	cp NOTICE dist/$(NAME)_windows_amd64
 	tar --directory=dist -cz $(NAME)_windows_amd64 > dist/$(NAME)_$(TAG)_windows_amd64.tar.gz
+
+	mkdir -p dist/$(NAME)_arm7
+	mv $(NAME).arm7 dist/$(NAME)_arm7
+	cp LICENSE dist/$(NAME)_arm7
+	cp NOTICE dist/$(NAME)_arm7
+	tar --directory=dist -cz $(NAME)_arm7 > dist/$(NAME)_$(TAG)_arm7.tar.gz
+
+	mkdir -p dist/$(NAME)_arm8
+	mv $(NAME).arm8 dist/$(NAME)_arm8
+	cp LICENSE dist/$(NAME)_arm8
+	cp NOTICE dist/$(NAME)_arm8
+	tar --directory=dist -cz $(NAME)_arm8 > dist/$(NAME)_$(TAG)_arm8.tar.gz
 
 	sh -c 'cd dist; sha256sum *.tar.gz' > dist/checksums.txt
