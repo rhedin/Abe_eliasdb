@@ -16,3 +16,13 @@
 /examples/data-mining/docker-images/eliasdb/eliasdb
 /examples/data-mining/docker-images/frontend/app/node_modules
 /examples/data-mining/docker-images/frontend/app/graphiql
+/examples/game/run/
+/examples/game/res/frontend/*.lock
+/examples/game/res/frontend/*-lock.json
+/examples/game/res/frontend/node_modules
+/examples/tmp
+/ssl
+/web
+/db
+/scripts
+/eliasdb.config.json
