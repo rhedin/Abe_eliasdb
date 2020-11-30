@@ -10,6 +10,9 @@
 /eliasdb
 /examples/tutorial/run/
 /examples/chat/run/
+/examples/chat/res/chat/*.lock
+/examples/chat/res/chat/*-lock.json
+/examples/chat/res/chat/node_modules
 /examples/data-mining/docker-images/eliasdb/eliasdb
 /examples/data-mining/docker-images/frontend/app/node_modules
 /examples/data-mining/docker-images/frontend/app/graphiql
