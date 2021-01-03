@@ -2,18 +2,15 @@ EliasDB
 =======
 
 <p align="center">
-  <img height="300px" style="height:300px;" src="logo.png">
+  <img height="300px" style="height:300px;" src="eliasdb_logo.png">
 </p>
 
 EliasDB is a graph-based database which aims to provide a lightweight solution for projects which want to store their data as a graph.
 
-<p>
-<a href="https://void.devt.de/pub/eliasdb/coverage.txt"><img src="https://void.devt.de/pub/eliasdb/test_result.svg" alt="Code coverage"></a>
-<a href="https://goreportcard.com/report/devt.de/krotik/eliasdb">
-<img src="https://goreportcard.com/badge/devt.de/krotik/eliasdb?style=flat-square" alt="Go Report Card"></a>
-<a href="https://godoc.org/devt.de/krotik/eliasdb">
-<img src="https://godoc.org/devt.de/krotik/eliasdb?status.svg" alt="Go Doc"></a>
-</p>
+[![Code coverage](https://void.devt.de/pub/eliasdb/test_result.svg)](https://void.devt.de/pub/eliasdb/coverage.txt)
+[![Go Report Card](https://goreportcard.com/badge/devt.de/krotik/eliasdb?style=flat-square)](https://goreportcard.com/report/devt.de/krotik/eliasdb)
+[![Go Reference](https://pkg.go.dev/badge/krotik/eliasdb.svg)](https://pkg.go.dev/devt.de/krotik/eliasdb)
+[![Mentioned in Awesome Go](https://awesome.re/mentioned-badge-flat.svg)](https://github.com/avelino/awesome-go)
 
 Features
 --------
