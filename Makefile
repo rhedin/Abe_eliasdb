@@ -10,12 +10,18 @@ clean:
 mod:
 	go mod init || true
 	go mod tidy
+
 test:
 	go test -p 1 ./...
+
+test-mac:
+	GOOS=darwin GOARCH=amd64 go test -p 1 ./...
+
 cover:
 	go test -p 1 --coverprofile=coverage.out ./...
 	go tool cover --html=coverage.out -o coverage.html
 	sh -c "open coverage.html || xdg-open coverage.html" 2>/dev/null
+
 fmt:
 	gofmt -l -w -s .
 
@@ -73,6 +79,7 @@ dist: build build-win build-mac build-arm7 build-arm8
 	cp -fR examples dist/$(NAME)_arm8
 	cp LICENSE dist/$(NAME)_arm8
 	cp NOTICE dist/$(NAME)_arm8
+
 	tar --directory=dist -cz $(NAME)_arm8 > dist/$(NAME)_$(TAG)_arm8.tar.gz
 
 	sh -c 'cd dist; sha256sum *.tar.gz' > dist/checksums.txt
