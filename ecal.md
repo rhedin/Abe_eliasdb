@@ -8,7 +8,7 @@ ECAL was added for the following use-cases:
 - Enforce certain aspects of a database schema
 - Providing back-end logic for web applications using EliasDB
 
-The source of EliasDB comes with a [chat example](examples/game/doc/chat.md) containing a simple ECAL script which adds a timestamp to nodes and a [game example](examples/game/doc/game.md) which demonstrates a more complex application of ECAL.
+The source of EliasDB comes with a [chat example](examples/chat/doc/chat.md) containing a simple ECAL script which adds a timestamp to nodes and a [game example](examples/game/doc/game.md) which demonstrates a more complex application of ECAL.
 
 ECAL related config values:
 --
