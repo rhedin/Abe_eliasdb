@@ -12,6 +12,7 @@ package graph
 
 import (
 	"bytes"
+	"io"
 	"strings"
 	"testing"
 
@@ -397,4 +398,105 @@ func TestImportExportError(t *testing.T) {
 		return
 	}
 
+}
+
+type testFactory struct {
+	readers []string
+	buf     map[string]*bytes.Buffer
+}
+
+func (tf *testFactory) CreateWriter(name string) (io.Writer, error) {
+	var b bytes.Buffer
+
+	tf.readers = append(tf.readers, name)
+	tf.buf[name] = &b
+
+	return &b, nil
+}
+
+func (tf *testFactory) Readers() ([]string, error) {
+	return tf.readers, nil
+}
+
+func (tf *testFactory) CreateReader(name string) (io.Reader, error) {
+	return bytes.NewBuffer(tf.buf[name].Bytes()), nil
+}
+
+func TestScaleExport(t *testing.T) {
+	gm, _ := songGraph()
+
+	tf := &testFactory{make([]string, 0), make(map[string]*bytes.Buffer)}
+
+	if err := LargeScaleExportPartition(tf, gm); err != nil {
+		t.Error(err)
+		return
+	}
+
+	var out1 bytes.Buffer
+
+	if err := ExportPartition(&out1, "main", gm); err != nil {
+		t.Error(err)
+		return
+	}
+	res1 := SortDump(out1.String())
+
+	mgs2 := graphstorage.NewMemoryGraphStorage("mystorage2")
+	gm2 := NewGraphManager(mgs2)
+
+	if err := LargeScaleImportPartition(tf, gm2); err != nil {
+		t.Error(err)
+		return
+	}
+
+	var out2 bytes.Buffer
+
+	if err := ExportPartition(&out2, "main", gm2); err != nil {
+		t.Error(err)
+		return
+	}
+	res2 := SortDump(out2.String())
+
+	if res1 != res2 {
+		t.Error("Unexpected result - results of import/export are different")
+		return
+	}
+
+	// Test failures
+	gm, gs := songGraph()
+
+	tfImport := tf
+	tf = &testFactory{make([]string, 0), make(map[string]*bytes.Buffer)}
+
+	msm := gs.StorageManager("main"+"Song"+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	msm.AccessMap[5] = storage.AccessCacheAndFetchSeriousError
+
+	if err := LargeScaleExportPartition(tf, gm); err == nil {
+		t.Error("Error was expected")
+		return
+	}
+
+	delete(msm.AccessMap, 5)
+
+	msm = gs.StorageManager("main"+"Wrote"+StorageSuffixEdges, false).(*storage.MemoryStorageManager)
+	msm.AccessMap[5] = storage.AccessCacheAndFetchSeriousError
+
+	if err := LargeScaleExportPartition(tf, gm); err == nil {
+		t.Error("Error was expected")
+		return
+	}
+
+	delete(msm.AccessMap, 5)
+
+	mgs2 = graphstorage.NewMemoryGraphStorage("mystorage2")
+	gm2 = NewGraphManager(mgs2)
+
+	msm = mgs2.StorageManager("main"+"Song"+StorageSuffixNodes, true).(*storage.MemoryStorageManager)
+	msm.AccessMap[2] = storage.AccessInsertError
+
+	if err := LargeScaleImportPartition(tfImport, gm2); err == nil {
+		t.Error("Error was expected")
+		return
+	}
+
+	delete(msm.AccessMap, 2)
 }

@@ -45,6 +45,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
@@ -294,7 +295,9 @@ func handleServerCommandLine(gm *graph.Manager) bool {
 	var ecalConsole *bool
 
 	importDb := flag.String("import", "", "Import a database from a zip file")
+	importDbLS := flag.String("import-ls", "", "Large scale import from a directory")
 	exportDb := flag.String("export", "", "Export the current database to a zip file")
+	exportDbLS := flag.String("export-ls", "", "Large scale export to a directory")
 
 	if config.Bool(config.EnableECALScripts) {
 		ecalConsole = flag.Bool("ecal-console", false, "Start an interactive interpreter console for ECAL")
@@ -319,63 +322,11 @@ func handleServerCommandLine(gm *graph.Manager) bool {
 		return true
 	}
 
-	if *importDb != "" {
-		var zipFile *zip.ReadCloser
+	err = handleSimpleImportExport(importDb, exportDb, gm)
 
-		fmt.Println("Importing from:", *importDb)
+	err = handleLargeScaleImportExport(importDbLS, exportDbLS, gm)
 
-		if zipFile, err = zip.OpenReader(*importDb); err == nil {
-			defer zipFile.Close()
-
-			for _, file := range zipFile.File {
-				var in io.Reader
-
-				if !file.FileInfo().IsDir() {
-					part := strings.TrimSuffix(filepath.Base(file.Name), filepath.Ext(file.Name))
-					fmt.Println(fmt.Sprintf("Importing %s to partition %s", file.Name, part))
-
-					if in, err = file.Open(); err == nil {
-						err = graph.ImportPartition(in, part, gm)
-					}
-
-					if err != nil {
-						break
-					}
-				}
-			}
-		}
-	}
-
-	if *exportDb != "" {
-		var zipFile *os.File
-
-		fmt.Println("Exporting to:", *exportDb)
-
-		if zipFile, err = os.Create(*exportDb); err == nil {
-			defer zipFile.Close()
-
-			zipWriter := zip.NewWriter(zipFile)
-			defer zipWriter.Close()
-
-			for _, part := range gm.Partitions() {
-				var exportFile io.Writer
-
-				name := fmt.Sprintf("%s.json", part)
-
-				fmt.Println(fmt.Sprintf("Exporting partition %s to %s", part, name))
-
-				if exportFile, err = zipWriter.Create(name); err == nil {
-					err = graph.ExportPartition(exportFile, part, gm)
-				}
-
-				if err != nil {
-					break
-				}
-			}
-		}
-	}
-
-	if ecalConsole != nil && *ecalConsole {
+	if ecalConsole != nil && *ecalConsole && err == nil {
 		var term termutil.ConsoleLineTerminal
 
 		isExitLine := func(s string) bool {
@@ -406,7 +357,6 @@ func handleServerCommandLine(gm *graph.Manager) bool {
 				}
 
 				if err = term.StartTerm(); err == nil {
-
 					if *noServ {
 						runECALConsole(0)
 					} else {
@@ -423,4 +373,123 @@ func handleServerCommandLine(gm *graph.Manager) bool {
 	}
 
 	return *noServ
+}
+
+func handleSimpleImportExport(importDb, exportDb *string, gm *graph.Manager) error {
+	var err error
+
+	if *importDb != "" {
+		var zipFile *zip.ReadCloser
+
+		fmt.Println("Importing from:", *importDb)
+
+		if zipFile, err = zip.OpenReader(*importDb); err == nil {
+			defer zipFile.Close()
+
+			for _, file := range zipFile.File {
+				var in io.Reader
+
+				if !file.FileInfo().IsDir() {
+					part := strings.TrimSuffix(filepath.Base(file.Name), filepath.Ext(file.Name))
+					fmt.Println(fmt.Sprintf("Importing %s to partition %s", file.Name, part))
+
+					if in, err = file.Open(); err == nil {
+						err = graph.ImportPartition(in, part, gm)
+					}
+
+					if err != nil {
+						break
+					}
+				}
+			}
+		}
+	}
+
+	if *exportDb != "" && err == nil {
+		var zipFile *os.File
+
+		fmt.Println("Exporting to:", *exportDb)
+
+		if zipFile, err = os.Create(*exportDb); err == nil {
+			defer zipFile.Close()
+
+			zipWriter := zip.NewWriter(zipFile)
+			defer zipWriter.Close()
+
+			for _, part := range gm.Partitions() {
+				var exportFile io.Writer
+
+				name := fmt.Sprintf("%s.json", part)
+
+				fmt.Println(fmt.Sprintf("Exporting partition %s to %s", part, name))
+
+				if exportFile, err = zipWriter.Create(name); err == nil {
+					err = graph.ExportPartition(exportFile, part, gm)
+				}
+
+				if err != nil {
+					break
+				}
+			}
+		}
+	}
+
+	return err
+}
+
+type directoryFactory struct {
+	pathPrefix string
+}
+
+func (tf *directoryFactory) Readers() ([]string, error) {
+	var files []string
+
+	fileInfos, err := ioutil.ReadDir(tf.pathPrefix)
+
+	if err == nil {
+		for _, fi := range fileInfos {
+			if !fi.IsDir() && strings.HasPrefix(fi.Name(), "db-") {
+				name := fi.Name()[3:]
+				files = append(files, strings.TrimSuffix(name, path.Ext(name)))
+			}
+		}
+	}
+
+	return files, err
+}
+
+func (tf *directoryFactory) CreateWriter(name string) (io.Writer, error) {
+	return os.Create(path.Join(tf.pathPrefix, "db-"+name+".ndjson"))
+}
+
+func (tf *directoryFactory) CreateReader(name string) (io.Reader, error) {
+	return os.Open(path.Join(tf.pathPrefix, "db-"+name+".ndjson"))
+}
+
+func handleLargeScaleImportExport(importDbLS, exportDbLS *string, gm *graph.Manager) error {
+	var err error
+
+	if *importDbLS != "" {
+		stat, err := os.Stat(*importDbLS)
+
+		if err == nil && stat.IsDir() {
+			fmt.Println("Importing from:", *importDbLS)
+
+			fac := &directoryFactory{*importDbLS}
+
+			err = graph.LargeScaleImportPartition(fac, gm)
+		}
+	}
+
+	if *exportDbLS != "" && err == nil {
+		fmt.Println("Exporting to:", *exportDbLS)
+
+		err = os.MkdirAll(*exportDbLS, 0777)
+
+		fac := &directoryFactory{*exportDbLS}
+
+		err = graph.LargeScaleExportPartition(fac, gm)
+	}
+
+	return err
 }
