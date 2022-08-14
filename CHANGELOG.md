@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://devt.de///compare/v1.3.0...v1.4.0) (2022-08-14)
+
+
+### Features
+
+* GraphQL parsing and pretty printing via API ([42f5e24](https://devt.de///commit/42f5e2454294887c208476b2b8de87a099c0a5b1))
+
 ## [1.3.0](https://devt.de///compare/v1.2.0...v1.3.0) (2022-03-19)
 
 
