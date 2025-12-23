@@ -1,0 +1,6 @@
+I discovered that the github.com/krotik version of eliasdb and ecal was missing some useful development that was done in the devt.de/krotik version. 
+I had forked the github.com/krotik versions of eliasdb and ecal to github.com/rhedin . 
+So I destroyed those github.com/rhedin versions and cloned new versions from devt.de/krotik . 
+I named the new versions Abe_eliasdb and Abe_ecal, not plain eliasdb and ecal. 
+Also, Matthias Ladkau just copied versions he felt were "significant" from devt.de/krotik to github.com/krotik. 
+All the steps in between were missing from the github version. 
