@@ -7,9 +7,9 @@ EliasDB
 
 EliasDB is a graph-based database which aims to provide a lightweight solution for projects which want to store their data as a graph.
 
-[![Code coverage](https://void.devt.de/pub/eliasdb/test_result.svg)](https://void.devt.de/pub/eliasdb/coverage.txt)
-[![Go Report Card](https://goreportcard.com/badge/devt.de/krotik/eliasdb?style=flat-square)](https://goreportcard.com/report/devt.de/krotik/eliasdb)
-[![Go Reference](https://pkg.go.dev/badge/krotik/eliasdb.svg)](https://pkg.go.dev/devt.de/krotik/eliasdb)
+<!-- [![Code coverage](https://void.devt.de/pub/eliasdb/test_result.svg)](https://void.devt.de/pub/eliasdb/coverage.txt) -->
+[![Go Report Card](https://goreportcard.com/badge/github.com/rhedin/Abe_eliasdb?style=flat-square)](https://goreportcard.com/report/github.com/rhedin/Abe_eliasdb)
+[![Go Reference](https://pkg.go.dev/badge/github.com/rhedin/Abe_eliasdb.svg)](https://pkg.go.dev/github.com/rhedin/Abe_eliasdb)
 [![Mentioned in Awesome Go](https://awesome.re/mentioned-badge-flat.svg)](https://github.com/avelino/awesome-go)
 
 Features
