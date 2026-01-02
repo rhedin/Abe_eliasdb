@@ -1,7 +1,6 @@
-devt.de/krotik/common v1.4.0/go.mod h1:X4nsS85DAxyHkwSg/Tc6+XC2zfmGeaVz+37F61+eSaI=
-devt.de/krotik/common v1.5.1 h1:UV65XZ1W82elEh9mCCUkJ6HYuXDqZXgS/cIbPtax5+4=
-devt.de/krotik/common v1.5.1/go.mod h1:X4nsS85DAxyHkwSg/Tc6+XC2zfmGeaVz+37F61+eSaI=
-devt.de/krotik/ecal v1.6.2 h1:ObIPXVQVYsxuXOZcENoZQMnwgGsN42YkfaCd7aFRdZk=
-devt.de/krotik/ecal v1.6.2/go.mod h1:0qIx3h+EjUnStgdEUnwAeO44UluTSLcpBWXA5zEw0hQ=
 github.com/gorilla/websocket v1.4.1 h1:q7AeDBpnBk8AogcD4DSag/Ukw/KV+YhzLj2bP5HvKCM=
 github.com/gorilla/websocket v1.4.1/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
+github.com/rhedin/Abe_common v1.5.2 h1:H8iqVjsnUqH487Xhw+2HQPocHehpu639WqEhjmRovQI=
+github.com/rhedin/Abe_common v1.5.2/go.mod h1:OaCYODmDUGrJbsd3iC247nl0AG0BaDnhG4r1GVBemhQ=
+github.com/rhedin/Abe_ecal v1.6.3 h1:1mkGp+l7vNkG4S8/jtm6w5mgh5WN7BfoK3QUtmkDdUA=
+github.com/rhedin/Abe_ecal v1.6.3/go.mod h1:c768ui2JY/t2/umdtBkOLltSuNg74FgeENvY97RNR+M=
