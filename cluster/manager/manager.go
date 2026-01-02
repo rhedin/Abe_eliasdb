@@ -21,7 +21,7 @@ import (
 	"sync"
 	"time"
 
-	"devt.de/krotik/common/datautil"
+	"github.com/rhedin/Abe_common/datautil"
 )
 
 /*
@@ -38,7 +38,6 @@ Each MemberManager object contains a Client object which can be used to
 communicate with other cluster members. This object should be used by pure
 clients - code which should communicate with the cluster without running an
 actual member.
-
 */
 type MemberManager struct {
 	name   string // Name of the cluster member

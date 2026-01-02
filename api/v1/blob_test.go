@@ -14,7 +14,7 @@ import (
 	"fmt"
 	"testing"
 
-	"devt.de/krotik/eliasdb/storage"
+	"github.com/rhedin/Abe_eliasdb/storage"
 )
 
 func TestBlob(t *testing.T) {

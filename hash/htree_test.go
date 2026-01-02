@@ -16,9 +16,9 @@ import (
 	"os"
 	"testing"
 
-	"devt.de/krotik/common/fileutil"
-	"devt.de/krotik/eliasdb/storage"
-	"devt.de/krotik/eliasdb/storage/file"
+	"github.com/rhedin/Abe_common/fileutil"
+	"github.com/rhedin/Abe_eliasdb/storage"
+	"github.com/rhedin/Abe_eliasdb/storage/file"
 )
 
 const DBDIR = "htreetest"

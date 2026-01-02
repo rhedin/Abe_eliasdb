@@ -17,13 +17,13 @@ import (
 	"net/http"
 	"strings"
 
-	"devt.de/krotik/common/cryptutil"
-	"devt.de/krotik/common/errorutil"
-	"devt.de/krotik/common/stringutil"
-	"devt.de/krotik/ecal/engine"
-	"devt.de/krotik/ecal/scope"
-	"devt.de/krotik/eliasdb/api"
-	"devt.de/krotik/eliasdb/ecal"
+	"github.com/rhedin/Abe_common/cryptutil"
+	"github.com/rhedin/Abe_common/errorutil"
+	"github.com/rhedin/Abe_common/stringutil"
+	"github.com/rhedin/Abe_ecal/engine"
+	"github.com/rhedin/Abe_ecal/scope"
+	"github.com/rhedin/Abe_eliasdb/api"
+	"github.com/rhedin/Abe_eliasdb/ecal"
 	"github.com/gorilla/websocket"
 )
 

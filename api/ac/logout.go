@@ -13,8 +13,8 @@ package ac
 import (
 	"net/http"
 
-	"devt.de/krotik/common/httputil/user"
-	"devt.de/krotik/eliasdb/api"
+	"github.com/rhedin/Abe_common/httputil/user"
+	"github.com/rhedin/Abe_eliasdb/api"
 )
 
 /*

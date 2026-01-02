@@ -11,12 +11,12 @@
 /*
 Package util contains utility classes for the graph storage.
 
-GraphError
+# GraphError
 
 Models a graph related error. Low-level errors should be wrapped in a GraphError
 before they are returned to a client.
 
-IndexManager
+# IndexManager
 
 Manages the full text search index. The index supports simple word searches as
 well as phrase searches.
@@ -34,7 +34,7 @@ value lookups very efficient:
 PrefixAttrHash + attr num + hash (md5) -> ids
 (provides exact match lookup)
 
-NamesManager
+# NamesManager
 
 Manages names of kinds, roles and attributes. Each stored name gets either a 16
 or 32 bit (little endian) number assigned. The manager provides functions to lookup

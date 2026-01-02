@@ -16,10 +16,10 @@ import (
 	"net/http"
 	"strings"
 
-	"devt.de/krotik/common/stringutil"
-	"devt.de/krotik/eliasdb/api"
-	"devt.de/krotik/eliasdb/graph"
-	"devt.de/krotik/eliasdb/graph/data"
+	"github.com/rhedin/Abe_common/stringutil"
+	"github.com/rhedin/Abe_eliasdb/api"
+	"github.com/rhedin/Abe_eliasdb/graph"
+	"github.com/rhedin/Abe_eliasdb/graph/data"
 )
 
 /*

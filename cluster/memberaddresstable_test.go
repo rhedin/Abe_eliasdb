@@ -15,8 +15,8 @@ import (
 	"math"
 	"testing"
 
-	"devt.de/krotik/eliasdb/hash"
-	"devt.de/krotik/eliasdb/storage"
+	"github.com/rhedin/Abe_eliasdb/hash"
+	"github.com/rhedin/Abe_eliasdb/storage"
 )
 
 func TestAddressTableClusterLoc(t *testing.T) {

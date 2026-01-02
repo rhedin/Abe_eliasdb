@@ -15,7 +15,7 @@ import (
 	"testing"
 	"time"
 
-	"devt.de/krotik/eliasdb/cluster/manager"
+	"github.com/rhedin/Abe_eliasdb/cluster/manager"
 )
 
 func TestSimpleDataReplicationInsert(t *testing.T) {

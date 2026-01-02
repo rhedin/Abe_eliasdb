@@ -65,7 +65,7 @@ lookup Line "3" traverse Line:StationOnLine:Member:Station where has_rail end sh
 ```
 Using the with clause we defined here a post-processing function which sorts the result once all data has been retrieved from the datastore.
 
-For further information on search queries please see the EQL documentation [here](https://devt.de/krotik/eliasdb/src/master/eql.md).
+For further information on search queries please see the EQL documentation [here](https://github.com/rhedin/Abe_eliasdb/src/master/eql.md).
 
 Doing a fulltext search
 -----------------------

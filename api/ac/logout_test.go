@@ -14,7 +14,7 @@ import (
 	"net/http"
 	"testing"
 
-	"devt.de/krotik/common/httputil/user"
+	"github.com/rhedin/Abe_common/httputil/user"
 )
 
 func TestLogoutEndpoint(t *testing.T) {

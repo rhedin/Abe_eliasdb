@@ -41,6 +41,9 @@ https://localhost:9090/db/term.html
 ```
 After accepting the self-signed certificate from the server you should see a web terminal. EliasDB can be stopped with a simple CTRL+C or by overwriting the content in eliasdb.lck with a single character.
 
+<!-- We didn't update the references to krotik within the docker section to refer to rhedin. 
+     We don't expect to support using docker with Abe_eliasdb. -->
+
 Getting Started (docker image)
 ------------------------------
 You can pull the latest docker image of EliasDB from [Dockerhub](https://hub.docker.com/r/krotik/eliasdb):
@@ -67,13 +70,13 @@ There is a separate [tutorial](examples/tutorial/doc/tutorial_graphql.md) on usi
 
 ### REST API:
 
-The terminal uses a REST API to communicate with the backend. The REST API can be browsed using a dynamically generated swagger.json definition (https://localhost:9090/db/swagger.json). You can browse the API of EliasDB's latest version [here](http://petstore.swagger.io/?url=https://devt.de/krotik/eliasdb/raw/master/swagger.json).
+The terminal uses a REST API to communicate with the backend. The REST API can be browsed using a dynamically generated swagger.json definition (https://localhost:9090/db/swagger.json). You can browse the API of EliasDB's latest version [here](http://petstore.swagger.io/?url=https://github.com/rhedin/Abe_eliasdb/raw/master/swagger.json).
 
 ### Scripting
 
 EliasDB supports a scripting language called [ECAL](ecal.md) to define alternative actions for database operations such as store, update or delete. The actions can be taken before, instead (by calling `db.raiseGraphEventHandled()`) or after the normal database operation. The language is powerful enough to write backend logic for applications.
 
-There is a [VSCode integration](https://devt.de/krotik/ecal/src/master/ecal-support/README.md) available which supports syntax highlighting and debugging via the debug server. More information can be found in the [code repository](https://devt.de/krotik/ecal) of the interpreter.
+There is a [VSCode integration](https://github.com/rhedin/Abe_ecal/src/master/ecal-support/README.md) available which supports syntax highlighting and debugging via the debug server. More information can be found in the [code repository](https://github.com/rhedin/Abe_ecal) of the interpreter.
 
 ### Clustering:
 
@@ -217,7 +220,7 @@ To build EliasDB from source you need to have Go installed (go >= 1.12):
 
 - Create a directory, change into it and run:
 ```
-git clone https://devt.de/krotik/eliasdb/ .
+git clone https://github.com/rhedin/Abe_eliasdb/ .
 ```
 
 - You can build EliasDB's executable with:
@@ -231,8 +234,10 @@ EliasDB can be build as a secure and compact Docker image.
 
 - Create a directory, change into it and run:
 ```
-git clone https://devt.de/krotik/eliasdb/ .
+git clone https://github.com/rhedin/Abe_eliasdb/ .
 ```
+
+<!-- I left the tag alone.  krotik/eliasdb  We're not doing docker, right now. -->
 
 - You can now build the Docker image with:
 ```

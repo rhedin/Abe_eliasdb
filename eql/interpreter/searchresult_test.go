@@ -15,11 +15,11 @@ import (
 	"fmt"
 	"testing"
 
-	"devt.de/krotik/eliasdb/eql/parser"
-	"devt.de/krotik/eliasdb/graph"
-	"devt.de/krotik/eliasdb/graph/data"
-	"devt.de/krotik/eliasdb/graph/graphstorage"
-	"devt.de/krotik/eliasdb/storage"
+	"github.com/rhedin/Abe_eliasdb/eql/parser"
+	"github.com/rhedin/Abe_eliasdb/graph"
+	"github.com/rhedin/Abe_eliasdb/graph/data"
+	"github.com/rhedin/Abe_eliasdb/graph/graphstorage"
+	"github.com/rhedin/Abe_eliasdb/storage"
 )
 
 func TestSources(t *testing.T) {

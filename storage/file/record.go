@@ -11,7 +11,7 @@
 /*
 Package file deals with low level file storage and transaction management.
 
-StorageFile
+# StorageFile
 
 StorageFile models a logical storage file which stores fixed size records on
 disk. Each record has a unique record id. On disk this logical storage file
@@ -19,12 +19,12 @@ might be split into several smaller files. StorageFiles can be reused after
 they were closed if the transaction management has been disabled. This is
 not the case otherwise.
 
-Record
+# Record
 
 A record is a byte slice of a StorageFile. It is a wrapper data structure for
 a byte array which provides read and write methods for several data types.
 
-TransactionManager
+# TransactionManager
 
 TransactionManager provides an optional transaction management for StorageFile.
 
@@ -45,8 +45,8 @@ import (
 	"fmt"
 	"io"
 
-	"devt.de/krotik/common/bitutil"
-	"devt.de/krotik/common/stringutil"
+	"github.com/rhedin/Abe_common/bitutil"
+	"github.com/rhedin/Abe_common/stringutil"
 )
 
 /*

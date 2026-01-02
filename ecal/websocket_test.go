@@ -18,9 +18,9 @@ import (
 	"sync"
 	"testing"
 
-	"devt.de/krotik/common/errorutil"
-	"devt.de/krotik/common/httputil"
-	"devt.de/krotik/ecal/engine"
+	"github.com/rhedin/Abe_common/errorutil"
+	"github.com/rhedin/Abe_common/httputil"
+	"github.com/rhedin/Abe_ecal/engine"
 	"github.com/gorilla/websocket"
 )
 

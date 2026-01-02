@@ -17,9 +17,9 @@ import (
 	"sync"
 	"testing"
 
-	"devt.de/krotik/eliasdb/graph/data"
-	"devt.de/krotik/eliasdb/graph/graphstorage"
-	"devt.de/krotik/eliasdb/storage"
+	"github.com/rhedin/Abe_eliasdb/graph/data"
+	"github.com/rhedin/Abe_eliasdb/graph/graphstorage"
+	"github.com/rhedin/Abe_eliasdb/storage"
 )
 
 /*

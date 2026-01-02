@@ -15,8 +15,8 @@ import (
 	"encoding/gob"
 	"fmt"
 
-	"devt.de/krotik/common/errorutil"
-	"devt.de/krotik/eliasdb/storage"
+	"github.com/rhedin/Abe_common/errorutil"
+	"github.com/rhedin/Abe_eliasdb/storage"
 )
 
 /*

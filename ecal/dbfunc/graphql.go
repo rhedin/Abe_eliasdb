@@ -13,10 +13,10 @@ package dbfunc
 import (
 	"fmt"
 
-	"devt.de/krotik/ecal/parser"
-	"devt.de/krotik/ecal/scope"
-	"devt.de/krotik/eliasdb/graph"
-	"devt.de/krotik/eliasdb/graphql"
+	"github.com/rhedin/Abe_ecal/parser"
+	"github.com/rhedin/Abe_ecal/scope"
+	"github.com/rhedin/Abe_eliasdb/graph"
+	"github.com/rhedin/Abe_eliasdb/graphql"
 )
 
 /*

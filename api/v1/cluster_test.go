@@ -21,12 +21,12 @@ import (
 	"strings"
 	"testing"
 
-	"devt.de/krotik/common/datautil"
-	"devt.de/krotik/eliasdb/api"
-	"devt.de/krotik/eliasdb/cluster"
-	"devt.de/krotik/eliasdb/cluster/manager"
-	"devt.de/krotik/eliasdb/graph"
-	"devt.de/krotik/eliasdb/graph/graphstorage"
+	"github.com/rhedin/Abe_common/datautil"
+	"github.com/rhedin/Abe_eliasdb/api"
+	"github.com/rhedin/Abe_eliasdb/cluster"
+	"github.com/rhedin/Abe_eliasdb/cluster/manager"
+	"github.com/rhedin/Abe_eliasdb/graph"
+	"github.com/rhedin/Abe_eliasdb/graph/graphstorage"
 )
 
 func TestClusterStorage(t *testing.T) {

@@ -1,0 +1,17 @@
+I was wrong.  start.sh wasn't complaining because it couldn't find the eliasdb directory. 
+It was complaining because it couldn't find th eliasdb file in the eliasdb directory. 
+Have to make eliasdb, before the examples will run.  Duh. 
+
+Good example of the current logging system in eliasdb/server/server.go . 
+
+Shall I use the existing logging system, or the slog system?  For my new stuff? 
+Existing.  I would say. 
+Does it record where the error occurred? 
+
+In the docker file, in the comments (not in code that is executed), it puts 
+krotik/eliasdb for the image argument of the run command.  Documentation 
+says you can specify a repository in that position.  That seems to be 
+what he is doing. 
+     We don't use the docker file.  So we will leave the krotik/eliasdb 
+in place. 
+

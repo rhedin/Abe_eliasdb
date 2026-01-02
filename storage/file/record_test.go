@@ -17,8 +17,8 @@ import (
 	"reflect"
 	"testing"
 
-	"devt.de/krotik/common/bitutil"
-	"devt.de/krotik/common/testutil"
+	"github.com/rhedin/Abe_common/bitutil"
+	"github.com/rhedin/Abe_common/testutil"
 )
 
 func TestRecordInitialisation(t *testing.T) {

@@ -21,10 +21,10 @@ import (
 	"os"
 	"strings"
 
-	"devt.de/krotik/common/datautil"
-	"devt.de/krotik/common/fileutil"
-	"devt.de/krotik/eliasdb/graph/util"
-	"devt.de/krotik/eliasdb/storage"
+	"github.com/rhedin/Abe_common/datautil"
+	"github.com/rhedin/Abe_common/fileutil"
+	"github.com/rhedin/Abe_eliasdb/graph/util"
+	"github.com/rhedin/Abe_eliasdb/storage"
 )
 
 /*

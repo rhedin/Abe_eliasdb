@@ -63,6 +63,7 @@ module.exports = {
     hints: false
   },
   devtool: 'eval-source-map',
+  mode: 'development',  // Added by Rick 251223. 
   plugins: [
     // make sure to include the plugin for the magic
     new VueLoaderPlugin(),

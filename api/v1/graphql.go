@@ -15,10 +15,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"devt.de/krotik/common/lang/graphql/parser"
-	"devt.de/krotik/common/stringutil"
-	"devt.de/krotik/eliasdb/api"
-	"devt.de/krotik/eliasdb/graphql"
+	"github.com/rhedin/Abe_common/lang/graphql/parser"
+	"github.com/rhedin/Abe_common/stringutil"
+	"github.com/rhedin/Abe_eliasdb/api"
+	"github.com/rhedin/Abe_eliasdb/graphql"
 )
 
 /*

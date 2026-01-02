@@ -18,7 +18,7 @@ import (
 	"sort"
 	"strconv"
 
-	"devt.de/krotik/common/lang/graphql/parser"
+	"github.com/rhedin/Abe_common/lang/graphql/parser"
 )
 
 // Not Implemented Runtime

@@ -18,11 +18,11 @@ import (
 	"strconv"
 	"strings"
 
-	"devt.de/krotik/ecal/engine"
-	"devt.de/krotik/ecal/scope"
-	"devt.de/krotik/ecal/util"
-	"devt.de/krotik/eliasdb/api"
-	"devt.de/krotik/eliasdb/ecal/dbfunc"
+	"github.com/rhedin/Abe_ecal/engine"
+	"github.com/rhedin/Abe_ecal/scope"
+	"github.com/rhedin/Abe_ecal/util"
+	"github.com/rhedin/Abe_eliasdb/api"
+	"github.com/rhedin/Abe_eliasdb/ecal/dbfunc"
 )
 
 /*
@@ -50,28 +50,28 @@ type ecalEndpoint struct {
 }
 
 /*
-	HandleGET handles a GET request.
+HandleGET handles a GET request.
 */
 func (ee *ecalEndpoint) HandleGET(w http.ResponseWriter, r *http.Request, resources []string) {
 	ee.forwardRequest(w, r, resources)
 }
 
 /*
-	HandlePOST handles a POST request.
+HandlePOST handles a POST request.
 */
 func (ee *ecalEndpoint) HandlePOST(w http.ResponseWriter, r *http.Request, resources []string) {
 	ee.forwardRequest(w, r, resources)
 }
 
 /*
-	HandlePUT handles a PUT request.
+HandlePUT handles a PUT request.
 */
 func (ee *ecalEndpoint) HandlePUT(w http.ResponseWriter, r *http.Request, resources []string) {
 	ee.forwardRequest(w, r, resources)
 }
 
 /*
-	HandleDELETE handles a DELETE request.
+HandleDELETE handles a DELETE request.
 */
 func (ee *ecalEndpoint) HandleDELETE(w http.ResponseWriter, r *http.Request, resources []string) {
 	ee.forwardRequest(w, r, resources)

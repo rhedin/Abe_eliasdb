@@ -13,7 +13,7 @@ package storage
 import (
 	"testing"
 
-	"devt.de/krotik/eliasdb/storage/file"
+	"github.com/rhedin/Abe_eliasdb/storage/file"
 )
 
 func TestMemoryStorageManager(t *testing.T) {

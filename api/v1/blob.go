@@ -11,7 +11,7 @@
 /*
 Package v1 contains EliasDB REST API Version 1.
 
-Binary Blob control endpoint
+# Binary Blob control endpoint
 
 /blob
 
@@ -30,8 +30,7 @@ be the binary data to store. The response should have the following structure:
 GET requests can be used to retrieve a binary blobs with a specific ID. Binary blobs
 can be updated by sending a PUT request and removed by sending a DELETE request.
 
-
-Cluster control endpoint
+# Cluster control endpoint
 
 /cluster
 
@@ -89,8 +88,7 @@ info of every member as a key-value map:
 Returns the latest cluster related log messages. A DELETE call will clear
 the current log.
 
-
-EQL parser endpoint
+# EQL parser endpoint
 
 /eql
 
@@ -124,8 +122,7 @@ Returns a JSON structure or an error message.
 		query : <Pretty printed query>
 	}
 
-
-Graph request endpoint
+# Graph request endpoint
 
 /graph
 
@@ -197,8 +194,7 @@ header is not set.
 	    [ <traversed nodes> ], [ <traversed edges> ]
 	]
 
-
-Index query endpoint
+# Index query endpoint
 
 /index
 
@@ -243,8 +239,7 @@ The return data is a list of node keys:
 
 	[ <node key1>, <node key2>, ... ]
 
-
-Find query endpoint
+# Find query endpoint
 
 /find
 
@@ -268,8 +263,7 @@ The return data is a map of partitions to node kinds to a list of nodes:
 	    ...
 	}
 
-
-GraphQL request endpoint
+# GraphQL request endpoint
 
 /graphql
 /graphql-query
@@ -278,8 +272,7 @@ The GraphQL endpoints execute GraphQL queries on EliasDB's datastore. The
 query endpoint supports only read-queries (i.e. no mutations). EliasDB supports
 only executable definitions and introspection (i.e. no type system validation).
 
-
-General database information endpoint
+# General database information endpoint
 
 /info
 
@@ -298,8 +291,7 @@ The return data is a key-value map:
 The node kind info endpoint returns general information about a known node or
 edge kind such as known attributes or known edges.
 
-
-Query endpoint
+# Query endpoint
 
 /query
 
@@ -342,7 +334,7 @@ The return data is a result object:
 	    groups           : [ [ <groups of row0> ], [ <groups of row1> ] ... ]
 	}
 
-Query result endpoint
+# Query result endpoint
 
 /queryresult
 
@@ -414,8 +406,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"devt.de/krotik/eliasdb/api"
-	"devt.de/krotik/eliasdb/storage"
+	"github.com/rhedin/Abe_eliasdb/api"
+	"github.com/rhedin/Abe_eliasdb/storage"
 )
 
 /*

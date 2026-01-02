@@ -11,22 +11,22 @@
 /*
 Package slotting contains managers which deal with slots on pages.
 
-FreeLogicalSlotManager
+# FreeLogicalSlotManager
 
 FreeLogicalSlotManager is a list manager for free logical slots. This manager
 object is used by the LogicalSlotManager.
 
-FreePhysicalSlotManager
+# FreePhysicalSlotManager
 
 FreePhysicalSlotManager is a list manager for free physical slots. This manager
 object is used by the PhysicalSlotManager.
 
-LogicalSlotManager
+# LogicalSlotManager
 
 LogicalSlotManager is a list manager for logical slots. Logical slots are stored
 on translation pages which store just pointers to physical slots.
 
-PhysicalSlotManager
+# PhysicalSlotManager
 
 PhysicalSlotManager is a list manager for physical slots.
 */
@@ -35,11 +35,11 @@ package slotting
 import (
 	"fmt"
 
-	"devt.de/krotik/eliasdb/storage/file"
-	"devt.de/krotik/eliasdb/storage/paging"
-	"devt.de/krotik/eliasdb/storage/paging/view"
-	"devt.de/krotik/eliasdb/storage/slotting/pageview"
-	"devt.de/krotik/eliasdb/storage/util"
+	"github.com/rhedin/Abe_eliasdb/storage/file"
+	"github.com/rhedin/Abe_eliasdb/storage/paging"
+	"github.com/rhedin/Abe_eliasdb/storage/paging/view"
+	"github.com/rhedin/Abe_eliasdb/storage/slotting/pageview"
+	"github.com/rhedin/Abe_eliasdb/storage/util"
 )
 
 /*

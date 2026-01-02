@@ -14,8 +14,8 @@ import (
 	"bytes"
 	"testing"
 
-	"devt.de/krotik/eliasdb/graph"
-	"devt.de/krotik/eliasdb/graph/graphstorage"
+	"github.com/rhedin/Abe_eliasdb/graph"
+	"github.com/rhedin/Abe_eliasdb/graph/graphstorage"
 )
 
 func TestTutorialTestQueries(t *testing.T) {

@@ -22,13 +22,13 @@ import (
 	"sync"
 	"testing"
 
-	"devt.de/krotik/common/datautil"
-	"devt.de/krotik/common/errorutil"
-	"devt.de/krotik/common/httputil"
-	"devt.de/krotik/common/httputil/access"
-	"devt.de/krotik/common/httputil/auth"
-	"devt.de/krotik/common/stringutil"
-	"devt.de/krotik/eliasdb/api"
+	"github.com/rhedin/Abe_common/datautil"
+	"github.com/rhedin/Abe_common/errorutil"
+	"github.com/rhedin/Abe_common/httputil"
+	"github.com/rhedin/Abe_common/httputil/access"
+	"github.com/rhedin/Abe_common/httputil/auth"
+	"github.com/rhedin/Abe_common/stringutil"
+	"github.com/rhedin/Abe_eliasdb/api"
 )
 
 const TESTPORT = ":9090"

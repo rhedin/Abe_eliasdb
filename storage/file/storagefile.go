@@ -17,7 +17,7 @@ import (
 	"io"
 	"os"
 
-	"devt.de/krotik/common/sortutil"
+	"github.com/rhedin/Abe_common/sortutil"
 )
 
 /*

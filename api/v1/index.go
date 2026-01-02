@@ -14,8 +14,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"devt.de/krotik/eliasdb/api"
-	"devt.de/krotik/eliasdb/graph"
+	"github.com/rhedin/Abe_eliasdb/api"
+	"github.com/rhedin/Abe_eliasdb/graph"
 )
 
 /*

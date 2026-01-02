@@ -15,7 +15,7 @@ The REST API provides an interface to EliasDB. It allows querying and modifying
 of the datastore. The API responds to GET, POST, PUT and DELETE requests in JSON
 if the request was successful (Return code 200 OK) and plain text in all other cases.
 
-Common API definitions
+# Common API definitions
 
 /about
 
@@ -36,7 +36,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"devt.de/krotik/eliasdb/config"
+	"github.com/rhedin/Abe_eliasdb/config"
 )
 
 /*

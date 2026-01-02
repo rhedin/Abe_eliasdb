@@ -13,7 +13,7 @@ package interpreter
 import (
 	"testing"
 
-	"devt.de/krotik/eliasdb/eql/parser"
+	"github.com/rhedin/Abe_eliasdb/eql/parser"
 )
 
 func TestHelperRuntime(t *testing.T) {

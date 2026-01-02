@@ -19,13 +19,13 @@ import (
 	"sync"
 	"time"
 
-	"devt.de/krotik/common/errorutil"
-	"devt.de/krotik/common/fileutil"
-	"devt.de/krotik/common/lockutil"
-	"devt.de/krotik/eliasdb/storage/file"
-	"devt.de/krotik/eliasdb/storage/paging"
-	"devt.de/krotik/eliasdb/storage/slotting"
-	"devt.de/krotik/eliasdb/storage/util"
+	"github.com/rhedin/Abe_common/errorutil"
+	"github.com/rhedin/Abe_common/fileutil"
+	"github.com/rhedin/Abe_common/lockutil"
+	"github.com/rhedin/Abe_eliasdb/storage/file"
+	"github.com/rhedin/Abe_eliasdb/storage/paging"
+	"github.com/rhedin/Abe_eliasdb/storage/slotting"
+	"github.com/rhedin/Abe_eliasdb/storage/util"
 )
 
 /*

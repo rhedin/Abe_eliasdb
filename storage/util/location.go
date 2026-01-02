@@ -11,7 +11,7 @@
 /*
 Package util contains utility functions for slot headers.
 
-Packing and unpacking of slot sizes
+# Packing and unpacking of slot sizes
 
 The package contains functions to pack/unpack sizes for physical slots and
 logical buckets. The size info is a 4 byte value which allocates 2 bytes
@@ -26,7 +26,7 @@ wasteful with increasing slot size. The current size is stored as a
 difference to the allocated size. The maximum difference between
 alloacted and current space is 65534 bytes.
 
-Packing and unpacking locations
+# Packing and unpacking locations
 
 The package contains utility functions to pack and unpack location information
 in an uint64. A location is a pointer which identifies a specific record and
@@ -47,7 +47,7 @@ Considering a default page size of 4096 bytes we can address:
 */
 package util
 
-import "devt.de/krotik/eliasdb/storage/file"
+import "github.com/rhedin/Abe_eliasdb/storage/file"
 
 /*
 LocationSize is the size of a location in bytes

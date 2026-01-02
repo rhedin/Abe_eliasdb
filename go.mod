@@ -1,4 +1,4 @@
-module devt.de/krotik/eliasdb
+module github.com/rhedin/Abe_eliasdb
 
 go 1.12
 

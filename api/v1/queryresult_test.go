@@ -14,9 +14,9 @@ import (
 	"fmt"
 	"testing"
 
-	"devt.de/krotik/eliasdb/api"
-	"devt.de/krotik/eliasdb/eql/interpreter"
-	"devt.de/krotik/eliasdb/graph/data"
+	"github.com/rhedin/Abe_eliasdb/api"
+	"github.com/rhedin/Abe_eliasdb/eql/interpreter"
+	"github.com/rhedin/Abe_eliasdb/graph/data"
 )
 
 func TestResultGroupingWithState(t *testing.T) {

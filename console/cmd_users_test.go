@@ -14,7 +14,7 @@ import (
 	"bytes"
 	"testing"
 
-	"devt.de/krotik/eliasdb/config"
+	"github.com/rhedin/Abe_eliasdb/config"
 )
 
 func TestUsersCommands(t *testing.T) {

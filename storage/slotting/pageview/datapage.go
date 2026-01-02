@@ -11,28 +11,28 @@
 /*
 Package pageview contains object wrappers for different page types.
 
-DataPage
+# DataPage
 
 DataPage is a page which holds actual data.
 
-FreeLogicalSlotPage
+# FreeLogicalSlotPage
 
 FreeLogicalSlotPage is a page which holds information about free logical slots.
 The page stores the slot location in a slotinfo data structure.
 
-FreePhysicalSlotPage
+# FreePhysicalSlotPage
 
 FreePhysicalSlotPage is a page which holds information about free physical slots.
 The page stores the slot location and its size in a slotinfo data structure
 (see util/slotsize.go).
 
-SlotInfoPage
+# SlotInfoPage
 
 SlotInfoPage is the super-struct for all page views which manage slotinfos.
 Slotinfo are location (see util/location.go) pointers into the data store containing
 record id and offset.
 
-TransPage
+# TransPage
 
 TransPage is a page which holds data to translate between physical and logical
 slots.
@@ -42,8 +42,8 @@ package pageview
 import (
 	"fmt"
 
-	"devt.de/krotik/eliasdb/storage/file"
-	"devt.de/krotik/eliasdb/storage/paging/view"
+	"github.com/rhedin/Abe_eliasdb/storage/file"
+	"github.com/rhedin/Abe_eliasdb/storage/paging/view"
 )
 
 /*

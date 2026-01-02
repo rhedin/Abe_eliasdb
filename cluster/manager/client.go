@@ -20,7 +20,7 @@ import (
 	"sync"
 	"time"
 
-	"devt.de/krotik/common/datautil"
+	"github.com/rhedin/Abe_common/datautil"
 )
 
 func init() {

@@ -15,18 +15,18 @@ Package paging contains functions and constants necessary for paging of records.
 	Errors in the middle of an operation may leave the datastructures in an
 	inconsistent state.
 
-PageCursor
+# PageCursor
 
 PageCursor is a pointer into a PagedStorageFile and can be used to traverse
 a linked list of pages (see also PagedStorageFileHeader which stores the
 entry points).
 
-PagedStorageFile
+# PagedStorageFile
 
 PagedStorageFile is a wrapper object for a StorageFile which views the file
 records as a linked list of pages.
 
-PagedStorageFileHeader
+# PagedStorageFileHeader
 
 PagedStorageFileHeader is a wrapper object for the header record of a StorageFile.
 The header record stores information about linked lists and root values.

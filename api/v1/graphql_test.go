@@ -15,7 +15,7 @@ import (
 	"net/url"
 	"testing"
 
-	"devt.de/krotik/common/errorutil"
+	"github.com/rhedin/Abe_common/errorutil"
 )
 
 func TestGraphQLQuery(t *testing.T) {

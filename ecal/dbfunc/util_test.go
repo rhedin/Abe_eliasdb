@@ -13,10 +13,10 @@ package dbfunc
 import (
 	"testing"
 
-	"devt.de/krotik/ecal/interpreter"
-	"devt.de/krotik/ecal/parser"
-	"devt.de/krotik/ecal/util"
-	"devt.de/krotik/eliasdb/graph"
+	"github.com/rhedin/Abe_ecal/interpreter"
+	"github.com/rhedin/Abe_ecal/parser"
+	"github.com/rhedin/Abe_ecal/util"
+	"github.com/rhedin/Abe_eliasdb/graph"
 )
 
 func TestRaiseGraphEventHandled(t *testing.T) {

@@ -17,12 +17,12 @@ import (
 	"fmt"
 	"strings"
 
-	"devt.de/krotik/common/errorutil"
-	"devt.de/krotik/ecal/engine"
-	"devt.de/krotik/ecal/scope"
-	"devt.de/krotik/ecal/util"
-	"devt.de/krotik/eliasdb/graph"
-	"devt.de/krotik/eliasdb/graph/data"
+	"github.com/rhedin/Abe_common/errorutil"
+	"github.com/rhedin/Abe_ecal/engine"
+	"github.com/rhedin/Abe_ecal/scope"
+	"github.com/rhedin/Abe_ecal/util"
+	"github.com/rhedin/Abe_eliasdb/graph"
+	"github.com/rhedin/Abe_eliasdb/graph/data"
 )
 
 /*

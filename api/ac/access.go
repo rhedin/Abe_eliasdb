@@ -20,11 +20,11 @@ import (
 	"net/url"
 	"strings"
 
-	"devt.de/krotik/common/datautil"
-	"devt.de/krotik/common/httputil/access"
-	"devt.de/krotik/common/httputil/auth"
-	"devt.de/krotik/common/httputil/user"
-	"devt.de/krotik/eliasdb/api"
+	"github.com/rhedin/Abe_common/datautil"
+	"github.com/rhedin/Abe_common/httputil/access"
+	"github.com/rhedin/Abe_common/httputil/auth"
+	"github.com/rhedin/Abe_common/httputil/user"
+	"github.com/rhedin/Abe_eliasdb/api"
 )
 
 // Code and datastructures relating to access control
@@ -137,7 +137,6 @@ func InitACLs(tab access.ACLTable) {
 }
 
 // Access request types
-//
 const (
 	CREATE = "create"
 	READ   = "read"
@@ -146,14 +145,12 @@ const (
 )
 
 // Access request results
-//
 const (
 	GRANTED = "granted"
 	DENIED  = "denied"
 )
 
 // Mapping from http request method to access request type
-//
 var httpRequestMapping = map[string]string{
 	"":       READ,
 	"get":    READ,

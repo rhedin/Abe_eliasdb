@@ -28,7 +28,7 @@ These ECAL related config options are available in `eliasdb.config.json`:
 
 ECAL Debugging
 --
-If the debug server is enabled in the config file then it is possible to debug ECAL scripts with [VSCode](https://devt.de/krotik/ecal/src/master/ecal-support/README.md). The debugger supports break points and thread state inspection. It is also possible to restart and reload the scripts.
+If the debug server is enabled in the config file then it is possible to debug ECAL scripts with [VSCode](https://github.com/rhedin/Abe_ecal/src/master/ecal-support/README.md). The debugger supports break points and thread state inspection. It is also possible to restart and reload the scripts.
 
 Using the `-ecal-console` parameter it is possible to open an interactive console into the server process. If used together with the debug server additional debug commands are available also there. Enter `?` to see the build-in documentation.
 

@@ -14,8 +14,8 @@ import (
 	"fmt"
 	"net/url"
 
-	"devt.de/krotik/common/stringutil"
-	"devt.de/krotik/eliasdb/api/v1"
+	"github.com/rhedin/Abe_common/stringutil"
+	"github.com/rhedin/Abe_eliasdb/api/v1"
 )
 
 // EQL Console

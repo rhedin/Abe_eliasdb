@@ -18,12 +18,12 @@ import (
 	"strconv"
 	"strings"
 
-	"devt.de/krotik/common/errorutil"
-	"devt.de/krotik/common/stringutil"
-	"devt.de/krotik/eliasdb/api"
-	"devt.de/krotik/eliasdb/eql"
-	"devt.de/krotik/eliasdb/graph"
-	"devt.de/krotik/eliasdb/graph/data"
+	"github.com/rhedin/Abe_common/errorutil"
+	"github.com/rhedin/Abe_common/stringutil"
+	"github.com/rhedin/Abe_eliasdb/api"
+	"github.com/rhedin/Abe_eliasdb/eql"
+	"github.com/rhedin/Abe_eliasdb/graph"
+	"github.com/rhedin/Abe_eliasdb/graph/data"
 )
 
 /*
@@ -653,7 +653,8 @@ func (qre *queryResultEndpoint) SwaggerDefs(s map[string]interface{}) {
 			"produces": []string{
 				"text/plain",
 			},
-			"parameters": append(required),
+			// "parameters": append(required),  // Make gave:  api/v1/queryresult.go:656:18: append with no values
+			"parameters": append(required[:], nil...),
 			"responses": map[string]interface{}{
 				"200": map[string]interface{}{
 					"description": "A CSV string.",
@@ -797,7 +798,10 @@ func (qre *queryResultEndpoint) SwaggerDefs(s map[string]interface{}) {
 				"text/plain",
 				"application/json",
 			},
-			"parameters": append(required),
+			// "parameters": append(required),  // Make gave:  api/v1/queryresult.go:800:18: append with no values
+			// Between Go 1.14 and Go 1.25, the behavior of vet changed.  Now if you don't explicitly
+			// append something, vet thinks you meant to, but you forgot.
+			"parameters": append(required[:], nil...),
 			"responses": map[string]interface{}{
 				"200": map[string]interface{}{
 					"description": "Current group selection state.",

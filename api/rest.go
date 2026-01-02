@@ -14,11 +14,11 @@ import (
 	"net/http"
 	"strings"
 
-	"devt.de/krotik/common/datautil"
-	"devt.de/krotik/eliasdb/cluster"
-	"devt.de/krotik/eliasdb/ecal"
-	"devt.de/krotik/eliasdb/graph"
-	"devt.de/krotik/eliasdb/graph/graphstorage"
+	"github.com/rhedin/Abe_common/datautil"
+	"github.com/rhedin/Abe_eliasdb/cluster"
+	"github.com/rhedin/Abe_eliasdb/ecal"
+	"github.com/rhedin/Abe_eliasdb/graph"
+	"github.com/rhedin/Abe_eliasdb/graph/graphstorage"
 )
 
 /*

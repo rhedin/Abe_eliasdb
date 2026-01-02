@@ -14,8 +14,8 @@ import (
 	"fmt"
 	"testing"
 
-	"devt.de/krotik/eliasdb/storage"
-	"devt.de/krotik/eliasdb/storage/file"
+	"github.com/rhedin/Abe_eliasdb/storage"
+	"github.com/rhedin/Abe_eliasdb/storage/file"
 )
 
 func TestHTreePageFetchExists(t *testing.T) {
@@ -435,7 +435,6 @@ func testMaxDepthExceededPanic(t *testing.T, page *htreePage, sm *storage.Memory
 }
 
 // Returns node numbers: total, pages, buckets
-//
 func countNodes(sm *storage.MemoryStorageManager) (int, int, int) {
 	var total, pages, buckets int
 	var i uint64

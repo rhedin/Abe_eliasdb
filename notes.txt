@@ -4,3 +4,41 @@ So I destroyed those github.com/rhedin versions and cloned new versions from dev
 I named the new versions Abe_eliasdb and Abe_ecal, not plain eliasdb and ecal. 
 Also, Matthias Ladkau just copied versions he felt were "significant" from devt.de/krotik to github.com/krotik. 
 All the steps in between were missing from the github version. 
+
+
+Ha!  The scripts (and probably other things) in these directories refer to other directories by name. 
+So my cleverly renamed directories (Abe_eliasdb) won't work. 
+Luckily, Grok tells me internally git keeps all the references relatively, so I can rename the directories 
+with impunity. 
+
+rickhedin@Ricks-MacBook-Pro chat % sdiff start_console.sh start.sh 
+#!/bin/sh                                                       #!/bin/sh
+cd "$(dirname "$0")"                                            cd "$(dirname "$0")"
+                                                                
+                                                              > if ! [ -d "run" ]; then
+                                                              >   mkdir -p run/web
+                                                              >   mkdir -p run/scripts
+                                                              >   cp -fR res/chat/* run/web
+                                                              >   cp -fR res/scripts/* run/scripts
+                                                              >   cp -fR res/eliasdb.config.json run
+                                                              >   cp -fR res/access.db run
+                                                              > fi
+cd run                                                          cd run
+../../../eliasdb console                                      | ../../../eliasdb server     <-----  See? 
+rickhedin@Ricks-MacBook-Pro chat % 
+rickhedin@Ricks-MacBook-Pro chat % 
+rickhedin@Ricks-MacBook-Pro chat % ./start.sh 
+./start.sh: line 13: ../../../eliasdb: No such file or directory
+rickhedin@Ricks-MacBook-Pro chat % pwd
+/Users/rickhedin/work/251222/Abe_eliasdb/examples/chat
+rickhedin@Ricks-MacBook-Pro chat % 
+rickhedin@Ricks-MacBook-Pro chat % 
+rickhedin@Ricks-MacBook-Pro chat % cd ..
+rickhedin@Ricks-MacBook-Pro examples % cd ..
+rickhedin@Ricks-MacBook-Pro Abe_eliasdb % cd ..
+rickhedin@Ricks-MacBook-Pro 251222 % 
+rickhedin@Ricks-MacBook-Pro 251222 % 
+rickhedin@Ricks-MacBook-Pro 251222 % mv Abe_eliasdb eliasdb      <-----  See? 
+rickhedin@Ricks-MacBook-Pro 251222 % mv Abe_ecal    ecal 
+
+

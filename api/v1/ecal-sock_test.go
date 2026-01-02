@@ -17,11 +17,11 @@ import (
 	"testing"
 	"time"
 
-	"devt.de/krotik/common/errorutil"
-	"devt.de/krotik/ecal/cli/tool"
-	"devt.de/krotik/ecal/engine"
-	"devt.de/krotik/ecal/util"
-	"devt.de/krotik/eliasdb/api"
+	"github.com/rhedin/Abe_common/errorutil"
+	"github.com/rhedin/Abe_ecal/cli/tool"
+	"github.com/rhedin/Abe_ecal/engine"
+	"github.com/rhedin/Abe_ecal/util"
+	"github.com/rhedin/Abe_eliasdb/api"
 	"github.com/gorilla/websocket"
 )
 

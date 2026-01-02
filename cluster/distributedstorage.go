@@ -41,10 +41,10 @@ import (
 	"math"
 	"sync"
 
-	"devt.de/krotik/common/datautil"
-	"devt.de/krotik/eliasdb/cluster/manager"
-	"devt.de/krotik/eliasdb/graph/graphstorage"
-	"devt.de/krotik/eliasdb/storage"
+	"github.com/rhedin/Abe_common/datautil"
+	"github.com/rhedin/Abe_eliasdb/cluster/manager"
+	"github.com/rhedin/Abe_eliasdb/graph/graphstorage"
+	"github.com/rhedin/Abe_eliasdb/storage"
 )
 
 /*

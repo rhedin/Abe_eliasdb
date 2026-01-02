@@ -11,8 +11,8 @@
 package interpreter
 
 import (
-	"devt.de/krotik/eliasdb/eql/parser"
-	"devt.de/krotik/eliasdb/graph"
+	"github.com/rhedin/Abe_eliasdb/eql/parser"
+	"github.com/rhedin/Abe_eliasdb/graph"
 )
 
 // Runtime provider for LOOKUP queries
@@ -72,7 +72,7 @@ func lookupRuntimeInst(rtp *LookupRuntimeProvider, node *parser.ASTNode) parser.
 }
 
 /*
- Validate and reset this runtime component and all its child components.
+Validate and reset this runtime component and all its child components.
 */
 func (rt *lookupRuntime) Validate() error {
 

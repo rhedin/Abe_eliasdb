@@ -16,10 +16,10 @@ import (
 	"strconv"
 	"strings"
 
-	"devt.de/krotik/common/lang/graphql/parser"
-	"devt.de/krotik/common/stringutil"
-	"devt.de/krotik/eliasdb/graph"
-	"devt.de/krotik/eliasdb/graph/data"
+	"github.com/rhedin/Abe_common/lang/graphql/parser"
+	"github.com/rhedin/Abe_common/stringutil"
+	"github.com/rhedin/Abe_eliasdb/graph"
+	"github.com/rhedin/Abe_eliasdb/graph/data"
 )
 
 // SelectionSet Runtime

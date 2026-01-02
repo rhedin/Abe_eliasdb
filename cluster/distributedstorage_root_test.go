@@ -14,7 +14,7 @@ import (
 	"math"
 	"testing"
 
-	"devt.de/krotik/eliasdb/cluster/manager"
+	"github.com/rhedin/Abe_eliasdb/cluster/manager"
 )
 
 func TestSimpleDataReplicationRoot(t *testing.T) {

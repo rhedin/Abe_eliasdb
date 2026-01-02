@@ -15,9 +15,9 @@ import (
 	"strings"
 	"testing"
 
-	"devt.de/krotik/common/bitutil"
-	"devt.de/krotik/eliasdb/hash"
-	"devt.de/krotik/eliasdb/storage"
+	"github.com/rhedin/Abe_common/bitutil"
+	"github.com/rhedin/Abe_eliasdb/hash"
+	"github.com/rhedin/Abe_eliasdb/storage"
 )
 
 func TestIndexManager(t *testing.T) {

@@ -15,8 +15,8 @@ import (
 	"strconv"
 	"strings"
 
-	"devt.de/krotik/eliasdb/cluster/manager"
-	"devt.de/krotik/eliasdb/hash"
+	"github.com/rhedin/Abe_eliasdb/cluster/manager"
+	"github.com/rhedin/Abe_eliasdb/hash"
 )
 
 /*

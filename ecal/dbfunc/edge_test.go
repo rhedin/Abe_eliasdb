@@ -14,9 +14,9 @@ import (
 	"fmt"
 	"testing"
 
-	"devt.de/krotik/eliasdb/graph"
-	"devt.de/krotik/eliasdb/graph/data"
-	"devt.de/krotik/eliasdb/graph/graphstorage"
+	"github.com/rhedin/Abe_eliasdb/graph"
+	"github.com/rhedin/Abe_eliasdb/graph/data"
+	"github.com/rhedin/Abe_eliasdb/graph/graphstorage"
 )
 
 func TestStoreAndRemoveEdge(t *testing.T) {

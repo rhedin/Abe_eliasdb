@@ -13,8 +13,8 @@ package pageview
 import (
 	"testing"
 
-	"devt.de/krotik/eliasdb/storage/file"
-	"devt.de/krotik/eliasdb/storage/paging/view"
+	"github.com/rhedin/Abe_eliasdb/storage/file"
+	"github.com/rhedin/Abe_eliasdb/storage/paging/view"
 )
 
 func TestDataPage(t *testing.T) {

@@ -28,7 +28,7 @@ The first step is to create a graph storage which will store the data. The follo
 ```
 import (
 	...
-		"devt.de/krotik/eliasdb/graph/graphstorage"
+		"github.com/rhedin/Abe_eliasdb/graph/graphstorage"
 )
 
 func main() {
@@ -45,15 +45,15 @@ func main() {
 ```
 Running `go build` again should now download eliasdb as additional dependency (the actual versions might be different):
 ```
-go: finding devt.de/krotik/eliasdb/graph/graphstorage latest
-go: finding devt.de/krotik/eliasdb/graph latest
-go: finding devt.de/krotik/eliasdb v1.0.0
-go: downloading devt.de/krotik/eliasdb v1.0.0
-go: extracting devt.de/krotik/eliasdb v1.0.0
+go: finding github.com/rhedin/Abe_eliasdb/graph/graphstorage latest
+go: finding github.com/rhedin/Abe_eliasdb/graph latest
+go: finding github.com/rhedin/Abe_eliasdb v1.0.0
+go: downloading github.com/rhedin/Abe_eliasdb v1.0.0
+go: extracting github.com/rhedin/Abe_eliasdb v1.0.0
 go: finding github.com/gorilla/websocket v1.4.1
-go: finding devt.de/krotik/common v1.0.0
-go: downloading devt.de/krotik/common v1.0.0
-go: extracting devt.de/krotik/common v1.0.0
+go: finding github.com/rhedin/Abe_common v1.0.0
+go: downloading github.com/rhedin/Abe_common v1.0.0
+go: extracting github.com/rhedin/Abe_common v1.0.0
 ```
 The `go build` command will have modified the `go.mod` file and created a `go.sum` file.
 
@@ -168,7 +168,7 @@ if idxerr == nil {
 	}
 }
 ```
-For even more complex searches you can use EQL (see also the EQL manual  [here](https://devt.de/krotik/eliasdb/src/master/eql.md)):
+For even more complex searches you can use EQL (see also the EQL manual  [here](https://github.com/rhedin/Abe_eliasdb/src/master/eql.md)):
 ```
 res, err := eql.RunQuery("myquery", "main", "get mynode where name = 'Node2'", gm)
 
@@ -193,10 +193,10 @@ import (
 	"fmt"
 	"log"
 
-	"devt.de/krotik/eliasdb/eql"
-	"devt.de/krotik/eliasdb/graph"
-	"devt.de/krotik/eliasdb/graph/data"
-	"devt.de/krotik/eliasdb/graph/graphstorage"
+	"github.com/rhedin/Abe_eliasdb/eql"
+	"github.com/rhedin/Abe_eliasdb/graph"
+	"github.com/rhedin/Abe_eliasdb/graph/data"
+	"github.com/rhedin/Abe_eliasdb/graph/graphstorage"
 )
 
 func main() {

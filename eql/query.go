@@ -20,9 +20,9 @@ package eql
 import (
 	"strings"
 
-	"devt.de/krotik/eliasdb/eql/interpreter"
-	"devt.de/krotik/eliasdb/eql/parser"
-	"devt.de/krotik/eliasdb/graph"
+	"github.com/rhedin/Abe_eliasdb/eql/interpreter"
+	"github.com/rhedin/Abe_eliasdb/eql/parser"
+	"github.com/rhedin/Abe_eliasdb/graph"
 )
 
 /*

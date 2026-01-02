@@ -13,7 +13,7 @@ package data
 import (
 	"sort"
 
-	"devt.de/krotik/common/datautil"
+	"github.com/rhedin/Abe_common/datautil"
 )
 
 /*

@@ -18,11 +18,11 @@ import (
 	"strings"
 	"sync"
 
-	"devt.de/krotik/common/sortutil"
-	"devt.de/krotik/eliasdb/cluster/manager"
-	"devt.de/krotik/eliasdb/graph/graphstorage"
-	"devt.de/krotik/eliasdb/hash"
-	"devt.de/krotik/eliasdb/storage"
+	"github.com/rhedin/Abe_common/sortutil"
+	"github.com/rhedin/Abe_eliasdb/cluster/manager"
+	"github.com/rhedin/Abe_eliasdb/graph/graphstorage"
+	"github.com/rhedin/Abe_eliasdb/hash"
+	"github.com/rhedin/Abe_eliasdb/storage"
 )
 
 /*

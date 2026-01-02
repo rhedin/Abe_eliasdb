@@ -14,8 +14,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"devt.de/krotik/common/errorutil"
-	v1 "devt.de/krotik/eliasdb/api/v1"
+	"github.com/rhedin/Abe_common/errorutil"
+	v1 "github.com/rhedin/Abe_eliasdb/api/v1"
 )
 
 // GraphQL Console

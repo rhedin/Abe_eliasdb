@@ -24,13 +24,13 @@ Hash buckets are on the lowest level of the tree and contain actual keys and
 values. The object stores multiple keys and values if there are hash collisions.
 In a sparsely populated tree buckets can also be found on the upper levels.
 
-Iterator
+# Iterator
 
 Entries in the HTree can be iterated by using an HTreeIterator. The HTree may
 change behind the iterator's back. The iterator will try to cope with best
 effort and only report an error as a last resort.
 
-Hash function
+# Hash function
 
 The HTree uses an implementation of Austin Appleby's MurmurHash3 (32bit) function
 as hash function.
@@ -43,7 +43,7 @@ import (
 	"fmt"
 	"sync"
 
-	"devt.de/krotik/eliasdb/storage"
+	"github.com/rhedin/Abe_eliasdb/storage"
 )
 
 /*

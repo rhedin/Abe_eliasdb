@@ -14,9 +14,9 @@ import (
 	"fmt"
 	"testing"
 
-	"devt.de/krotik/eliasdb/api"
-	"devt.de/krotik/eliasdb/graph/data"
-	"devt.de/krotik/eliasdb/storage"
+	"github.com/rhedin/Abe_eliasdb/api"
+	"github.com/rhedin/Abe_eliasdb/graph/data"
+	"github.com/rhedin/Abe_eliasdb/storage"
 	"github.com/gorilla/websocket"
 )
 

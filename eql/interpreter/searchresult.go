@@ -18,7 +18,7 @@ import (
 	"strconv"
 	"strings"
 
-	"devt.de/krotik/eliasdb/graph/data"
+	"github.com/rhedin/Abe_eliasdb/graph/data"
 )
 
 /*
@@ -63,7 +63,8 @@ func (sh *SearchHeader) Format() []string {
 /*
 Data returns the data which is displayed in each column of a search result.
 (e.g. 1:n:name - Name of starting nodes,
-      3:e:key  - Key of edge traversed in the second traversal)
+
+	3:e:key  - Key of edge traversed in the second traversal)
 */
 func (sh *SearchHeader) Data() []string {
 	return sh.ColData

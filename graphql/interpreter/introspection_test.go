@@ -14,7 +14,7 @@ import (
 	"fmt"
 	"testing"
 
-	"devt.de/krotik/common/lang/graphql/parser"
+	"github.com/rhedin/Abe_common/lang/graphql/parser"
 )
 
 func TestIntrospection(t *testing.T) {

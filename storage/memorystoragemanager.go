@@ -15,8 +15,8 @@ import (
 	"fmt"
 	"sync"
 
-	"devt.de/krotik/common/datautil"
-	"devt.de/krotik/eliasdb/storage/file"
+	"github.com/rhedin/Abe_common/datautil"
+	"github.com/rhedin/Abe_eliasdb/storage/file"
 )
 
 /*

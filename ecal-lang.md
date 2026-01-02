@@ -556,10 +556,10 @@ Stdlib Functions
 --
 It is possible to extend the ECAL interpreter with additional functions and constants. This can either be done through:
 
-- Using [Go plugins](https://golang.org/pkg/plugin/) which allow the loading of code via dynamic linking. See ECAL's [documentation](https://devt.de/krotik/ecal#using-go-plugins-in-ecal).
-- Using a bridge to Go. Standard Go functions using primitive argument types can be easily added using [code generation](https://blog.golang.org/generate). See the ECAL's [stdlib/generate](https://devt.de/krotik/ecal/src/master/stdlib/generate/generate.go#L51).
-- Adding custom function definitions to the ECAL interpreter by extending the interpreter code. See ECAL's [stdlib package](https://pkg.go.dev/devt.de/krotik/ecal/stdlib).
+- Using [Go plugins](https://golang.org/pkg/plugin/) which allow the loading of code via dynamic linking. See ECAL's [documentation](https://github.com/rhedin/Abe_ecal#using-go-plugins-in-ecal).
+- Using a bridge to Go. Standard Go functions using primitive argument types can be easily added using [code generation](https://blog.golang.org/generate). See the ECAL's [stdlib/generate](https://github.com/rhedin/Abe_ecal/src/master/stdlib/generate/generate.go#L51).
+- Adding custom function definitions to the ECAL interpreter by extending the interpreter code. See ECAL's [stdlib package](https://pkg.go.dev/github.com/rhedin/Abe_ecal/stdlib).
 
 For the first one you need to define a `.ecal.json` in the scripts folder. For the other options you need to recompile the ECAL interpreter code for EliasDB. Use the [replace directive](https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive) in EliasDB's `go.mod` file to point the compiler to an alternative version of the ECAL interpreter which includes your changes.
 
-Please see the [documentation](https://devt.de/krotik/ecal) of the ECAL interpreter for more information.
+Please see the [documentation](https://github.com/rhedin/Abe_ecal) of the ECAL interpreter for more information.

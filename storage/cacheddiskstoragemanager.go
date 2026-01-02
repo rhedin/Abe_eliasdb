@@ -13,7 +13,7 @@ Package storage contains the low-level API for data storage. Data is stored
 in slots. The interface defines methods to store, retrieve, update and delete
 a given object to and from the disk. There are 3 main implementations:
 
-DiskStorageManager
+# DiskStorageManager
 
 A disk storage manager handles the data storage on disk. It controls the actual
 PhysicalSlotManager and LogicalSlotManager objects. It holds references to all
@@ -23,14 +23,14 @@ DiskStorageManager on the same files will result in an error. The DiskStorageMan
 is also responsible for marshalling given abstract objects into a binary form which
 can be written to physical slots.
 
-CachedDiskStorageManager
+# CachedDiskStorageManager
 
 The CachedDiskStorageManager is a cache wrapper for the DiskStorageManager. Its
 purpose is to intercept calls and to maintain a cache of stored objects. The cache
 is limited in size by the number of total objects it references. Once the cache
 is full it will forget the objects which have been requested the least.
 
-MemoryStorageManager
+# MemoryStorageManager
 
 A storage manager which keeps all its data in memory and provides several
 error simulation facilities.

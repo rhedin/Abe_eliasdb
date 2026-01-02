@@ -1,7 +1,8 @@
 export NAME=eliasdb
 export TAG=`git describe --abbrev=0 --tags`
 export CGO_ENABLED=0
-export GOOS=linux
+# export GOOS=linux 
+# Need to leave the operating system unspecified.  I'm not on a linux system. 
 
 all: build
 clean:

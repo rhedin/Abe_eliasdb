@@ -10,7 +10,7 @@
 
 package graphstorage
 
-import "devt.de/krotik/eliasdb/storage"
+import "github.com/rhedin/Abe_eliasdb/storage"
 
 /*
 Storage interface models the storage backend for a graph manager.

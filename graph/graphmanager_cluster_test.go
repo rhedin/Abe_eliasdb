@@ -16,11 +16,11 @@ import (
 	"log"
 	"testing"
 
-	"devt.de/krotik/eliasdb/cluster"
-	"devt.de/krotik/eliasdb/cluster/manager"
-	"devt.de/krotik/eliasdb/graph/data"
-	"devt.de/krotik/eliasdb/graph/graphstorage"
-	"devt.de/krotik/eliasdb/hash"
+	"github.com/rhedin/Abe_eliasdb/cluster"
+	"github.com/rhedin/Abe_eliasdb/cluster/manager"
+	"github.com/rhedin/Abe_eliasdb/graph/data"
+	"github.com/rhedin/Abe_eliasdb/graph/graphstorage"
+	"github.com/rhedin/Abe_eliasdb/hash"
 )
 
 func TestClusterWithPhysicalStorage(t *testing.T) {

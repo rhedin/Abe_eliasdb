@@ -17,8 +17,8 @@ import (
 	"strings"
 	"text/template"
 
-	"devt.de/krotik/common/errorutil"
-	"devt.de/krotik/common/stringutil"
+	"github.com/rhedin/Abe_common/errorutil"
+	"github.com/rhedin/Abe_common/stringutil"
 )
 
 /*

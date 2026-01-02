@@ -14,7 +14,7 @@ import (
 	"errors"
 	"fmt"
 
-	"devt.de/krotik/eliasdb/eql/parser"
+	"github.com/rhedin/Abe_eliasdb/eql/parser"
 )
 
 /*

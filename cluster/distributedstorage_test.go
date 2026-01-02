@@ -21,9 +21,9 @@ import (
 	"math"
 	"testing"
 
-	"devt.de/krotik/eliasdb/cluster/manager"
-	"devt.de/krotik/eliasdb/graph/graphstorage"
-	"devt.de/krotik/eliasdb/storage"
+	"github.com/rhedin/Abe_eliasdb/cluster/manager"
+	"github.com/rhedin/Abe_eliasdb/graph/graphstorage"
+	"github.com/rhedin/Abe_eliasdb/storage"
 )
 
 func TestDistributionStorageInitialisationError(t *testing.T) {

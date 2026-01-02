@@ -1,6 +1,6 @@
 EliasDB Game Example
 ==
-This example demonstrates a game which uses [ECAL](https://devt.de/krotik/ecal) scripts for its backend. The game is a simple [Asteroids](https://en.wikipedia.org/wiki/Asteroids_(video_game)) game clone using modern graphics.
+This example demonstrates a game which uses [ECAL](https://github.com/rhedin/Abe_ecal) scripts for its backend. The game is a simple [Asteroids](https://en.wikipedia.org/wiki/Asteroids_(video_game)) game clone using modern graphics.
 
 <p align="center">
   <img height="300px" style="height:300px;" src="screenshot1.png">
@@ -24,7 +24,7 @@ The generated default key and certificate for https are self-signed which should
 ## Design
 Conceptionally the game runs through 2 loops running in parallel to each other. One loop, called the game loop, calculates the game model in discreet time intervals using vector geometry. The other loop, called the display loop, displays the model by redrawing the current scene as fast as possible.
 
-The game loop runs in the backend and used ECAL's [pulse trigger](https://devt.de/krotik/ecal/src/master/ecal.md#setpulsetriggermicros-eventname-eventkind) to generate periodic model update events.
+The game loop runs in the backend and used ECAL's [pulse trigger](https://github.com/rhedin/Abe_ecal/src/master/ecal.md#setpulsetriggermicros-eventname-eventkind) to generate periodic model update events.
 
 <p align="center">
   <img height="300px" style="height:300px;" src="game-loop.png">
@@ -49,7 +49,7 @@ By pressing a button a player adds a "shot" object to the model and a "shot" aud
 A detailed description of all files of the example game can be found below:
 
 ### Backend
-The backend code under `res/scripts` contains the game loop which simulates the model. The game loop is written in [ECAL](https://github.com/krotik/ecal) and runs inside the EliasDB process.
+The backend code under `res/scripts` contains the game loop which simulates the model. The game loop is written in [ECAL](https://github.com/rhedin/Abe_ecal) and runs inside the EliasDB process.
 
 | File | Description |
 | --- | --- |

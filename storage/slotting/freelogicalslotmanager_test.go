@@ -13,11 +13,11 @@ package slotting
 import (
 	"testing"
 
-	"devt.de/krotik/eliasdb/storage/file"
-	"devt.de/krotik/eliasdb/storage/paging"
-	"devt.de/krotik/eliasdb/storage/paging/view"
-	"devt.de/krotik/eliasdb/storage/slotting/pageview"
-	"devt.de/krotik/eliasdb/storage/util"
+	"github.com/rhedin/Abe_eliasdb/storage/file"
+	"github.com/rhedin/Abe_eliasdb/storage/paging"
+	"github.com/rhedin/Abe_eliasdb/storage/paging/view"
+	"github.com/rhedin/Abe_eliasdb/storage/slotting/pageview"
+	"github.com/rhedin/Abe_eliasdb/storage/util"
 )
 
 func TestFreeLogicalSlotManager(t *testing.T) {

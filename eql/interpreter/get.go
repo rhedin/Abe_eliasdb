@@ -11,8 +11,8 @@
 package interpreter
 
 import (
-	"devt.de/krotik/eliasdb/eql/parser"
-	"devt.de/krotik/eliasdb/graph"
+	"github.com/rhedin/Abe_eliasdb/eql/parser"
+	"github.com/rhedin/Abe_eliasdb/graph"
 )
 
 // Runtime provider for GET queries
@@ -71,7 +71,7 @@ func getRuntimeInst(rtp *GetRuntimeProvider, node *parser.ASTNode) parser.Runtim
 }
 
 /*
- Validate and reset this runtime component and all its child components.
+Validate and reset this runtime component and all its child components.
 */
 func (rt *getRuntime) Validate() error {
 

@@ -15,8 +15,8 @@ import (
 	"strings"
 	"sync"
 
-	"devt.de/krotik/eliasdb/graph/data"
-	"devt.de/krotik/eliasdb/graph/util"
+	"github.com/rhedin/Abe_eliasdb/graph/data"
+	"github.com/rhedin/Abe_eliasdb/graph/util"
 )
 
 /*

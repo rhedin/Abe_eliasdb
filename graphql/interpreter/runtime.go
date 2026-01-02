@@ -13,9 +13,9 @@ package interpreter
 import (
 	"fmt"
 
-	"devt.de/krotik/common/errorutil"
-	"devt.de/krotik/common/lang/graphql/parser"
-	"devt.de/krotik/eliasdb/graph"
+	"github.com/rhedin/Abe_common/errorutil"
+	"github.com/rhedin/Abe_common/lang/graphql/parser"
+	"github.com/rhedin/Abe_eliasdb/graph"
 )
 
 // Runtime definition
@@ -172,7 +172,7 @@ func documentRuntimeInst(rtp *GraphQLRuntimeProvider, node *parser.ASTNode) pars
 }
 
 /*
- Validate and reset this runtime component and all its child components.
+Validate and reset this runtime component and all its child components.
 */
 func (rt *documentRuntime) Validate() error {
 
@@ -312,7 +312,7 @@ func executableDefinitionRuntimeInst(rtp *GraphQLRuntimeProvider, node *parser.A
 }
 
 /*
- Validate and reset this runtime component and all its child components.
+Validate and reset this runtime component and all its child components.
 */
 func (rt *executableDefinitionRuntime) Validate() error {
 
