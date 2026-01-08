@@ -1,12 +1,16 @@
-export NAME=eliasdb
-export TAG=`git describe --abbrev=0 --tags`
-export CGO_ENABLED=0
+CGO_ENABLED  := 0                   # Disable cgo for static, portable binaries
+NAME         := eliasdb             # Binary name
 # export GOOS=linux 
 # Need to leave the operating system unspecified.  I'm not on a linux system. 
+TAG          := $(shell git describe --abbrev=0 --tags 2>/dev/null || echo "") 
+# Setting TAG this way works even if the project has zero tags. 
+PROD_TMPDIR  := .tmp/prod-src# Temp directory for stripped production sources
+STRIP_SCRIPT := scripts/strip-understand-logs.sh  # Script to remove understand logs
 
 all: build
 clean:
 	rm -f eliasdb
+	rm -rf .tmp 
 
 mod:
 	go mod init || true
@@ -27,10 +31,25 @@ fmt:
 	gofmt -l -w -s .
 
 vet:
+	set | grep GO
 	go vet ./...
 
+build-prod: clean mod fmt vet
+	rm -rf $(PROD_TMPDIR)
+	mkdir -p $(PROD_TMPDIR)
+	# Copy entire source tree (fast with rsync or cp --preserve=links if possible)
+	rsync -a --exclude=$(PROD_TMPDIR) --exclude=.git ./ $(PROD_TMPDIR)
+	# Strip the understand blocks in the copy
+	$(STRIP_SCRIPT) $(PROD_TMPDIR)
+	go build -ldflags "-s -w" -o $(NAME) ./$(PROD_TMPDIR)/cli   # or ./cmd/... whatever your main is
+
+build-for-production: build-prod
+build-without-logging-for-understanding: build-prod
+
 build: clean mod fmt vet
-	go build -ldflags "-s -w" -o $(NAME) cli/eliasdb.go
+	go build -ldflags "-s -w" -o $(NAME) ./cli
+
+build-with-logging-for-understanding: build 
 
 build-mac: clean mod fmt vet
 	GOOS=darwin GOARCH=amd64 go build -o $(NAME).mac cli/eliasdb.go

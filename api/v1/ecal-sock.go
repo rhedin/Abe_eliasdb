@@ -17,6 +17,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/gorilla/websocket"
 	"github.com/rhedin/Abe_common/cryptutil"
 	"github.com/rhedin/Abe_common/errorutil"
 	"github.com/rhedin/Abe_common/stringutil"
@@ -24,7 +25,6 @@ import (
 	"github.com/rhedin/Abe_ecal/scope"
 	"github.com/rhedin/Abe_eliasdb/api"
 	"github.com/rhedin/Abe_eliasdb/ecal"
-	"github.com/gorilla/websocket"
 )
 
 /*
