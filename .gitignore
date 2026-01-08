@@ -24,5 +24,6 @@
 /ssl
 /web
 /db
+/scripts
 /eliasdb.config.json
 .DS_Store

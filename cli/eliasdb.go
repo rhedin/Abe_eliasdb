@@ -44,7 +44,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -61,10 +60,6 @@ import (
 )
 
 func main() {
-
-	// Test whether our logging mechanism works.
-
-	log.Printf("Greetings.  Are you there?\n")
 
 	// Initialize the default command line parser
 

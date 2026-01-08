@@ -17,12 +17,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gorilla/websocket"
 	"github.com/rhedin/Abe_common/errorutil"
 	"github.com/rhedin/Abe_ecal/cli/tool"
 	"github.com/rhedin/Abe_ecal/engine"
 	"github.com/rhedin/Abe_ecal/util"
 	"github.com/rhedin/Abe_eliasdb/api"
+	"github.com/gorilla/websocket"
 )
 
 func TestECALSockConnectionErrors(t *testing.T) {

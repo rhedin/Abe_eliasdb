@@ -7,5 +7,3 @@ require (
 	github.com/rhedin/Abe_common v1.5.2
 	github.com/rhedin/Abe_ecal v1.6.3
 )
-
-replace github.com/rhedin/Abe_common => ../Abe_common
