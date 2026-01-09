@@ -18,10 +18,10 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/gorilla/websocket"
 	"github.com/rhedin/Abe_common/errorutil"
 	"github.com/rhedin/Abe_common/httputil"
 	"github.com/rhedin/Abe_ecal/engine"
-	"github.com/gorilla/websocket"
 )
 
 const TESTPORT = ":9090"

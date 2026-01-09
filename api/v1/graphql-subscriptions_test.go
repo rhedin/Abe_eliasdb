@@ -14,10 +14,10 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/gorilla/websocket"
 	"github.com/rhedin/Abe_eliasdb/api"
 	"github.com/rhedin/Abe_eliasdb/graph/data"
 	"github.com/rhedin/Abe_eliasdb/storage"
-	"github.com/gorilla/websocket"
 )
 
 func TestGraphQLSubscriptionConnectionErrors(t *testing.T) {

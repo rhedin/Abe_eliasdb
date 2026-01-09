@@ -29,6 +29,12 @@ fmt:
 vet:
 	go vet ./...
 
+build-without-under-logging: clean mod fmt vet
+	go build -ldflags "-s -w"                -o $(NAME) cli/eliasdb.go
+
+build-with-under-logging: clean mod fmt vet
+	go build -ldflags "-s -w" -tags=underlog -o $(NAME) cli/eliasdb.go
+
 build: clean mod fmt vet
 	go build -ldflags "-s -w" -o $(NAME) cli/eliasdb.go
 

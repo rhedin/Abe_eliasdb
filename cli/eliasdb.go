@@ -49,6 +49,7 @@ import (
 	"strings"
 	"time"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/errorutil"
 	"github.com/rhedin/Abe_common/fileutil"
 	"github.com/rhedin/Abe_common/termutil"
@@ -60,6 +61,10 @@ import (
 )
 
 func main() {
+
+	if abelog.UnderEnabled {
+		fmt.Printf("Print controlled by abelog.UnderEnabled")
+	}
 
 	// Initialize the default command line parser
 
