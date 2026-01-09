@@ -63,8 +63,10 @@ import (
 func main() {
 
 	if abelog.UnderEnabled {
-		fmt.Printf("Print controlled by abelog.UnderEnabled")
+		fmt.Printf("Print controlled by abelog.UnderEnabled\n")
 	}
+
+	abelog.UnderPrintf("This is printed (or not) by abelog.UnderPrintf\n")
 
 	// Initialize the default command line parser
 
