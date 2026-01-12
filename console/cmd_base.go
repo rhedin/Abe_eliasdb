@@ -14,6 +14,7 @@ import (
 	"bytes"
 	"fmt"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/stringutil"
 	"github.com/rhedin/Abe_eliasdb/api"
 	"github.com/rhedin/Abe_eliasdb/api/ac"
@@ -58,6 +59,7 @@ func (c *CmdVer) LongDescription() string {
 Run executes the command.
 */
 func (c *CmdVer) Run(args []string, capi CommandConsoleAPI) error {
+	abelog.UnderPrintf("\n")
 
 	fmt.Fprintln(capi.Out(), fmt.Sprintf("Connected to: %v", capi.URL()))
 
@@ -112,6 +114,7 @@ func (c *CmdWhoAmI) LongDescription() string {
 Run executes the command.
 */
 func (c *CmdWhoAmI) Run(args []string, capi CommandConsoleAPI) error {
+	abelog.UnderPrintf("\n")
 
 	res, err := capi.Req(ac.EndpointWhoAmI, "GET", nil)
 
@@ -173,6 +176,7 @@ func (c *CmdExport) LongDescription() string {
 Run executes the command.
 */
 func (c *CmdExport) Run(args []string, capi CommandConsoleAPI) error {
+	abelog.UnderPrintf("\n")
 	return c.exportFunc(args, capi.ExportBuffer())
 }
 
@@ -215,6 +219,7 @@ func (c *CmdLogin) LongDescription() string {
 Run executes the command.
 */
 func (c *CmdLogin) Run(args []string, capi CommandConsoleAPI) error {
+	abelog.UnderPrintf("\n")
 	return nil // Functionality is implemented in the command processor
 }
 
@@ -257,6 +262,7 @@ func (c *CmdLogout) LongDescription() string {
 Run executes the command.
 */
 func (c *CmdLogout) Run(args []string, capi CommandConsoleAPI) error {
+	abelog.UnderPrintf("\n")
 	return nil // Functionality is implemented in the command processor
 }
 
@@ -299,6 +305,7 @@ func (c *CmdHelp) LongDescription() string {
 Run executes the command.
 */
 func (c *CmdHelp) Run(args []string, capi CommandConsoleAPI) error {
+	abelog.UnderPrintf("\n")
 
 	cmds := capi.Commands()
 

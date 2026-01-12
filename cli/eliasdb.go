@@ -61,12 +61,7 @@ import (
 )
 
 func main() {
-
-	if abelog.UnderEnabled {
-		fmt.Printf("Print controlled by abelog.UnderEnabled\n")
-	}
-
-	abelog.UnderPrintf("This is printed (or not) by abelog.UnderPrintf\n")
+	abelog.UnderPrintf("\n")
 
 	// Initialize the default command line parser
 
@@ -119,6 +114,7 @@ func main() {
 RunCliConsole runs the server console on the commandline.
 */
 func RunCliConsole() {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	// Try to get the server host and port from the config file
@@ -278,6 +274,7 @@ getHostPortFromConfig gets the host and port from the config file or the
 default config.
 */
 func getHostPortFromConfig() (string, string) {
+	abelog.UnderPrintf("\n")
 	host := fileutil.ConfStr(config.DefaultConfig, config.HTTPSHost)
 	port := fileutil.ConfStr(config.DefaultConfig, config.HTTPSPort)
 
@@ -297,6 +294,7 @@ func getHostPortFromConfig() (string, string) {
 handleServerCommandLine handles all command line options for the server
 */
 func handleServerCommandLine(gm *graph.Manager) bool {
+	abelog.UnderPrintf("\n")
 	var err error
 	var ecalConsole *bool
 
