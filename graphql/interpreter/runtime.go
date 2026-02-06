@@ -13,6 +13,7 @@ package interpreter
 import (
 	"fmt"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/errorutil"
 	"github.com/rhedin/Abe_common/lang/graphql/parser"
 	"github.com/rhedin/Abe_eliasdb/graph"
@@ -135,6 +136,7 @@ func (rtp *GraphQLRuntimeProvider) init() error {
 Runtime returns a runtime component for a given ASTNode.
 */
 func (rtp *GraphQLRuntimeProvider) Runtime(node *parser.ASTNode) parser.Runtime {
+	abelog.UnderPrintf("\n")
 	if pinst, ok := runtimeProviderMap[node.Name]; ok {
 		return pinst(rtp, node)
 	}
@@ -148,6 +150,7 @@ is given to track selection sets.
 */
 func (rtp *GraphQLRuntimeProvider) TraverseAST(root *parser.ASTNode,
 	visitor func(*parser.ASTNode)) {
+	abelog.UnderPrintf("\n")
 
 	visitor(root)
 
@@ -175,6 +178,7 @@ func documentRuntimeInst(rtp *GraphQLRuntimeProvider, node *parser.ASTNode) pars
 Validate and reset this runtime component and all its child components.
 */
 func (rt *documentRuntime) Validate() error {
+	abelog.UnderPrintf("\n")
 
 	err := rt.rtp.init()
 
@@ -272,6 +276,7 @@ func (rt *documentRuntime) Validate() error {
 Eval evaluate this runtime component.
 */
 func (rt *documentRuntime) Eval() (map[string]interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	// First validate the query and reset the runtime provider datastructures
@@ -315,6 +320,7 @@ func executableDefinitionRuntimeInst(rtp *GraphQLRuntimeProvider, node *parser.A
 Validate and reset this runtime component and all its child components.
 */
 func (rt *executableDefinitionRuntime) Validate() error {
+	abelog.UnderPrintf("\n")
 
 	if rt.rtp.operation == nil {
 
@@ -392,6 +398,7 @@ func operationDefinitionRuntimeInst(rtp *GraphQLRuntimeProvider, node *parser.AS
 Eval evaluate this runtime component.
 */
 func (rt *operationDefinitionRuntime) Eval() (map[string]interface{}, error) {
+	abelog.UnderPrintf("\n")
 	res := make(map[string]interface{})
 
 	// Execute the selection set

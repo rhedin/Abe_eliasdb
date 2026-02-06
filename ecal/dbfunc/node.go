@@ -13,6 +13,7 @@ package dbfunc
 import (
 	"fmt"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_ecal/parser"
 	"github.com/rhedin/Abe_eliasdb/graph"
 	"github.com/rhedin/Abe_eliasdb/graph/data"
@@ -29,6 +30,7 @@ type StoreNodeFunc struct {
 Run executes the ECAL function.
 */
 func (f *StoreNodeFunc) Run(instanceID string, vs parser.Scope, is map[string]interface{}, tid uint64, args []interface{}) (interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	if arglen := len(args); arglen != 2 && arglen != 3 {
@@ -88,6 +90,7 @@ type UpdateNodeFunc struct {
 Run executes the ECAL function.
 */
 func (f *UpdateNodeFunc) Run(instanceID string, vs parser.Scope, is map[string]interface{}, tid uint64, args []interface{}) (interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	if arglen := len(args); arglen != 2 && arglen != 3 {
@@ -147,6 +150,7 @@ type RemoveNodeFunc struct {
 Run executes the ECAL function.
 */
 func (f *RemoveNodeFunc) Run(instanceID string, vs parser.Scope, is map[string]interface{}, tid uint64, args []interface{}) (interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	if arglen := len(args); arglen != 3 && arglen != 4 {
@@ -204,6 +208,7 @@ type FetchNodeFunc struct {
 Run executes the ECAL function.
 */
 func (f *FetchNodeFunc) Run(instanceID string, vs parser.Scope, is map[string]interface{}, tid uint64, args []interface{}) (interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var res interface{}
 	var err error
 
@@ -251,6 +256,7 @@ func (f *FetchNodeFunc) DocString() (string, error) {
 NewGraphNodeFromECALMap creates a new Node instance from a given map.
 */
 func NewGraphNodeFromECALMap(d map[interface{}]interface{}) data.Node {
+	abelog.UnderPrintf("\n")
 	node := data.NewGraphNode()
 
 	for k, v := range d {

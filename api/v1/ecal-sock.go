@@ -18,6 +18,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/websocket"
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/cryptutil"
 	"github.com/rhedin/Abe_common/errorutil"
 	"github.com/rhedin/Abe_common/stringutil"
@@ -61,6 +62,7 @@ type ecalSockEndpoint struct {
 HandleGET handles ECAL websocket operations.
 */
 func (e *ecalSockEndpoint) HandleGET(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 
 	if api.SI != nil {
 		var body []byte
@@ -118,6 +120,7 @@ func (e *ecalSockEndpoint) HandleGET(w http.ResponseWriter, r *http.Request, res
 
 			// Add event that the websocket has been registered
 
+			abelog.UnderPrintf("About to add an event.  event = %v\n", event)
 			if _, err = proc.AddEventAndWait(event, nil); err == nil {
 				api.SI.RegisterECALSock(wc)
 				defer func() {
@@ -159,6 +162,7 @@ func (e *ecalSockEndpoint) HandleGET(w http.ResponseWriter, r *http.Request, res
 							"data":     scope.ConvertJSONToECALObject(data),
 						})
 
+					abelog.UnderPrintf("About to add an event.  event = %v\n", event)
 					_, err = proc.AddEvent(event, nil)
 					errorutil.AssertOk(err)
 				}

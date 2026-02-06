@@ -24,6 +24,7 @@ import (
 	"sync"
 	"time"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/cryptutil"
 	"github.com/rhedin/Abe_common/datautil"
 	"github.com/rhedin/Abe_common/errorutil"
@@ -78,6 +79,7 @@ StartServerWithSingleOp runs the EliasDB server. If the singleOperation function
 not nil then the server executes the function and exists if the function returns true.
 */
 func StartServerWithSingleOp(singleOperation func(*graph.Manager) bool) {
+	abelog.UnderPrintf("\n")
 	var err error
 	var gs graphstorage.Storage
 
@@ -396,6 +398,8 @@ func StartServerWithSingleOp(singleOperation func(*graph.Manager) bool) {
 
 			print("Ensuring web terminal: ", termFile)
 
+			// LoginSRC, TermSRC, and ClusterTermSRC are defined in pages.go,
+			// and are available in this file because they are part of the server package.
 			if res, _ := fileutil.PathExists(termFile); !res {
 				errorutil.AssertOk(ioutil.WriteFile(termFile, []byte(TermSRC[1:]), 0644))
 			}
@@ -483,11 +487,14 @@ func StartServerWithSingleOp(singleOperation func(*graph.Manager) bool) {
 	lf.Start()
 
 	go func() {
+		abelog.UnderPrintf("Appears to be a goroutine that checks the lockfile once a second.\n")
 
 		// Check if the lockfile watcher is running and
 		// call shutdown once it has finished
 
 		for lf.WatcherRunning() {
+			// abelog.UnderPrintf("Checking whether the watcher is still running, once a second.\n")
+			// Yeah, this works.  Not going to listen to it forever.
 			time.Sleep(time.Duration(1) * time.Second)
 		}
 

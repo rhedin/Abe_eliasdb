@@ -16,6 +16,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/datautil"
 	"github.com/rhedin/Abe_common/fileutil"
 	"github.com/rhedin/Abe_common/stringutil"
@@ -53,6 +54,7 @@ type ScriptingInterpreter struct {
 NewScriptingInterpreter returns a new ECAL scripting interpreter.
 */
 func NewScriptingInterpreter(scriptFolder string, gm *graph.Manager) *ScriptingInterpreter {
+	abelog.UnderPrintf("\n")
 	return &ScriptingInterpreter{
 		GM:                   gm,
 		Dir:                  scriptFolder,
@@ -84,6 +86,7 @@ After this function completes:
 - GraphManager events are being forwarded to ECAL
 */
 func (si *ScriptingInterpreter) Run() error {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	// Ensure we have a dummy entry point
@@ -171,6 +174,7 @@ func (si *ScriptingInterpreter) Run() error {
 RegisterECALSock registers a websocket which should be connected to ECAL events.
 */
 func (si *ScriptingInterpreter) RegisterECALSock(conn *WebsocketConnection) {
+	abelog.UnderPrintf("\n")
 	si.WebsocketConnections.Put(conn.CommID, conn)
 }
 
@@ -178,6 +182,7 @@ func (si *ScriptingInterpreter) RegisterECALSock(conn *WebsocketConnection) {
 DeregisterECALSock removes a registered websocket.
 */
 func (si *ScriptingInterpreter) DeregisterECALSock(conn *WebsocketConnection) {
+	abelog.UnderPrintf("\n")
 	si.WebsocketConnections.Remove(conn.CommID)
 }
 
@@ -185,6 +190,7 @@ func (si *ScriptingInterpreter) DeregisterECALSock(conn *WebsocketConnection) {
 HandleECALSockEvent handles websocket events from the ECAL interpreter (db.web.sock.msg events).
 */
 func (si *ScriptingInterpreter) HandleECALSockEvent(p engine.Processor, m engine.Monitor, e *engine.Event, tid uint64) error {
+	abelog.UnderPrintf("\n")
 	state := e.State()
 	payload := scope.ConvertECALToJSONObject(state["payload"])
 	shouldClose := stringutil.IsTrueValue(fmt.Sprint(state["close"]))
@@ -217,6 +223,7 @@ func (si *ScriptingInterpreter) HandleECALSockEvent(p engine.Processor, m engine
 AddEliasDBStdlibFunctions adds EliasDB related ECAL stdlib functions.
 */
 func AddEliasDBStdlibFunctions(gm *graph.Manager) {
+	abelog.UnderPrintf("\n")
 	stdlib.AddStdlibPkg("db", "EliasDB related functions")
 
 	stdlib.AddStdlibFunc("db", "storeNode", &dbfunc.StoreNodeFunc{GM: gm})

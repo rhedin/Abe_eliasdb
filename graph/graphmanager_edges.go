@@ -17,6 +17,7 @@ import (
 	"sort"
 	"strings"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_eliasdb/graph/data"
 	"github.com/rhedin/Abe_eliasdb/graph/util"
 	"github.com/rhedin/Abe_eliasdb/hash"
@@ -59,6 +60,7 @@ func (gm *Manager) EdgeCount(kind string) uint64 {
 FetchNodeEdgeSpecs returns all possible edge specs for a certain node.
 */
 func (gm *Manager) FetchNodeEdgeSpecs(part string, key string, kind string) ([]string, error) {
+	abelog.UnderPrintf("\n")
 
 	_, tree, err := gm.getNodeStorageHTree(part, kind, false)
 	if err != nil || tree == nil {
@@ -108,6 +110,7 @@ the minimal set of attributes will be populated.
 */
 func (gm *Manager) TraverseMulti(part string, key string, kind string,
 	spec string, allData bool) ([]data.Node, []data.Edge, error) {
+	abelog.UnderPrintf("\n")
 
 	sspec := strings.Split(spec, ":")
 	if len(sspec) != 4 {
@@ -168,6 +171,7 @@ attributes will be populated.
 */
 func (gm *Manager) Traverse(part string, key string, kind string,
 	spec string, allData bool) ([]data.Node, []data.Edge, error) {
+	abelog.UnderPrintf("\n")
 
 	_, tree, err := gm.getNodeStorageHTree(part, kind, false)
 	if err != nil || tree == nil {
@@ -305,6 +309,7 @@ FetchEdgePart fetches part of a single edge from a partition of the graph.
 */
 func (gm *Manager) FetchEdgePart(part string, key string, kind string,
 	attrs []string) (data.Edge, error) {
+	abelog.UnderPrintf("\n")
 
 	// Get the HTrees which stores the edge
 
@@ -330,6 +335,7 @@ StoreEdge stores a single edge in a partition of the graph. This function will
 overwrites any existing edge.
 */
 func (gm *Manager) StoreEdge(part string, edge data.Edge) error {
+	abelog.UnderPrintf("\n")
 	trans := newInternalGraphTrans(gm)
 	trans.subtrans = true
 
@@ -494,6 +500,7 @@ update occurred.
 */
 func (gm *Manager) writeEdge(edge data.Edge, edgeTree *hash.HTree,
 	end1Tree *hash.HTree, end2Tree *hash.HTree) (data.Edge, error) {
+	abelog.UnderPrintf("\n")
 
 	// Create lookup keys
 
@@ -623,6 +630,7 @@ func (gm *Manager) writeEdge(edge data.Edge, edgeTree *hash.HTree,
 RemoveEdge removes a single edge from a partition of the graph.
 */
 func (gm *Manager) RemoveEdge(part string, key string, kind string) (data.Edge, error) {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	trans := newInternalGraphTrans(gm)
@@ -735,6 +743,7 @@ func (gm *Manager) RemoveEdge(part string, key string, kind string) (data.Edge, 
 Delete edge information from a given node storage
 */
 func (gm *Manager) deleteEdge(edge data.Edge, end1Tree *hash.HTree, end2Tree *hash.HTree) error {
+	abelog.UnderPrintf("\n")
 
 	// Create lookup keys
 

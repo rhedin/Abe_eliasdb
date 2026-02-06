@@ -18,6 +18,8 @@ import (
 	"github.com/rhedin/Abe_eliasdb/api"
 )
 
+// Hm.  I guess api/v1/rest.go is an entirely different animal than api/rest.go.
+
 /*
 APIv1 is the directory for version 1 of the API
 */

@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 )
 
 /*
@@ -35,6 +36,7 @@ type WebsocketConnection struct {
 NewWebsocketConnection creates a new WebsocketConnection object.
 */
 func NewWebsocketConnection(commID string, c *websocket.Conn) *WebsocketConnection {
+	abelog.UnderPrintf("\n")
 	return &WebsocketConnection{
 		CommID: commID,
 		Conn:   c,
@@ -46,6 +48,7 @@ func NewWebsocketConnection(commID string, c *websocket.Conn) *WebsocketConnecti
 Init initializes the websocket connection.
 */
 func (wc *WebsocketConnection) Init() {
+	abelog.UnderPrintf("\n")
 	wc.WMutex.Lock()
 	defer wc.WMutex.Unlock()
 	wc.Conn.WriteMessage(websocket.TextMessage, []byte(`{"type":"init_success","payload":{}}`))
@@ -55,6 +58,7 @@ func (wc *WebsocketConnection) Init() {
 ReadData reads data from the websocket connection.
 */
 func (wc *WebsocketConnection) ReadData() (map[string]interface{}, bool, error) {
+	abelog.UnderPrintf("\n")
 	var data map[string]interface{}
 	var fatal = true
 
@@ -74,6 +78,7 @@ func (wc *WebsocketConnection) ReadData() (map[string]interface{}, bool, error) 
 WriteData writes data to the websocket.
 */
 func (wc *WebsocketConnection) WriteData(data map[string]interface{}) {
+	abelog.UnderPrintf("\n")
 	wc.WMutex.Lock()
 	defer wc.WMutex.Unlock()
 
@@ -90,6 +95,7 @@ func (wc *WebsocketConnection) WriteData(data map[string]interface{}) {
 Close closes the websocket connection.
 */
 func (wc *WebsocketConnection) Close(msg string) {
+	abelog.UnderPrintf("\n")
 	wc.Conn.WriteControl(websocket.CloseMessage,
 		websocket.FormatCloseMessage(
 			websocket.CloseNormalClosure, msg), time.Now().Add(10*time.Second))

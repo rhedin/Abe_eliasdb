@@ -19,6 +19,7 @@ import (
 
 	"github.com/gorilla/websocket"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/stringutil"
 	"github.com/rhedin/Abe_eliasdb/api"
 	"github.com/rhedin/Abe_eliasdb/graphql"
@@ -58,6 +59,7 @@ type graphQLSubscriptionsEndpoint struct {
 HandleGET handles GraphQL subscription queries.
 */
 func (e *graphQLSubscriptionsEndpoint) HandleGET(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 
 	// Update the incomming connection to a websocket
 	// If the upgrade fails then the client gets an HTTP error response.
@@ -103,6 +105,7 @@ func (e *graphQLSubscriptionsEndpoint) HandleGET(w http.ResponseWriter, r *http.
 	callbackHandler := &subscriptionCallbackHandler{
 		finished: false,
 		publish: func(data map[string]interface{}, err error) {
+			abelog.UnderPrintf("\n")
 			var res []byte
 
 			// Error for unit testing
@@ -267,9 +270,11 @@ type subscriptionCallbackHandler struct {
 }
 
 func (ch *subscriptionCallbackHandler) Publish(data map[string]interface{}, err error) {
+	abelog.UnderPrintf("\n")
 	ch.publish(data, err)
 }
 
 func (ch *subscriptionCallbackHandler) IsFinished() bool {
+	abelog.UnderPrintf("\n")
 	return ch.finished
 }

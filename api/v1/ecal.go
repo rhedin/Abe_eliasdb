@@ -18,6 +18,7 @@ import (
 	"strconv"
 	"strings"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_ecal/engine"
 	"github.com/rhedin/Abe_ecal/scope"
 	"github.com/rhedin/Abe_ecal/util"
@@ -53,6 +54,7 @@ type ecalEndpoint struct {
 HandleGET handles a GET request.
 */
 func (ee *ecalEndpoint) HandleGET(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 	ee.forwardRequest(w, r, resources)
 }
 
@@ -60,6 +62,7 @@ func (ee *ecalEndpoint) HandleGET(w http.ResponseWriter, r *http.Request, resour
 HandlePOST handles a POST request.
 */
 func (ee *ecalEndpoint) HandlePOST(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 	ee.forwardRequest(w, r, resources)
 }
 
@@ -67,6 +70,7 @@ func (ee *ecalEndpoint) HandlePOST(w http.ResponseWriter, r *http.Request, resou
 HandlePUT handles a PUT request.
 */
 func (ee *ecalEndpoint) HandlePUT(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 	ee.forwardRequest(w, r, resources)
 }
 
@@ -74,10 +78,12 @@ func (ee *ecalEndpoint) HandlePUT(w http.ResponseWriter, r *http.Request, resour
 HandleDELETE handles a DELETE request.
 */
 func (ee *ecalEndpoint) HandleDELETE(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 	ee.forwardRequest(w, r, resources)
 }
 
 func (ee *ecalEndpoint) forwardRequest(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 
 	if api.SI != nil {
 
@@ -129,6 +135,7 @@ func (ee *ecalEndpoint) forwardRequest(w http.ResponseWriter, r *http.Request, r
 
 				var m engine.Monitor
 
+				abelog.UnderPrintf("About to add an event.  event = %v\n", event)
 				if m, err = proc.AddEventAndWait(event, nil); err == nil {
 					if m != nil {
 						var headers map[interface{}]interface{}

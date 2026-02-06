@@ -13,6 +13,7 @@ package dbfunc
 import (
 	"fmt"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_ecal/parser"
 	"github.com/rhedin/Abe_eliasdb/eql"
 	"github.com/rhedin/Abe_eliasdb/graph"
@@ -29,6 +30,7 @@ type QueryFunc struct {
 Run executes the ECAL function.
 */
 func (f *QueryFunc) Run(instanceID string, vs parser.Scope, is map[string]interface{}, tid uint64, args []interface{}) (interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var err error
 	var cols, rows []interface{}
 

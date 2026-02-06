@@ -16,6 +16,7 @@ import (
 	"strconv"
 	"strings"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/lang/graphql/parser"
 	"github.com/rhedin/Abe_common/stringutil"
 	"github.com/rhedin/Abe_eliasdb/graph"
@@ -38,6 +39,7 @@ type selectionSetRuntime struct {
 selectionSetRuntimeInst returns a new runtime component instance.
 */
 func selectionSetRuntimeInst(rtp *GraphQLRuntimeProvider, node *parser.ASTNode) parser.Runtime {
+	abelog.UnderPrintf("\n")
 	return &selectionSetRuntime{&invalidRuntime{rtp, node}, rtp, node}
 }
 
@@ -45,6 +47,7 @@ func selectionSetRuntimeInst(rtp *GraphQLRuntimeProvider, node *parser.ASTNode) 
 Eval evaluate this runtime component.
 */
 func (rt *selectionSetRuntime) Eval() (map[string]interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	// Build result data
@@ -139,6 +142,7 @@ traversal.
 */
 func (rt *selectionSetRuntime) ProcessNodes(path []string, kind string,
 	args map[string]interface{}, it nodeIterator) []map[string]interface{} {
+	abelog.UnderPrintf("\n")
 
 	var from, items, last int
 	var ascending, descending string
@@ -329,6 +333,7 @@ func (rt *selectionSetRuntime) ProcessNodes(path []string, kind string,
 handleOutputModifyingArgs handles arguments which modify the output presentation.
 */
 func (rt *selectionSetRuntime) handleOutputArgs(args map[string]interface{}) (string, string, int, int, int, error) {
+	abelog.UnderPrintf("\n")
 	var from, items, last int
 	var ascending, descending string
 	var err error
@@ -369,6 +374,7 @@ func (rt *selectionSetRuntime) handleOutputArgs(args map[string]interface{}) (st
 handleMutationArgs handles node and edge insertion and removal.
 */
 func (rt *selectionSetRuntime) handleMutationArgs(path []string, args map[string]interface{}, kind string) error {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	if toStore, ok := args["storeNode"]; ok && rt.rtp.CheckWritePermission(path, rt.node) {
@@ -476,6 +482,7 @@ matchNode matches a given node against a given node template. Returns true if
 the template matches, false otherwise.
 */
 func (rt *selectionSetRuntime) matchNode(node data.Node, nodeTemplate map[string]*regexp.Regexp) bool {
+	abelog.UnderPrintf("\n")
 	nodeData := node.Data()
 
 	for k, v := range nodeTemplate {
@@ -530,6 +537,7 @@ aliases to names and a map from aliases to traversals.
 */
 func (rt *selectionSetRuntime) GetPlainFieldsAndAliases(path []string, kind string) (
 	[]string, map[string]string, map[string]*traversal) {
+	abelog.UnderPrintf("\n")
 
 	errMultiFields := make([]string, 0)
 	resList := []string{"key", "kind"}
@@ -713,6 +721,7 @@ func (rt *argumentExpressionRuntime) Name() string {
 Arguments returns all arguments of the field as a map.
 */
 func (rt *argumentExpressionRuntime) Arguments() map[string]interface{} {
+	abelog.UnderPrintf("\n")
 	res := make(map[string]interface{})
 	for _, c := range rt.node.Children {
 

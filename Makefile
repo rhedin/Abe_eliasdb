@@ -1,8 +1,14 @@
-export NAME=eliasdb
-export TAG=`git describe --abbrev=0 --tags`
-export CGO_ENABLED=0
-# export GOOS=linux 
+NAME=eliasdb
+TAG=`git describe --abbrev=0 --tags`
+CGO_ENABLED=0
+# GOOS=linux 
 # Need to leave the operating system unspecified.  I'm not on a linux system. 
+TAGS_UNDERLOG=
+# I don't like the fact that I am typing TAGS_UNDERLOG=<eol> rather than TAGS_UNDERLOG="" 
+# but the Makefile seems to like it better. 
+BUILD_FLAGS=-ldflags="-s -w"
+# Removes the symbol table and the DWART debugging information. 
+# Normally, you will want to say:  make enable-underlog enable-debugging build 
 
 all: build
 clean:
@@ -26,17 +32,23 @@ cover:
 fmt:
 	gofmt -l -w -s .
 
+enable-underlog:
+	$(eval TAGS_UNDERLOG=-tags=underlog)
+
+enable-debugging:
+	$(eval BUILD_FLAGS=-gcflags="all=-N -l")
+	# Turn off compiler optimizations so source matches binary 
+
+enable-symbols:
+	$(eval STRIP_SYMBOLS=)
+
+
+
 vet:
-	go vet ./...
-
-build-without-under-logging: clean mod fmt vet
-	go build -ldflags "-s -w"                -o $(NAME) cli/eliasdb.go
-
-build-with-under-logging: clean mod fmt vet
-	go build -ldflags "-s -w" -tags=underlog -o $(NAME) cli/eliasdb.go
+	go vet $(TAGS_UNDERLOG) ./...
 
 build: clean mod fmt vet
-	go build -ldflags "-s -w" -o $(NAME) cli/eliasdb.go
+	go build $(TAGS_UNDERLOG) $(BUILD_FLAGS) -o $(NAME) cli/eliasdb.go
 
 build-mac: clean mod fmt vet
 	GOOS=darwin GOARCH=amd64 go build -o $(NAME).mac cli/eliasdb.go

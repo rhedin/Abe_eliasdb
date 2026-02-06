@@ -15,6 +15,7 @@ import (
 	"strings"
 	"sync"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_eliasdb/graph/data"
 	"github.com/rhedin/Abe_eliasdb/graph/util"
 )
@@ -54,6 +55,7 @@ type Rule interface {
 graphEvent main event handler which receives all graph related events.
 */
 func (gr *graphRulesManager) graphEvent(trans Trans, event int, data ...interface{}) error {
+	abelog.UnderPrintf("\n")
 	var result error
 	var errors []string
 
@@ -103,6 +105,7 @@ func (gr *graphRulesManager) graphEvent(trans Trans, event int, data ...interfac
 Clone a given graph manager and insert a new RWMutex.
 */
 func (gr *graphRulesManager) cloneGraphManager() *Manager {
+	abelog.UnderPrintf("\n")
 	return &Manager{gr.gm.gs, gr, gr.gm.nm, gr.gm.mapCache, &sync.RWMutex{}, &sync.Mutex{}}
 }
 
@@ -110,6 +113,7 @@ func (gr *graphRulesManager) cloneGraphManager() *Manager {
 SetGraphRule sets a GraphRule.
 */
 func (gr *graphRulesManager) SetGraphRule(rule Rule) {
+	abelog.UnderPrintf("\n")
 	gr.rules[rule.Name()] = rule
 
 	for _, handledEvent := range rule.Handles() {
@@ -167,6 +171,7 @@ func (r *SystemRuleDeleteNodeEdges) Handles() []int {
 Handle handles an event.
 */
 func (r *SystemRuleDeleteNodeEdges) Handle(gm *Manager, trans Trans, event int, ed ...interface{}) error {
+	abelog.UnderPrintf("\n")
 	part := ed[0].(string)
 	node := ed[1].(data.Node)
 
@@ -272,6 +277,7 @@ func (r *SystemRuleUpdateNodeStats) Handles() []int {
 Handle handles an event.
 */
 func (r *SystemRuleUpdateNodeStats) Handle(gm *Manager, trans Trans, event int, ed ...interface{}) error {
+	abelog.UnderPrintf("\n")
 	attrMap := MainDBNodeAttrs
 
 	if event == EventEdgeCreated {

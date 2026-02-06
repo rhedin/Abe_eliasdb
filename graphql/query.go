@@ -26,6 +26,7 @@ package graphql
 import (
 	"fmt"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/lang/graphql/parser"
 	"github.com/rhedin/Abe_eliasdb/graph"
 	"github.com/rhedin/Abe_eliasdb/graphql/interpreter"
@@ -44,6 +45,7 @@ Set the readOnly flag if the query should only be allowed to do read operations.
 func RunQuery(name string, part string, query map[string]interface{},
 	gm *graph.Manager, callbackHandler interpreter.SubscriptionCallbackHandler,
 	readOnly bool) (map[string]interface{}, error) {
+	abelog.UnderPrintf("\n")
 
 	var ok bool
 	var vars map[string]interface{}
@@ -95,6 +97,7 @@ func RunQuery(name string, part string, query map[string]interface{},
 ParseQuery parses a GraphQL query and return its Abstract Syntax Tree.
 */
 func ParseQuery(name string, query string) (*parser.ASTNode, error) {
+	abelog.UnderPrintf("\n")
 	ast, err := parser.ParseWithRuntime(name, query, nil)
 
 	if err != nil {

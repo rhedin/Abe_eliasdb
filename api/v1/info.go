@@ -15,6 +15,7 @@ import (
 	"fmt"
 	"net/http"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_eliasdb/api"
 )
 
@@ -41,6 +42,7 @@ type infoEndpoint struct {
 HandleGET handles a info query REST call.
 */
 func (ie *infoEndpoint) HandleGET(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 
 	data := make(map[string]interface{})
 

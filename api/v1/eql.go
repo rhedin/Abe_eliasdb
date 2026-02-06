@@ -15,6 +15,7 @@ import (
 	"fmt"
 	"net/http"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_eliasdb/api"
 	"github.com/rhedin/Abe_eliasdb/eql"
 	"github.com/rhedin/Abe_eliasdb/eql/parser"
@@ -43,6 +44,7 @@ type eqlEndpoint struct {
 HandlePOST handles REST calls to transform EQL queries.
 */
 func (e *eqlEndpoint) HandlePOST(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 
 	dec := json.NewDecoder(r.Body)
 	data := make(map[string]interface{})

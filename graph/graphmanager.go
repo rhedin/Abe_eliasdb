@@ -16,6 +16,7 @@ import (
 	"strconv"
 	"sync"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_eliasdb/graph/data"
 	"github.com/rhedin/Abe_eliasdb/graph/graphstorage"
 	"github.com/rhedin/Abe_eliasdb/graph/util"
@@ -49,6 +50,7 @@ func NewGraphManager(gs graphstorage.Storage) *Manager {
 createGraphManager creates a new GraphManager instance.
 */
 func createGraphManager(gs graphstorage.Storage) *Manager {
+	abelog.UnderPrintf("\n")
 
 	mdb := gs.MainDB()
 

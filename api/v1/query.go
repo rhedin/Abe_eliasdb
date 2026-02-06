@@ -17,6 +17,7 @@ import (
 	"strings"
 	"time"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/datautil"
 	"github.com/rhedin/Abe_common/stringutil"
 	"github.com/rhedin/Abe_eliasdb/api"
@@ -74,6 +75,7 @@ type queryEndpoint struct {
 HandleGET handles a search query REST call.
 */
 func (eq *queryEndpoint) HandleGET(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	// Check parameters
@@ -164,6 +166,7 @@ writeResultData writes result data for the client.
 */
 func (eq *queryEndpoint) writeResultData(w http.ResponseWriter, res *APISearchResult,
 	part string, resID string, offset int, limit int, showGroups bool) error {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	// Write out the data
@@ -575,3 +578,5 @@ func (r *APISearchResult) refreshSelection() {
 		}
 	}
 }
+
+// I am disturbed.  It doesn't seem to allocate any extra space, for growth.

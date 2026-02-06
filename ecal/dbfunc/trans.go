@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"strconv"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_ecal/parser"
 	"github.com/rhedin/Abe_eliasdb/graph"
 )
@@ -29,6 +30,7 @@ type NewTransFunc struct {
 Run executes the ECAL function.
 */
 func (f *NewTransFunc) Run(instanceID string, vs parser.Scope, is map[string]interface{}, tid uint64, args []interface{}) (interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	if len(args) != 0 {
@@ -57,6 +59,7 @@ type NewRollingTransFunc struct {
 Run executes the ECAL function.
 */
 func (f *NewRollingTransFunc) Run(instanceID string, vs parser.Scope, is map[string]interface{}, tid uint64, args []interface{}) (interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var err error
 	var trans graph.Trans
 
@@ -97,6 +100,7 @@ type CommitTransFunc struct {
 Run executes the ECAL function.
 */
 func (f *CommitTransFunc) Run(instanceID string, vs parser.Scope, is map[string]interface{}, tid uint64, args []interface{}) (interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	if arglen := len(args); arglen != 1 {

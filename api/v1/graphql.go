@@ -15,6 +15,7 @@ import (
 	"fmt"
 	"net/http"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/lang/graphql/parser"
 	"github.com/rhedin/Abe_common/stringutil"
 	"github.com/rhedin/Abe_eliasdb/api"
@@ -44,6 +45,7 @@ type graphQLEndpoint struct {
 HandlePOST handles GraphQL queries.
 */
 func (e *graphQLEndpoint) HandlePOST(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 	var err error
 	var res map[string]interface{}
 

@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"strings"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/stringutil"
 	"github.com/rhedin/Abe_eliasdb/api"
 	"github.com/rhedin/Abe_eliasdb/graph"
@@ -45,6 +46,7 @@ type findEndpoint struct {
 HandleGET handles a search query REST call.
 */
 func (ie *findEndpoint) HandleGET(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	ret := make(map[string]map[string][]interface{})

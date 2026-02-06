@@ -14,6 +14,7 @@ import (
 	"encoding/binary"
 	"encoding/gob"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_eliasdb/graph/data"
 	"github.com/rhedin/Abe_eliasdb/graph/util"
 	"github.com/rhedin/Abe_eliasdb/hash"
@@ -42,6 +43,7 @@ func (gm *Manager) NodeCount(kind string) uint64 {
 NodeKeyIterator iterates node keys of a certain kind.
 */
 func (gm *Manager) NodeKeyIterator(part string, kind string) (*NodeKeyIterator, error) {
+	abelog.UnderPrintf("\n")
 	// Get the HTrees which stores the node
 
 	tree, _, err := gm.getNodeStorageHTree(part, kind, false)
@@ -72,6 +74,7 @@ FetchNodePart fetches part of a single node from a partition of the graph.
 */
 func (gm *Manager) FetchNodePart(part string, key string, kind string,
 	attrs []string) (data.Node, error) {
+	abelog.UnderPrintf("\n")
 
 	// Get the HTrees which stores the node
 
@@ -95,6 +98,7 @@ readNode reads a given node from the datastore.
 */
 func (gm *Manager) readNode(key string, kind string, attrs []string,
 	attrTree *hash.HTree, valTree *hash.HTree) (data.Node, error) {
+	abelog.UnderPrintf("\n")
 
 	keyAttrs := PrefixNSAttrs + key
 	keyAttrPrefix := PrefixNSAttr + key
@@ -184,6 +188,7 @@ StoreNode stores a single node in a partition of the graph. This function will
 overwrites any existing node.
 */
 func (gm *Manager) StoreNode(part string, node data.Node) error {
+	abelog.UnderPrintf("\n")
 	trans := newInternalGraphTrans(gm)
 	trans.subtrans = true
 
@@ -208,6 +213,7 @@ UpdateNode updates a single node in a partition of the graph. This function will
 only update the given values of the node.
 */
 func (gm *Manager) UpdateNode(part string, node data.Node) error {
+	abelog.UnderPrintf("\n")
 	trans := newInternalGraphTrans(gm)
 	trans.subtrans = true
 
@@ -231,6 +237,7 @@ func (gm *Manager) UpdateNode(part string, node data.Node) error {
 storeOrUpdateNode stores or updates a single node in a partition of the graph.
 */
 func (gm *Manager) storeOrUpdateNode(part string, node data.Node, onlyUpdate bool) error {
+	abelog.UnderPrintf("\n")
 
 	// Check if the node can be stored
 
@@ -338,6 +345,7 @@ specific attributes.
 */
 func (gm *Manager) writeNode(node data.Node, onlyUpdate bool, attrTree *hash.HTree,
 	valTree *hash.HTree, attFilter func(attr string) bool) (data.Node, error) {
+	abelog.UnderPrintf("\n")
 
 	keyAttrs := PrefixNSAttrs + node.Key()
 	keyAttrPrefix := PrefixNSAttr + node.Key()
@@ -476,6 +484,7 @@ func (gm *Manager) writeNode(node data.Node, onlyUpdate bool, attrTree *hash.HTr
 RemoveNode removes a single node from a partition of the graph.
 */
 func (gm *Manager) RemoveNode(part string, key string, kind string) (data.Node, error) {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	trans := newInternalGraphTrans(gm)
@@ -570,6 +579,7 @@ returns, the changes are flushed to the storage. Returns the deleted node.
 */
 func (gm *Manager) deleteNode(key string, kind string, attrTree *hash.HTree,
 	valTree *hash.HTree) (data.Node, error) {
+	abelog.UnderPrintf("\n")
 
 	keyAttrs := PrefixNSAttrs + key
 	keyAttrPrefix := PrefixNSAttr + key

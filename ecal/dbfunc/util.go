@@ -13,6 +13,7 @@ package dbfunc
 import (
 	"fmt"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_ecal/interpreter"
 	"github.com/rhedin/Abe_ecal/parser"
 	"github.com/rhedin/Abe_ecal/util"
@@ -31,6 +32,7 @@ type RaiseGraphEventHandledFunc struct {
 Run executes the ECAL function.
 */
 func (f *RaiseGraphEventHandledFunc) Run(instanceID string, vs parser.Scope, is map[string]interface{}, tid uint64, args []interface{}) (interface{}, error) {
+	abelog.UnderPrintf("\n")
 	return nil, graph.ErrEventHandled
 }
 
@@ -57,6 +59,7 @@ type RaiseWebEventHandledFunc struct {
 Run executes the ECAL function.
 */
 func (f *RaiseWebEventHandledFunc) Run(instanceID string, vs parser.Scope, is map[string]interface{}, tid uint64, args []interface{}) (interface{}, error) {
+	abelog.UnderPrintf("\n")
 	if arglen := len(args); arglen != 1 {
 		return nil, fmt.Errorf("Function requires 1 parameter: request response object")
 	}

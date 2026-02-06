@@ -12,8 +12,10 @@ package api
 
 import (
 	"net/http"
+	"net/http/httputil"
 	"strings"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/datautil"
 	"github.com/rhedin/Abe_eliasdb/cluster"
 	"github.com/rhedin/Abe_eliasdb/ecal"
@@ -128,16 +130,38 @@ var HandleFunc = http.HandleFunc
 RegisterRestEndpoints registers all given REST endpoint handlers.
 */
 func RegisterRestEndpoints(endpointInsts map[string]RestEndpointInst) {
+	abelog.UnderPrintf("\n")
 
 	for url, endpointInst := range endpointInsts {
+		abelog.UnderPrintf("Registering a handler function for url = %v and endpointInst = %v\n", url, endpointInst)
 		registered[url] = endpointInst
 
+		// I added the parens around the type that the anonymous function returns,
+		// because otherwise I had a lot of trouble parsing the line.
+		// Arghh!  vet (or whatever) removes the parens when I save it.
 		HandleFunc(url, func() func(w http.ResponseWriter, r *http.Request) {
+			abelog.UnderPrintf("\n")
 
 			var handlerURL = url
 			var handlerInst = endpointInst
 
 			return func(w http.ResponseWriter, r *http.Request) {
+				if abelog.UnderEnabled {
+					requestDump, err := httputil.DumpRequest(r, true)
+					if err != nil {
+						abelog.UnderPrintf("httputil.DumpRequest returned an error: %v", err)
+					}
+					// Go requires the braces, even when it's all on one line.  Annnnd the linter
+					// split my all-on-one-line statement into three lines.
+					formattedQuery := abelog.FormatQuery(string(requestDump)) /* "hello" */
+					abelog.UnderPrintf(
+						`Running a handler function for handlerURL = %v and handlerInst = %v with http.Request:
+%s
+formatted the graphql query:
+%s
+`,
+						handlerURL, handlerInst, requestDump, formattedQuery)
+				}
 
 				// Create a new handler instance
 
@@ -156,6 +180,8 @@ func RegisterRestEndpoints(endpointInsts map[string]RestEndpointInst) {
 				if res != "" {
 					resources = strings.Split(res, "/")
 				}
+
+				abelog.UnderPrintf("\n")
 
 				switch r.Method {
 				case "GET":

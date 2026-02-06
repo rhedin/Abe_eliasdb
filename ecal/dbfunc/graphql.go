@@ -13,6 +13,7 @@ package dbfunc
 import (
 	"fmt"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_ecal/parser"
 	"github.com/rhedin/Abe_ecal/scope"
 	"github.com/rhedin/Abe_eliasdb/graph"
@@ -30,6 +31,7 @@ type GraphQLFunc struct {
 Run executes the ECAL function.
 */
 func (f *GraphQLFunc) Run(instanceID string, vs parser.Scope, is map[string]interface{}, tid uint64, args []interface{}) (interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var err error
 	var ret interface{}
 

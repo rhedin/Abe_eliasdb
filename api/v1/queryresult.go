@@ -18,6 +18,7 @@ import (
 	"strconv"
 	"strings"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/errorutil"
 	"github.com/rhedin/Abe_common/stringutil"
 	"github.com/rhedin/Abe_eliasdb/api"
@@ -49,6 +50,7 @@ type queryResultEndpoint struct {
 HandleGET handles info requests on query results.
 */
 func (qre *queryResultEndpoint) HandleGET(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 	qre.handleRequest("get", w, r, resources)
 }
 
@@ -56,6 +58,7 @@ func (qre *queryResultEndpoint) HandleGET(w http.ResponseWriter, r *http.Request
 HandlePUT handles state changing operations on query results.
 */
 func (qre *queryResultEndpoint) HandlePUT(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 	qre.handleRequest("put", w, r, resources)
 }
 
@@ -63,6 +66,7 @@ func (qre *queryResultEndpoint) HandlePUT(w http.ResponseWriter, r *http.Request
 HandlePOST handles state changing operations on query results.
 */
 func (qre *queryResultEndpoint) HandlePOST(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 	qre.handleRequest("post", w, r, resources)
 }
 
@@ -70,10 +74,12 @@ func (qre *queryResultEndpoint) HandlePOST(w http.ResponseWriter, r *http.Reques
 HandleDELETE handles state changing operations on query results.
 */
 func (qre *queryResultEndpoint) HandleDELETE(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 	qre.handleRequest("delete", w, r, resources)
 }
 
 func (qre *queryResultEndpoint) handleRequest(requestType string, w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 
 	// Check parameters
 
@@ -139,6 +145,7 @@ groupSelected implements the adding/removing of all selected nodes to a group fu
 */
 func (qre *queryResultEndpoint) groupSelected(requestType string, w http.ResponseWriter, r *http.Request,
 	resources []string, sres *APISearchResult) {
+	abelog.UnderPrintf("\n")
 	var col int
 	var err error
 
@@ -320,6 +327,7 @@ func (qre *queryResultEndpoint) groupSelected(requestType string, w http.Respons
 groupSelectionState returns the current group selection state of a given query result.
 */
 func (qre *queryResultEndpoint) groupSelectionState(sres *APISearchResult, part string, primaryNodeCol int, selections []bool) (map[string]interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var ret map[string]interface{}
 	var err error
 
@@ -392,6 +400,7 @@ selectRows implements the row selection functionality.
 */
 func (qre *queryResultEndpoint) selectRows(requestType string, w http.ResponseWriter,
 	resources []string, sres *APISearchResult) {
+	abelog.UnderPrintf("\n")
 
 	if requestType != "put" && requestType != "get" {
 		http.Error(w, "Select can only handle GET and PUT requests", http.StatusBadRequest)
@@ -474,6 +483,7 @@ quickfilter implements the quickfilter functionality.
 */
 func (qre *queryResultEndpoint) quickFilter(requestType string, w http.ResponseWriter,
 	resources []string, sres *APISearchResult, limit int) {
+	abelog.UnderPrintf("\n")
 
 	if requestType != "get" {
 		http.Error(w, "Quickfilter can only handle GET requests", http.StatusBadRequest)

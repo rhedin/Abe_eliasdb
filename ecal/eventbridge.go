@@ -15,8 +15,10 @@ package ecal
 
 import (
 	"fmt"
+	// "runtime/debug"  Hopefully, no longer needed, now that we record who called us.
 	"strings"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/errorutil"
 	"github.com/rhedin/Abe_ecal/engine"
 	"github.com/rhedin/Abe_ecal/scope"
@@ -146,6 +148,10 @@ func (eb *EventBridge) Handles() []int {
 Handle handles an event.
 */
 func (eb *EventBridge) Handle(gm *graph.Manager, trans graph.Trans, event int, ed ...interface{}) error {
+	abelog.UnderPrintf("\n")
+	// if abelog.UnderEnabled {
+	// 	debug.PrintStack()
+	// }  Hopefully, no longer needed, now that we record who called us.
 	var err error
 
 	if name, ok := EventMapping[event]; ok {
@@ -195,6 +201,8 @@ func (eb *EventBridge) Handle(gm *graph.Manager, trans graph.Trans, event int, e
 
 		event := engine.NewEvent(fmt.Sprintf("EliasDB: %v", name), strings.Split(name, "."), state)
 
+		// This appears to be the one that is used, when I run the chat example.
+		abelog.UnderPrintf("About to add an event.  event = %v\n", event)
 		var m engine.Monitor
 		m, err = eb.Processor.AddEventAndWait(event, nil)
 

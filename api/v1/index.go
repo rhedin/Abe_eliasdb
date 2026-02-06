@@ -14,6 +14,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_eliasdb/api"
 	"github.com/rhedin/Abe_eliasdb/graph"
 )
@@ -41,6 +42,7 @@ type indexEndpoint struct {
 HandleGET handles a search query REST call.
 */
 func (ie *indexEndpoint) HandleGET(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	// Check parameters

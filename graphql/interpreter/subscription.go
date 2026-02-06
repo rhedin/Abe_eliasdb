@@ -16,6 +16,7 @@ import (
 	"strings"
 	"sync"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/cryptutil"
 	"github.com/rhedin/Abe_common/errorutil"
 	"github.com/rhedin/Abe_eliasdb/graph"
@@ -54,6 +55,7 @@ subscriptions to monitor data changes and forwards events to the subscription
 callback handler.
 */
 func (rtp *GraphQLRuntimeProvider) InitSubscription(rt *documentRuntime) {
+	abelog.UnderPrintf("\n")
 	var rule *SystemRuleGraphQLSubscriptions
 
 	if rt.rtp.subscriptionHandler != nil {
@@ -116,6 +118,7 @@ HandleEvent handles an event from a rule and forwards it to the callbackHandler
 if appropriate.
 */
 func (h *subscriptionHandler) HandleEvent(event int, part string, node data.Node) {
+	abelog.UnderPrintf("\n")
 
 	defer func() {
 
@@ -166,6 +169,7 @@ func (h *subscriptionHandler) HandleEvent(event int, part string, node data.Node
 EnsureMonitoredKind ensure that the given kind is monitored for updates.
 */
 func (h *subscriptionHandler) EnsureMonitoredKind(kind string) {
+	abelog.UnderPrintf("\n")
 	h.monitoredKindsLock.RLock()
 	if _, ok := h.monitoredKinds[kind]; !ok {
 		h.monitoredKindsLock.RUnlock()
@@ -229,6 +233,7 @@ func (r *SystemRuleGraphQLSubscriptions) Handles() []int {
 Handle handles an event.
 */
 func (r *SystemRuleGraphQLSubscriptions) Handle(gm *graph.Manager, trans graph.Trans, event int, ed ...interface{}) error {
+	abelog.UnderPrintf("\n")
 	part := ed[0].(string)
 	node := ed[1].(data.Node)
 
@@ -249,6 +254,7 @@ func (r *SystemRuleGraphQLSubscriptions) Handle(gm *graph.Manager, trans graph.T
 AddHandler adds a new handler for rule events.
 */
 func (r *SystemRuleGraphQLSubscriptions) AddHandler(handler *subscriptionHandler) {
+	abelog.UnderPrintf("\n")
 	r.handlersLock.Lock()
 	defer r.handlersLock.Unlock()
 	r.handlers[handler.id] = handler
@@ -258,6 +264,7 @@ func (r *SystemRuleGraphQLSubscriptions) AddHandler(handler *subscriptionHandler
 RemoveHandler removes a handler from receiving further rule events.
 */
 func (r *SystemRuleGraphQLSubscriptions) RemoveHandler(handler *subscriptionHandler) {
+	abelog.UnderPrintf("\n")
 	r.handlersLock.Lock()
 	defer r.handlersLock.Unlock()
 	delete(r.handlers, handler.id)

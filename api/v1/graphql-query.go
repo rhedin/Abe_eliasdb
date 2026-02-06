@@ -14,6 +14,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/stringutil"
 	"github.com/rhedin/Abe_eliasdb/api"
 	"github.com/rhedin/Abe_eliasdb/graphql"
@@ -43,6 +44,7 @@ type graphQLQueryEndpoint struct {
 HandleGET handles GraphQL queries.
 */
 func (e *graphQLQueryEndpoint) HandleGET(w http.ResponseWriter, r *http.Request, resources []string) {
+	abelog.UnderPrintf("\n")
 
 	gqlquery := map[string]interface{}{
 		"variables":     nil,

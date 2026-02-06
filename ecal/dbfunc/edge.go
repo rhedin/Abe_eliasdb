@@ -16,6 +16,7 @@ package dbfunc
 import (
 	"fmt"
 
+	abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_ecal/parser"
 	"github.com/rhedin/Abe_eliasdb/graph"
 	"github.com/rhedin/Abe_eliasdb/graph/data"
@@ -32,6 +33,7 @@ type StoreEdgeFunc struct {
 Run executes the ECAL function.
 */
 func (f *StoreEdgeFunc) Run(instanceID string, vs parser.Scope, is map[string]interface{}, tid uint64, args []interface{}) (interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	if arglen := len(args); arglen != 2 && arglen != 3 {
@@ -94,6 +96,7 @@ type RemoveEdgeFunc struct {
 Run executes the ECAL function.
 */
 func (f *RemoveEdgeFunc) Run(instanceID string, vs parser.Scope, is map[string]interface{}, tid uint64, args []interface{}) (interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var err error
 
 	if arglen := len(args); arglen != 3 && arglen != 4 {
@@ -151,6 +154,7 @@ type FetchEdgeFunc struct {
 Run executes the ECAL function.
 */
 func (f *FetchEdgeFunc) Run(instanceID string, vs parser.Scope, is map[string]interface{}, tid uint64, args []interface{}) (interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var res interface{}
 	var err error
 
@@ -202,6 +206,7 @@ type TraverseFunc struct {
 Run executes the ECAL function.
 */
 func (f *TraverseFunc) Run(instanceID string, vs parser.Scope, is map[string]interface{}, tid uint64, args []interface{}) (interface{}, error) {
+	abelog.UnderPrintf("\n")
 	var res interface{}
 	var err error
 
