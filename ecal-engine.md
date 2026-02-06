@@ -41,7 +41,7 @@ Rules
 Rules define the conditions under which a particular action should be executed. Every rule must have the following properties:
 
 - [Name] A name which identifies the rule.
-- [KindMatch] Match on event kinds: A list of strings in dot notation which describes event kinds. May contain '*' characters as wildcards (e.g. core.tests.*).
+- [KindMatch] Match on event kinds: A list of strings in dot notation which describes event kinds. May contain '\*' characters as wildcards (e.g. core.tests.*).
 - [ScopeMatch] Match on event cascade scope: A list of strings in dot notation which describe the required scopes which are required for this rule to trigger. The included / excluded scopes for an event are stored in its monitor.
 - [StateMatch] Match on event state: A simple list of required key / value states in the event state. Nil values can be used as wildcards (i.e. match is only on key).
 - [Priority] Rules are sorted by their priority before their actions are executed.
