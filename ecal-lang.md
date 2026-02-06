@@ -255,7 +255,7 @@ Object-oriented programming structures
 ECAL supports Object-oriented programming by providing the concept of objects containing data as properties and code in the form of methods. Methods can access properties of their object by using the variable `this`. Objects can be initialized with a constructor. Objects can inherit data and properties from each other. Multiple inheritance is allowed. Constructors of super map structures can be called by using the `super` function list variable available to the constructor of an object.
 
 Operator|Description
--|-|-
+-|-
 new|In-build function to instantiate a map structure into an object
 super|Property with a list value containing all super map structures and constructor method variable which contains a list of all super map structure constructors
 init|Attribute with a constructor function as value - this function can use the variable `super` to access constructors of super map structures
