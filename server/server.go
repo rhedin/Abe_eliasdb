@@ -35,6 +35,7 @@ import (
 	"github.com/rhedin/Abe_common/httputil/user"
 	"github.com/rhedin/Abe_common/lockutil"
 	"github.com/rhedin/Abe_common/timeutil"
+	"github.com/rhedin/Abe_editor/app"
 	"github.com/rhedin/Abe_eliasdb/api"
 	"github.com/rhedin/Abe_eliasdb/api/ac"
 	v1 "github.com/rhedin/Abe_eliasdb/api/v1"
@@ -187,7 +188,16 @@ func StartServerWithSingleOp(singleOperation func(*graph.Manager) bool) {
 	api.GS = gs
 	api.GM = graph.NewGraphManager(gs)
 
+	if config.Bool(config.ApplicationEnabled) {
+		app.Initialize(api.GS, api.GM)
+	}
+
 	defer func() {
+
+		if config.Bool(config.ApplicationEnabled) {
+			print("Closing application")
+			app.Finalize()
+		}
 
 		print("Closing datastore")
 
@@ -361,6 +371,10 @@ func StartServerWithSingleOp(singleOperation func(*graph.Manager) bool) {
 	// these will require authentication and authorization for a given user
 
 	api.RegisterRestEndpoints(v1.V1EndpointMap)
+
+	if config.Bool(config.ApplicationEnabled) {
+		api.RegisterRestEndpoints(app.HttpEndpointMap)
+	}
 
 	// Register normal web server
 
