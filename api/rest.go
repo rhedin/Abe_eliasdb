@@ -153,7 +153,7 @@ func RegisterRestEndpoints(endpointInsts map[string]RestEndpointInst) {
 					}
 					// Go requires the braces, even when it's all on one line.  Annnnd the linter
 					// split my all-on-one-line statement into three lines.
-					formattedQuery := abelog.FormatQuery(string(requestDump)) /* "hello" */
+					formattedQuery := abelog.FormatQuery(string(requestDump))
 					abelog.UnderPrintf(
 						`Running a handler function for handlerURL = %v and handlerInst = %v with http.Request:
 %s

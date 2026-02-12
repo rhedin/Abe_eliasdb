@@ -447,11 +447,11 @@ func TestMainErrorCases(t *testing.T) {
 func shutdownWithLogFile(filename string) error {
 
 	file, err := os.OpenFile(filename, os.O_CREATE|os.O_TRUNC|os.O_RDWR, 0660)
-	defer file.Close()
 	if err != nil {
 		fmt.Println(errorLog)
 		return err
 	}
+	defer file.Close()
 
 	_, err = file.Write([]byte("a"))
 	if err != nil {

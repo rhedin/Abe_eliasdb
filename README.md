@@ -261,3 +261,20 @@ Further Reading
 License
 -------
 EliasDB source code is available under the [Mozilla Public License](/LICENSE).
+
+
+Other Considerations - for building and editing Abe_eliasdb, especially in connection with Abe_editor
+-----------------------------------------------------------------------------------------------------
+A file needs to be in the top level, above Abe_editor, Abe_eliasdb, Abe_common, and Abe_ecal.   This file is work.go. 
+
+It is not a part of any of the four repositories, so that fact that it is needed has to be recorded somewhere.  I am recording it here.  Here are its current contents. 
+```
+go 1.25
+use (
+	./Abe_editor
+	./Abe_common
+	./Abe_eliasdb
+	./Abe_ecal
+)
+```
+If this file is not in place, VS Code has trouble finding all the places where a symbol is referenced.  I asked VS Code to show me all the places that used the Shutdown function defined in Abe_common/httputil/httpserver.go, and it didn't show me the reference in Abe_elias/server/server.go that I knew was there.  In order for VS Code to have a unified view of all four repositories, it needs this file. 
