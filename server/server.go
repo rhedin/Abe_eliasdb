@@ -188,13 +188,13 @@ func StartServerWithSingleOp(singleOperation func(*graph.Manager) bool) {
 	api.GS = gs
 	api.GM = graph.NewGraphManager(gs)
 
-	if config.Bool(config.ApplicationEnabled) {
+	if config.Bool(config.EnableApplication) {
 		app.Initialize(api.GS, api.GM)
 	}
 
 	defer func() {
 
-		if config.Bool(config.ApplicationEnabled) {
+		if config.Bool(config.EnableApplication) {
 			print("Closing application")
 			app.Finalize()
 		}
@@ -372,7 +372,7 @@ func StartServerWithSingleOp(singleOperation func(*graph.Manager) bool) {
 
 	api.RegisterRestEndpoints(v1.V1EndpointMap)
 
-	if config.Bool(config.ApplicationEnabled) {
+	if config.Bool(config.EnableApplication) {
 		api.RegisterRestEndpoints(app.HttpEndpointMap)
 	}
 

@@ -56,6 +56,7 @@ const (
 	EnableWebTerminal        = "EnableWebTerminal"
 	EnableCluster            = "EnableCluster"
 	EnableClusterTerminal    = "EnableClusterTerminal"
+	EnableApplication        = "EnableApplication"
 	ResultCacheMaxSize       = "ResultCacheMaxSize"
 	ResultCacheMaxAgeSeconds = "ResultCacheMaxAgeSeconds"
 	ClusterStateInfoFile     = "ClusterStateInfoFile"
@@ -83,6 +84,7 @@ var DefaultConfig = map[string]interface{}{
 	EnableWebTerminal:        true,
 	EnableCluster:            false,
 	EnableClusterTerminal:    false,
+	EnableApplication:        true,
 	LocationDatastore:        "db",
 	LocationHTTPS:            "ssl",
 	LocationWebFolder:        "web",

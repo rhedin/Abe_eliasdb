@@ -159,6 +159,7 @@ EliasDB uses a single configuration file called eliasdb.config.json. After start
 | ECALScriptFolder | Directory for ECAL scripts. |
 | ECALWorkerCount | Number of worker threads in the ECA engine's thread pool. |
 | EnableAccessControl | Flag if access control for EliasDB should be enabled. This provides user authentication and authorization features. |
+| EnableApplication | Are we running Eliasdb as part of a larger application? |
 | EnableCluster | Flag if EliasDB clustering support should be enabled. EXPERIMENTAL! |
 | EnableClusterTerminal | Flag if the cluster terminal file /web/db/cluster.html should be created. |
 | EnableECALDebugServer | Flag if the ECAL debug server should be started. Note: This will slow ECAL performance significantly. |
