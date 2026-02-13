@@ -1,6 +1,2 @@
 github.com/gorilla/websocket v1.4.1 h1:q7AeDBpnBk8AogcD4DSag/Ukw/KV+YhzLj2bP5HvKCM=
 github.com/gorilla/websocket v1.4.1/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
-github.com/rhedin/Abe_ecal v1.6.3 h1:1mkGp+l7vNkG4S8/jtm6w5mgh5WN7BfoK3QUtmkDdUA=
-github.com/rhedin/Abe_ecal v1.6.3/go.mod h1:c768ui2JY/t2/umdtBkOLltSuNg74FgeENvY97RNR+M=
-github.com/rhedin/Abe_editor v0.0.0-20260212225356-56e22903e533 h1:peg+g4+I+HwkGlRvpQNBNm4LJXMgUx53QeE1ha+sBAQ=
-github.com/rhedin/Abe_editor v0.0.0-20260212225356-56e22903e533/go.mod h1:eo9bFsO5xykpCOcxT5rlQfOZaldaAxhJXXU3/mUvfCc=
