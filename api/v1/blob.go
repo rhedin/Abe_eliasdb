@@ -11,6 +11,8 @@
 /*
 Package v1 contains EliasDB REST API Version 1.
 
+Um.  Blob.go has the documentation for *all* the endpoints. (rmh)
+
 # Binary Blob control endpoint
 
 /blob
