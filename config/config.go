@@ -42,6 +42,7 @@ const (
 	LocationWebFolder        = "LocationWebFolder"
 	LocationUserDB           = "LocationUserDB"
 	LocationAccessDB         = "LocationAccessDB"
+	LocationAppStaticFiles   = "../Abe_editor/static" // Not really the business of eliasdb, but okay for now.
 	HTTPSCertificate         = "HTTPSCertificate"
 	HTTPSKey                 = "HTTPSKey"
 	LockFile                 = "LockFile"
