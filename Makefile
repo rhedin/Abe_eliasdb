@@ -14,6 +14,9 @@ all: build
 clean:
 	rm -f eliasdb
 
+process-files:
+	../Abe_editor/build_time_programs/html_include ../Abe_editor/build_time_data/index.html.pp ../Abe_editor/static/index.html
+
 mod:
 	go mod init || true
 	go mod tidy
@@ -47,19 +50,19 @@ enable-symbols:
 vet:
 	go vet $(TAGS_UNDERLOG) ./...
 
-build: clean mod fmt vet
+build: clean process-files mod fmt vet
 	go build $(TAGS_UNDERLOG) $(BUILD_FLAGS) -o $(NAME) cli/eliasdb.go
 
-build-mac: clean mod fmt vet
+build-mac: clean process-files mod fmt vet
 	GOOS=darwin GOARCH=amd64 go build -o $(NAME).mac cli/eliasdb.go
 
-build-win: clean mod fmt vet
+build-win: clean process-files mod fmt vet
 	GOOS=windows GOARCH=amd64 go build -o $(NAME).exe cli/eliasdb.go
 
-build-arm7: clean mod fmt vet
+build-arm7: clean process-files mod fmt vet
 	GOOS=linux GOARCH=arm GOARM=7 go build -o $(NAME).arm7 cli/eliasdb.go
 
-build-arm8: clean mod fmt vet
+build-arm8: clean process-files mod fmt vet
 	GOOS=linux GOARCH=arm64 go build -o $(NAME).arm8 cli/eliasdb.go
 
 dist: build build-win build-mac build-arm7 build-arm8
