@@ -9,6 +9,8 @@ require (
 	github.com/rhedin/Abe_editor v0.0.0-20260212225356-56e22903e533
 )
 
+require github.com/rs/cors v1.11.1 // indirect
+
 replace (
 	github.com/rhedin/Abe_common => ../Abe_common
 	github.com/rhedin/Abe_ecal => ../Abe_ecal
