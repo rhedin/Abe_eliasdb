@@ -70,6 +70,8 @@ const (
 	ECALLogFile              = "ECALLogFile"
 	ECALDebugServerHost      = "ECALDebugServerHost"
 	ECALDebugServerPort      = "ECALDebugServerPort"
+	CORSDebug                = "CORSDebug"
+	CORSAllowedOrigins       = "CORSAllowedOrigins"
 )
 
 /*
@@ -109,6 +111,8 @@ var DefaultConfig = map[string]interface{}{
 	ECALLogFile:              "",
 	ECALDebugServerHost:      "127.0.0.1",
 	ECALDebugServerPort:      "33274",
+	CORSDebug:                true,
+	CORSAllowedOrigins:       "*,https://studio.apollographql.com",
 }
 
 /*
