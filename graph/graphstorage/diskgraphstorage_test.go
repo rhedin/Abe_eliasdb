@@ -32,7 +32,7 @@ const invalidFileName = "**" + "\x00"
 // Main function for all tests in this package
 
 func TestMain(m *testing.M) {
-	flag.Parse()
+	flag.Parse() // I wonder what flag he's hoping to parse.
 
 	for _, dbdir := range dbdirs {
 		if res, _ := fileutil.PathExists(dbdir); res {

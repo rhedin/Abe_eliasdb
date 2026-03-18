@@ -1,4 +1,4 @@
-//go:build !diskbased
+//go:build diskbased
 
 /*
  * EliasDB
@@ -11,41 +11,158 @@
  */
 
 /***
-Okay, this is Rick being a doo-doo head.  I want to run the same tests,
-but with a disk backing, not a memory backing as the tests have now.
-I want to see how it looks when I examine the database from
-graphiql (Hasura) after the test has run.  So I am duplicating
-the tests with the word "Disk" in the title, and I will use
--run with my go test command.
-Hmm.  But then, when it is run without the -run argument,
-it will run both kinds of tests, won't it?
 
-New plan.  I will have query_test_memorybased.go and query_test_diskbased.go.
-In one I will say //go:build !disk-based, and in the other //go:build disk-based.
-Then if I run the tests the regular way, go test, I'll get the same tests I
-always got.  And if I run them using go test -tags=disk-based, I'll get
-just the tests using the disk.
-I learned:  Go doesn't accept disk-based.  Has to be diskbased.
+If you have the server running somewhere else, you'll encounter this.
 
-Now that I see that there are multiple directories involved in running the eliasdb server,
-and the query_test.go only affects one of them, I am in doubt of my project.  Maybe just wait
-till later, and see how things look from graphiql (Hasura).
+rickhedin@Ricks-MacBook-Pro graphql % go test -tags=diskbased
+--- FAIL: TestSimpleQueries (0.50s)
+panic: Could not take ownership of lockfile queryDiskbasedTestDBDir/mainAuthor.nodeidx: Could not write lockfile - read result after writing: 1773370882578508000(expected: 1773370884268406000)<nil> [recovered, repanicked]
+
+goroutine 49 [running]:
+testing.tRunner.func1.2({0x100c02160, 0x1400040c030})
+	/Users/rickhedin/.goenv/versions/1.25.4/src/testing/testing.go:1872 +0x190
+testing.tRunner.func1()
+	/Users/rickhedin/.goenv/versions/1.25.4/src/testing/testing.go:1875 +0x31c
+panic({0x100c02160?, 0x1400040c030?})
+	/Users/rickhedin/.goenv/versions/1.25.4/src/runtime/panic.go:783 +0x120
+github.com/rhedin/Abe_eliasdb/storage.initByteDiskStorageManager(0x14000418f80)
+	/Users/rickhedin/work/260102/Abe_eliasdb/storage/diskstoragemanager.go:657 +0x8c8
+	...
+	github.com/rhedin/Abe_eliasdb/graphql.TestSimpleQueries(0x14000582380)
+	/Users/rickhedin/work/260102/Abe_eliasdb/graphql/query_diskbased_test.go:64 +0x28
+testing.tRunner(0x14000582380, 0x100c59128)
+	/Users/rickhedin/.goenv/versions/1.25.4/src/testing/testing.go:1934 +0xc8
+created by testing.(*T).Run in goroutine 1
+	/Users/rickhedin/.goenv/versions/1.25.4/src/testing/testing.go:1997 +0x364
+exit status 2
+FAIL	github.com/rhedin/Abe_eliasdb/graphql	2.389s
+rickhedin@Ricks-MacBook-Pro graphql %
+
+Actually, it turned out the tests were interfering with each other.  The first
+test still had its lockfile monitor running, which meant that the second test
+couldn't get hold of the file.
+
+Hey.  The most useful way to understand this file is to do a:
+
+sdiff -w 200 graphql/query_diskbased_test.go graphql/query_test.go | less
+
 ***/
 
 package graphql
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
+	"os"
+	"path/filepath"
 	"testing"
+	// "time"
 
+	"github.com/rhedin/Abe_common/fileutil"
 	"github.com/rhedin/Abe_eliasdb/graph"
 	"github.com/rhedin/Abe_eliasdb/graph/data"
 	"github.com/rhedin/Abe_eliasdb/graph/graphstorage"
 )
 
+const queryDiskbasedTestDBDir = "querydiskbasedtestdbdir"
+
+var dbdirs = []string{queryDiskbasedTestDBDir}
+
+// Main function for all tests in this package
+
+func TestMain(m *testing.M) {
+	flag.Parse()
+
+	// createDirectory()  Actually, these are called from each test.
+
+	// Run the tests
+
+	res := m.Run()
+
+	// Teardown
+
+	// destroyDirectory()
+
+	os.Exit(res)
+}
+
+// Dude!  You completely put the remove-directory logic into create-directory also!
+// No, that's correct.  I thought I was creating the directory beforehand, and
+// removing the directory after, but I was removing it in both cases.  The directory
+// is created by the NewDiskGraphStorage call.
+
+/*** never existed
+func createDirectory() {
+	for _, dbdir := range dbdirs {
+		if res, _ := fileutil.PathExists(dbdir); res {
+			if err := os.RemoveAll(dbdir); err != nil {
+				fmt.Print("Could not remove test directory:", err.Error())
+			}
+		}
+	}
+}
+***/
+
+func destroyDirectory(directoryName string) {
+	if res, _ := fileutil.PathExists(directoryName); res {
+		if err := os.RemoveAll(directoryName); err != nil {
+			fmt.Print("Could not remove test directory:", err.Error(), "\n")
+		}
+	}
+}
+
+func printContentsOfDirectory(directoryName string) {
+
+	fmt.Printf("--- Contents of directory: %q ---\n", directoryName)
+
+	// Check if it even exists anymore
+	if _, err := os.Stat(directoryName); os.IsNotExist(err) {
+		fmt.Println("  Directory does not exist (successfully removed)")
+		return
+	} else if err != nil {
+		fmt.Printf("  Cannot stat directory: %v\n", err)
+		return
+	}
+
+	// Walk the directory tree
+	err := filepath.Walk(directoryName, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			fmt.Printf("  Walk error at %s: %v\n", path, err)
+			return nil // continue anyway
+		}
+
+		// Skip the root directory itself in output (less noise)
+		if path == directoryName {
+			return nil
+		}
+
+		rel, _ := filepath.Rel(directoryName, path)
+		if info.IsDir() {
+			fmt.Printf("  directory  %s/\n", rel)
+		} else {
+			fmt.Printf("  file %s  (size %d bytes)\n", rel, info.Size())
+		}
+		return nil
+	})
+
+	if err != nil {
+		fmt.Printf("  Walk failed: %v\n", err)
+	}
+
+	fmt.Println("--- End of directory listing ---")
+}
+
 func TestErrorCases(t *testing.T) {
-	gm, _ := songGraphGroups()
+
+	// const directoryName = "queryDiskBasedTestErrorCasesDir"
+	const directoryName = "queryDiskBasedTestSharedDir"
+
+	destroyDirectory(directoryName)
+	fmt.Printf("After destroyDirectory at beginning of TestErrorCases:\n")
+	printContentsOfDirectory(directoryName)
+
+	gm, dgs := songGraphGroups(directoryName)
 
 	query := map[string]interface{}{
 		"operationName": "foo",
@@ -80,10 +197,32 @@ func TestErrorCases(t *testing.T) {
 		return
 	}
 
+	// Added code to close disk graph storage.
+	if err := dgs.Close(); err != nil {
+		t.Error(err)
+		return
+	}
+
+	destroyDirectory(directoryName)
+	fmt.Printf("After destroyDirectory at end of TestErrorCases:\n")
+	printContentsOfDirectory(directoryName)
+
+	// time.Sleep(5 * time.Second)  Seeing whether it works without a time delay.
+	// Even though there was a visible pause before the first test (this one) finished,
+	// the directory on disk apparently still survived.  The second test failed,
+	// even though when it used an entirely different directory on disk, it succeeded.
 }
 
 func TestSimpleQueries(t *testing.T) {
-	gm, _ := songGraphGroups()
+
+	// const directoryName = "queryDiskBasedTestSimpleQueriesDir"
+	const directoryName = "queryDiskBasedTestSharedDir"
+
+	destroyDirectory(directoryName)
+	fmt.Printf("After destroyDirectory at beginning of TestSimpleQueries:\n")
+	printContentsOfDirectory(directoryName)
+
+	gm, dgs := songGraphGroups(directoryName)
 
 	ast, err := ParseQuery("test", "{ name }")
 
@@ -365,6 +504,17 @@ fragment SongKind on Song {
 		t.Error(rerr)
 		return
 	}
+
+	// I added code to close disk graph storage.  It was keeping ahold of the lock file.
+	// Note I replaced a _ return from songGraphGroups with dgs.
+	if err := dgs.Close(); err != nil {
+		t.Error(err)
+		return
+	}
+
+	destroyDirectory(directoryName)
+	fmt.Printf("After destroyDirectory at end of TestSimpleQueries:\n")
+	printContentsOfDirectory(directoryName)
 }
 
 func checkResult(expectedResult string, query map[string]interface{}, gm *graph.Manager) error {
@@ -391,9 +541,16 @@ func checkResult(expectedResult string, query map[string]interface{}, gm *graph.
 	return err
 }
 
-func songGraph() (*graph.Manager, *graphstorage.MemoryGraphStorage) {
+func songGraph(directoryName string) (*graph.Manager, *graphstorage.DiskGraphStorage) {
 
-	mgs := graphstorage.NewMemoryGraphStorage("mystorage")
+	mgs, err := graphstorage.NewDiskGraphStorage(directoryName, false) // false means not readonly
+	// I don't have t in this function, so I can't say t.Error(err).
+	// If it errors, I'll just say so, return, and hope for the best.
+	if err != nil {
+		fmt.Printf("graphstorage.NewDiskGraphStorage(~) returned an error.  err = %v\n", err)
+		// return It got mad because I didn't return *gm, *gs.  I didn't want to import os
+		// so I could use os.Exit(1).  I just go on.  I wrote out what happened.
+	}
 	gm := graph.NewGraphManager(mgs)
 
 	constructEdge := func(key string, node1 data.Node, node2 data.Node, number int) data.Edge {
@@ -457,11 +614,11 @@ func songGraph() (*graph.Manager, *graphstorage.MemoryGraphStorage) {
 
 	storeSong(node2, "MyOnlySong3", 19, 3)
 
-	return gm, mgs.(*graphstorage.MemoryGraphStorage)
+	return gm, mgs.(*graphstorage.DiskGraphStorage)
 }
 
-func songGraphGroups() (*graph.Manager, *graphstorage.MemoryGraphStorage) {
-	gm, mgs := songGraph()
+func songGraphGroups(directoryName string) (*graph.Manager, *graphstorage.DiskGraphStorage) {
+	gm, mgs := songGraph(directoryName)
 
 	node0 := data.NewGraphNode()
 	node0.SetAttr("key", "Best")

@@ -15,7 +15,7 @@ import (
 	"fmt"
 	"net/http"
 
-	abelog "github.com/rhedin/Abe_common/abelogutil"
+	// noisy abelog "github.com/rhedin/Abe_common/abelogutil"
 	"github.com/rhedin/Abe_common/lang/graphql/parser"
 	"github.com/rhedin/Abe_common/stringutil"
 	"github.com/rhedin/Abe_eliasdb/api"
@@ -45,7 +45,11 @@ type graphQLEndpoint struct {
 HandlePOST handles GraphQL queries.
 */
 func (e *graphQLEndpoint) HandlePOST(w http.ResponseWriter, r *http.Request, resources []string) {
-	abelog.UnderPrintf("\n")
+	// noisy abelog.UnderPrintf("\n")
+	// noisy abelog.UnderPrintf("Arrived in graphql.go HandlePOST.  We think this is where the message came from:\n")
+	// noisy abelog.UnderPrintf("   Parse error in Main query: Unexpected end (Line:1 Pos:80)\n")
+	// noisy abelog.UnderPrintf("r = %v\n", r)
+	// noisy abelog.UnderPrintf("resources = %v\n", resources)
 	var err error
 	var res map[string]interface{}
 
@@ -54,12 +58,14 @@ func (e *graphQLEndpoint) HandlePOST(w http.ResponseWriter, r *http.Request, res
 
 	if err := dec.Decode(&data); err != nil {
 		http.Error(w, "Could not decode request body: "+err.Error(), http.StatusBadRequest)
+		// noisy abelog.UnderPrintf("About to return from (*graphQLEndpoint).HandlePOST.\n")
 		return
 	}
 
 	toAST, ok1 := data["query-to-ast"]
 	toQuery, ok2 := data["ast-to-query"]
 	if ok1 || ok2 {
+		// noisy abelog.UnderPrintf("(*graphQLEndpoint).HandlePOST  In first clause.  At least one of query-to-ast and ast-to-query is ok.\n")
 
 		res := make(map[string]interface{})
 
@@ -68,6 +74,7 @@ func (e *graphQLEndpoint) HandlePOST(w http.ResponseWriter, r *http.Request, res
 
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
+				// noisy abelog.UnderPrintf("About to return from (*graphQLEndpoint).HandlePOST.\n")
 				return
 			}
 
@@ -79,6 +86,7 @@ func (e *graphQLEndpoint) HandlePOST(w http.ResponseWriter, r *http.Request, res
 
 			if !ok {
 				http.Error(w, "Plain AST object expected as 'ast-to-query' value", http.StatusBadRequest)
+				// noisy abelog.UnderPrintf("About to return from (*graphQLEndpoint).HandlePOST.\n")
 				return
 			}
 
@@ -88,6 +96,7 @@ func (e *graphQLEndpoint) HandlePOST(w http.ResponseWriter, r *http.Request, res
 
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
+				// noisy abelog.UnderPrintf("About to return from (*graphQLEndpoint).HandlePOST.\n")
 				return
 			}
 
@@ -97,6 +106,7 @@ func (e *graphQLEndpoint) HandlePOST(w http.ResponseWriter, r *http.Request, res
 
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
+				// noisy abelog.UnderPrintf("About to return from (*graphQLEndpoint).HandlePOST.\n")
 				return
 			}
 
@@ -106,9 +116,12 @@ func (e *graphQLEndpoint) HandlePOST(w http.ResponseWriter, r *http.Request, res
 		w.Header().Set("content-type", "application/json; charset=utf-8")
 		json.NewEncoder(w).Encode(res)
 
+		// noisy abelog.UnderPrintf("About to return from (*graphQLEndpoint).HandlePOST.\n")
 		return
 
 	} else {
+		// noisy abelog.UnderPrintf("(*graphQLEndpoint).HandlePOST  In second clause.  query-to-ast and ast-to-query both not-ok.\n")
+		// We have learned that in our test case, we enter this 2nd clause.  See Note 1 below.
 		partData, ok := data["partition"]
 		if !ok && len(resources) > 0 {
 			partData = resources[0]
@@ -116,6 +129,7 @@ func (e *graphQLEndpoint) HandlePOST(w http.ResponseWriter, r *http.Request, res
 		}
 		if !ok || partData == "" {
 			http.Error(w, "Need a partition", http.StatusBadRequest)
+			// noisy abelog.UnderPrintf("About to return from (*graphQLEndpoint).HandlePOST.\n")
 			return
 		}
 
@@ -135,12 +149,24 @@ func (e *graphQLEndpoint) HandlePOST(w http.ResponseWriter, r *http.Request, res
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		// noisy abelog.UnderPrintf("About to return from (*graphQLEndpoint).HandlePOST.\n")
+		// This is where our error "Parse error in Main query: Unexpected end (Line:1 Pos:80)" came from.
 		return
 	}
 
 	w.Header().Set("content-type", "application/json; charset=utf-8")
 	json.NewEncoder(w).Encode(res)
+	// noisy abelog.UnderPrintf("About to hit the bottom of (*graphQLEndpoint).HandlePOST.\n")
 }
+
+/*** [Note 1]  Here is the test case we were trying to run down.
+rickhedin@Ricks-MacBook-Pro _work15 %   curl -X POST 'https://localhost:9090/db/v1/graphql/main' --insecure -H "Content-Type: application/json" -d '{"query": "{ __schema { mutationType { name fields { name args { name type { name } } } } }" }'
+Parse error in Main query: Unexpected end (Line:1 Pos:80)
+rickhedin@Ricks-MacBook-Pro _work15 %
+
+This is the exact answer to the problem.  Without cluttering the code with log writes.
+https://jsontotable.org/graphql-formatter
+***/
 
 /*
 SwaggerDefs is used to describe the endpoint in swagger.

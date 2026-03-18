@@ -95,6 +95,15 @@ NewGraphQLRuntimeProvider creates a new GraphQLRuntimeProvider object.
 func NewGraphQLRuntimeProvider(name string, part string, gm *graph.Manager,
 	op string, vars map[string]interface{}, callbackHandler SubscriptionCallbackHandler,
 	readOnly bool) *GraphQLRuntimeProvider {
+	abelog.UnderPrintf("runtime.go NewGraphQARuntimeProvider  \n"+
+		"     name = %s\n"+
+		"     part = %s\n"+
+		"     gm = %v\n"+
+		"     op = %s\n"+
+		"     vars = %v\n"+
+		"     callbackHandler = %v\n"+
+		"     readOnly = %t\n",
+		name, part, gm, op, vars, callbackHandler, readOnly)
 
 	return &GraphQLRuntimeProvider{name, "", op, vars, []string{}, []*RuntimeError{},
 		[][]string{}, part, gm, callbackHandler, nil, readOnly, nil,

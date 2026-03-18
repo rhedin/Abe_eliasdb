@@ -45,7 +45,14 @@ Set the readOnly flag if the query should only be allowed to do read operations.
 func RunQuery(name string, part string, query map[string]interface{},
 	gm *graph.Manager, callbackHandler interpreter.SubscriptionCallbackHandler,
 	readOnly bool) (map[string]interface{}, error) {
-	abelog.UnderPrintf("\n")
+	abelog.UnderPrintf("query.go RunQuery  \n"+
+		"     name = %v, \n"+
+		"     part = %s, \n"+
+		"     query = %v, \n"+
+		"     gm = %v, \n"+
+		"     callbackHandler = %v, \n"+
+		"     readOnly = %v\n",
+		name, part, query, gm, callbackHandler, readOnly)
 
 	var ok bool
 	var vars map[string]interface{}
@@ -61,8 +68,8 @@ func RunQuery(name string, part string, query map[string]interface{},
 	// Nil pointer become empty strings
 
 	if query["operationName"] == nil {
-		query["operationName"] = ""
-	}
+		query["operationName"] = "" // I have worried about not supplying an operationName gumming up the works.
+	} // Matthias seems to have made that concern unnecessary.
 	if query["query"] == nil {
 		query["query"] = ""
 	}
