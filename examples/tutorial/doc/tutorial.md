@@ -59,6 +59,10 @@ To control the data which is displayed we can specify a show clause:
 ```
 lookup Line "3" traverse Line:StationOnLine:Member:Station where has_rail end show Station:name, Station:zone
 ```
+I have learned that this doesn't actually work.  I added more details at the bottom of this document.  To make it work, add one more column name:
+```
+lookup Line "3" traverse Line:StationOnLine:Member:Station where has_rail end show key, Station:name, Station:zone
+```
 In the last refinement of the search query we can order by name:
 ```
 lookup Line "3" traverse Line:StationOnLine:Member:Station where has_rail end show Station:name, Station:zone with ordering(ascending name)
@@ -76,3 +80,45 @@ find King's Cross
 The query should return the Station `King's Cross`. The index can efficiently lookup words, phrases (multiple consecutive words) and attribute values. Use the index endpoint in the REST API for more specific lookups.
 
 ![](tutorial3.png)
+
+Things I learned after Matthias left it
+---------------------------------------
+
+The tutorial suggests that you enter this query. 
+```
+lookup Line "3" traverse Line:StationOnLine:Member:Station where has_rail end show Station:name, Station:zone
+```
+
+If you do, you will get this response. 
+```
+Could not determine key of primary node - query needs a primary expression
+```
+
+If you add one more superfluous column name, it works. 
+```
+lookup Line "3" traverse Line:StationOnLine:Member:Station where has_rail end show key, Station:name, Station:zone
+```
+
+Matthias himself found the issue, and recorded it in the project tracker he was using at the time. 
+
+[Matthias highlighted an issue](https://github.com/krotik/eliasdb/issues/51).
+
+The question, that occurs to me at least, is why the query engine behaves this way. 
+
+Well, I had a long conversation with Grok, and found out some of these answers.  I'll give you the benefit of what I found out. 
+
+For some of this, it might be useful to look at the response recorded in the query_test.go file.  That will tell you what the json looks like. 
+
+There are two things.  Grouping, and selection.  They both rely on selecting a "primary" node. 
+
+Rows are selected (internally) by keeping one node (or one address of a node) that typifies the row.  When rows are gathered together, or included and excluded, that is done by referring to their synecdoche node.  So if eliasdb can't identify a primary node to use for that purpose, it complains. 
+
+Plus, when eql translates the query to calls to the http api (which is what it does) it always adds "groups=1". 
+
+So *whenever* you say *anything* through eql, you are grouping things, and a primary node must be identified. 
+
+When you add an unqualified column name, it finds the first occurrence of that name in the transit across nodes, and uses that.  So by saying key, we get 1:n:key, since every node has a key. 
+
+There is also a keyword "primary".  You can say "primary 2:n:key" and specify the node at the end of the first traverse. 
+
+By the way, I emailed my conversation with Grok to myself.  cubsno1@gmail.com, 24 March 2026.  One day before Greg turns 42.  Life, the universe, and everything! 
