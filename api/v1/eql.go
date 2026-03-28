@@ -118,10 +118,15 @@ SwaggerDefs is used to describe the endpoint in swagger.
 */
 func (e *eqlEndpoint) SwaggerDefs(s map[string]interface{}) {
 
-	s["paths"].(map[string]interface{})["/v1/eql"] = map[string]interface{}{
+	s["paths"].(map[string]interface{})["/v1/eql/"] = map[string]interface{}{
 		"post": map[string]interface{}{
-			"summary":     "EQL parser and pretty printer endpoint.",
-			"description": "The eql endpoint should be used to parse a given EQL query into an Abstract Syntax Tree or pretty print a given Abstract Syntax Tree into an EQL query.",
+			"summary": "EQL parser and pretty printer endpoint.",
+			"description": `The eql endpoint should be used to parse a given EQL query into an Abstract Syntax Tree or pretty print a given Abstract Syntax Tree into an EQL query.
+
+In my experience, if you put both the query member and the ast member into your request, you will get an error.  Eliasdb tries to parse the empty ast specification, and fails. 
+I gave it only a query string, and I got a response.  (rmh) 
+
+Note that this endpoint only gives the ast that is equivalent to your query.  If you want to query for data, you'll have to use the 'query' endpoint.`,
 			"consumes": []string{
 				"application/json",
 			},
