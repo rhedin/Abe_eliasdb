@@ -26,4 +26,5 @@
 /db
 /scripts
 /eliasdb.config.json
+/eliasdb.lck 
 .DS_Store

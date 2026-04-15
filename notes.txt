@@ -42,3 +42,33 @@ rickhedin@Ricks-MacBook-Pro 251222 % mv Abe_eliasdb eliasdb      <-----  See?
 rickhedin@Ricks-MacBook-Pro 251222 % mv Abe_ecal    ecal 
 
 
+
+The kinds are in alphabetical order.  The keys are not. 
+
+Processing a node: GraphNode:
+     key : 456
+    kind : Author
+    name : Hans
+
+Processing an edge: GraphEdge:
+                  key : MyOnlySong3
+                 kind : Wrote
+        end1cascading : true
+    end1cascadinglast : false
+              end1key : 456
+             end1kind : Author
+             end1role : Author
+        end2cascading : false
+    end2cascadinglast : false
+              end2key : MyOnlySong3
+             end2kind : Song
+             end2role : Song
+
+Processing a node: GraphNode:
+     key : 000
+    kind : Author
+    name : John
+
+
+
+
