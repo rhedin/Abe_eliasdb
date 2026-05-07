@@ -21,6 +21,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	// "runtime" // *** Temporary ***
 	"sync"
 	"time"
 
@@ -476,6 +477,22 @@ func StartServerWithSingleOp(singleOperation func(*graph.Manager) bool) {
 	fpfile := filepath.Join(basepath, config.Str(config.LocationWebFolder), "fingerprint.json")
 
 	print("Writing fingerprint file: ", fpfile)
+
+	// Temporary stack tracer — remove after we find the delay
+	// go func() {
+	// 	ticker := time.NewTicker(3 * time.Second) // *** Temporary ***
+	// 	defer ticker.Stop()  // I asked Grok what this defer accomplished,
+	//                       // since the function never goes out of scope.
+	//                       // He said nothing.  It's just "good practice".
+	//                       // Like the virgin Mary's being sinless isn't
+	//                       // necessary for Jesus' being sinless.  It's
+	//                       // just "appropriate".
+	// 	for range ticker.C {
+	// 		buf := make([]byte, 1<<16)
+	// 		n := runtime.Stack(buf, true)
+	// 		log.Printf("=== HEARTBEAT STACK TRACE ===\n%s\n", buf[:n])
+	// 	}
+	// }()
 
 	certs, _ := cryptutil.ReadX509CertsFromFile(certPath)
 

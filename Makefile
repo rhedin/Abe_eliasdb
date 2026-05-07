@@ -40,7 +40,7 @@ enable-underlog:
 
 enable-debugging:
 	$(eval BUILD_FLAGS=-gcflags="all=-N -l")
-	# Turn off compiler optimizations so source matches binary 
+	# Turn off compiler optimizations so source matches binary. 
 
 enable-symbols:
 	$(eval STRIP_SYMBOLS=)
@@ -48,6 +48,9 @@ enable-symbols:
 
 
 vet:
+	echo "Go version being used:" 
+	go version 
+	go env GOVERSION GOOS GOARCH 
 	go vet $(TAGS_UNDERLOG) ./...
 
 build: clean process-files mod fmt vet
