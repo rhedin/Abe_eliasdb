@@ -5,6 +5,10 @@ EliasDB
   <img height="300px" style="height:300px;" src="eliasdb_logo.png">
 </p>
 
+(Hey!  I thought I marked this "cloned from devt.de/krotik/eliasdb"  (github.com/krotik/eliasdb did not contain the complete revisions history)  Anyway, I cloned Matthias Ladkau's work.  I was afraid it might go away, and my project depends on it.  Also, I wanted to modify it.  It's great work, and I really appreciate his creation.)
+
+--
+
 EliasDB is a graph-based database which aims to provide a lightweight solution for projects which want to store their data as a graph.
 
 <!-- [![Code coverage](https://void.devt.de/pub/eliasdb/test_result.svg)](https://void.devt.de/pub/eliasdb/coverage.txt) -->
