@@ -57,6 +57,28 @@ func (gm *Manager) EdgeCount(kind string) uint64 {
 }
 
 /*
+EdgeKeyIterator iterates edge keys of a certain kind.
+*/
+func (gm *Manager) EdgeKeyIterator(part string, kind string) (*EdgeKeyIterator, error) {
+	// Get the HTree which stores the edge
+
+	tree, err := gm.getEdgeStorageHTree(part, kind, false)
+	if err != nil || tree == nil {
+		return nil, err
+	}
+
+	it := hash.NewHTreeIterator(tree)
+	if it.LastError != nil {
+		return nil, &util.GraphError{
+			Type:   util.ErrReading,
+			Detail: it.LastError.Error(),
+		}
+	}
+
+	return &EdgeKeyIterator{gm, it, nil}, nil
+}
+
+/*
 FetchNodeEdgeSpecs returns all possible edge specs for a certain node.
 */
 func (gm *Manager) FetchNodeEdgeSpecs(part string, key string, kind string) ([]string, error) {
