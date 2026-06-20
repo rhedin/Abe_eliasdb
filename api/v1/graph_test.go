@@ -13,6 +13,7 @@ package v1
 import (
 	"encoding/json"
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/rhedin/Abe_common/datautil"
@@ -275,15 +276,23 @@ func TestGraphQuery(t *testing.T) {
 
 	// Test error cases
 
-	msm := gmMSM.StorageManager("main"+"Song"+graph.StorageSuffixNodes,
+	// msm := gmMSM.StorageManager("main"+"Song"+graph.StorageSuffixNodes,
+	// 	true).(*storage.MemoryStorageManager)
+	msm := gmMSM.StorageManager(graph.CaseSensitiveName("main", "Song", graph.StorageSuffixNodes),
 		true).(*storage.MemoryStorageManager)
 
 	msm.AccessMap[2] = storage.AccessCacheAndFetchError
 
 	st, _, res = sendTestRequest(queryURL+"/main/n/Song", "GET", nil)
 
-	if st != "500 Internal Server Error" ||
-		res != "GraphError: Failed to access graph storage component (Slot not found (mystorage/mainSong.nodes - Location:2))" {
+	// if st != "500 Internal Server Error" ||
+	// 	res != "GraphError: Failed to access graph storage component (Slot not found (mystorage/mainSong.nodes - Location:2))" {
+	// 	t.Error("Unexpected response:", res)
+	// 	return
+	// }
+	matched, _ := regexp.MatchString(`^\QGraphError: Failed to access graph storage component `+
+		`(Slot not found (mystorage/mainSong\E(....)?\Q.nodes - Location:2))\E$`, res)
+	if st != "500 Internal Server Error" || !matched {
 		t.Error("Unexpected response:", res)
 		return
 	}
@@ -294,15 +303,17 @@ func TestGraphQuery(t *testing.T) {
 
 	st, _, res = sendTestRequest(queryURL+"/main/n/Song", "GET", nil)
 
-	if st != "500 Internal Server Error" ||
-		res != "GraphError: Could not read graph information (Slot not found (mystorage/mainSong.nodes - Location:4))" {
+	matched, _ = regexp.MatchString(`^\QGraphError: Could not read graph information (Slot not found (mystorage/mainSong\E(....)?\Q.nodes - Location:4))\E$`, res)
+	if st != "500 Internal Server Error" || !matched {
 		t.Error("Unexpected response:", res)
 		return
 	}
 
 	delete(msm.AccessMap, 4)
 
-	msm = gmMSM.StorageManager("main"+"Spam"+graph.StorageSuffixNodes,
+	// msm = gmMSM.StorageManager("main"+"Spam"+graph.StorageSuffixNodes,
+	// 	true).(*storage.MemoryStorageManager)
+	msm = gmMSM.StorageManager(graph.CaseSensitiveName("main", "Spam", graph.StorageSuffixNodes),
 		true).(*storage.MemoryStorageManager)
 
 	loc := msm.Root(graph.RootIDNodeHTree)
@@ -384,30 +395,34 @@ func TestGraphQuerySingleItem(t *testing.T) {
 		return
 	}
 
-	msm := gmMSM.StorageManager("main"+"Spam"+graph.StorageSuffixNodes,
+	// msm := gmMSM.StorageManager("main"+"Spam"+graph.StorageSuffixNodes,
+	// 	true).(*storage.MemoryStorageManager)
+	msm := gmMSM.StorageManager(graph.CaseSensitiveName("main", "Spam", graph.StorageSuffixNodes),
 		true).(*storage.MemoryStorageManager)
 
 	msm.AccessMap[2] = storage.AccessCacheAndFetchError
 
 	st, _, res = sendTestRequest(queryURL+"/main/n/Spam/0005", "GET", nil)
 
-	if st != "500 Internal Server Error" ||
-		res != "GraphError: Failed to access graph storage component (Slot not found (mystorage/mainSpam.nodes - Location:2))" {
+	matched, _ := regexp.MatchString(`^\QGraphError: Failed to access graph storage component (Slot not found (mystorage/mainSpam\E(....)?\Q.nodes - Location:2))\E$`, res)
+	if st != "500 Internal Server Error" || !matched {
 		t.Error("Unexpected response:", res)
 		return
 	}
 
 	delete(msm.AccessMap, 2)
 
-	msm = gmMSM.StorageManager("main"+"Wrote"+graph.StorageSuffixEdges,
+	// msm = gmMSM.StorageManager("main"+"Wrote"+graph.StorageSuffixEdges,
+	// 	true).(*storage.MemoryStorageManager)
+	msm = gmMSM.StorageManager(graph.CaseSensitiveName("main", "Wrote", graph.StorageSuffixEdges),
 		true).(*storage.MemoryStorageManager)
 
 	msm.AccessMap[1] = storage.AccessCacheAndFetchError
 
 	st, _, res = sendTestRequest(queryURL+"/main/e/Wrote/LoveSong3", "GET", nil)
 
-	if st != "500 Internal Server Error" ||
-		res != "GraphError: Failed to access graph storage component (Slot not found (mystorage/mainWrote.edges - Location:1))" {
+	matched, _ = regexp.MatchString(`^\QGraphError: Failed to access graph storage component (Slot not found (mystorage/mainWrote\E(....)?\Q.edges - Location:1))\E$`, res)
+	if st != "500 Internal Server Error" || !matched {
 		t.Error("Unexpected response:", res)
 		return
 	}
@@ -542,30 +557,34 @@ func TestGraphQueryTraversal(t *testing.T) {
 		return
 	}
 
-	msm := gmMSM.StorageManager("main"+"Song"+graph.StorageSuffixNodes,
+	// msm := gmMSM.StorageManager("main"+"Song"+graph.StorageSuffixNodes,
+	// 	true).(*storage.MemoryStorageManager)
+	msm := gmMSM.StorageManager(graph.CaseSensitiveName("main", "Song", graph.StorageSuffixNodes),
 		true).(*storage.MemoryStorageManager)
 
 	msm.AccessMap[2] = storage.AccessCacheAndFetchError
 
 	st, _, res = sendTestRequest(queryURL+"/main/n/Author/123/:::", "GET", nil)
 
-	if st != "500 Internal Server Error" ||
-		res != "GraphError: Failed to access graph storage component (Slot not found (mystorage/mainSong.nodes - Location:2))" {
+	matched, _ := regexp.MatchString(`^\QGraphError: Failed to access graph storage component (Slot not found (mystorage/mainSong\E(....)?\Q.nodes - Location:2))\E$`, res)
+	if st != "500 Internal Server Error" || !matched {
 		t.Error("Unexpected response:", res)
 		return
 	}
 
 	delete(msm.AccessMap, 2)
 
-	msm = gmMSM.StorageManager("main"+"Spam"+graph.StorageSuffixNodes,
+	// msm = gmMSM.StorageManager("main"+"Spam"+graph.StorageSuffixNodes,
+	// 	true).(*storage.MemoryStorageManager)
+	msm = gmMSM.StorageManager(graph.CaseSensitiveName("main", "Spam", graph.StorageSuffixNodes),
 		true).(*storage.MemoryStorageManager)
 
 	msm.AccessMap[2] = storage.AccessCacheAndFetchError
 
 	st, _, res = sendTestRequest(queryURL+"/main/n/Spam/0005/:::", "GET", nil)
 
-	if st != "500 Internal Server Error" ||
-		res != "GraphError: Failed to access graph storage component (Slot not found (mystorage/mainSpam.nodes - Location:2))" {
+	matched, _ = regexp.MatchString(`^\QGraphError: Failed to access graph storage component (Slot not found (mystorage/mainSpam\E(....)?\Q.nodes - Location:2))\E$`, res)
+	if st != "500 Internal Server Error" || !matched {
 		t.Error("Unexpected response:", res)
 		return
 	}

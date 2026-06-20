@@ -13,6 +13,7 @@ package graph
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/rhedin/Abe_eliasdb/graph/data"
@@ -112,10 +113,10 @@ func TestSanityChecks(t *testing.T) {
 		return
 	}
 
-	gs.StorageManager("blabla"+StorageSuffixNodes, true)
-	gs.StorageManager("blabla"+StorageSuffixNodesIndex, true)
-	gs.StorageManager("blabla"+StorageSuffixEdges, true)
-	gs.StorageManager("blabla"+StorageSuffixEdgesIndex, true)
+	gs.StorageManager(caseSensitiveName("bla", "bla", StorageSuffixNodes), true)
+	gs.StorageManager(caseSensitiveName("bla", "bla", StorageSuffixNodesIndex), true)
+	gs.StorageManager(caseSensitiveName("bla", "bla", StorageSuffixEdges), true)
+	gs.StorageManager(caseSensitiveName("bla", "bla", StorageSuffixEdgesIndex), true)
 
 	storage.MsmRetFlush = errors.New("Test")
 
@@ -125,6 +126,11 @@ func TestSanityChecks(t *testing.T) {
 		t.Error("Unexpected flush result:", res)
 		return
 	}
+	// panic: runtime error: invalid memory address or nil pointer dereference [recovered, repanicked]
+	//     [signal SIGSEGV: segmentation violation code=0x2 addr=0x18 pc=0x1009a5390]
+	// github.com/rhedin/Abe_eliasdb/graph.TestSanityChecks(0x14000602c40)
+	//     /Users/rickhedin/work/260102/Abe_eliasdb/graph/helpers_test.go:123 +0xd70
+	// Line 123 is    if res := gm.flushNodeStorage("bla", "bla").Error(); res !=    above.
 
 	if res := gm.flushNodeIndex("bla", "bla").Error(); res !=
 		"GraphError: Failed to flush changes (Test)" {
@@ -247,14 +253,16 @@ func TestSanityChecks(t *testing.T) {
 		return
 	}
 
-	sm := gm.gs.StorageManager("mypart"+"mykind"+StorageSuffixNodes, false)
+	// sm := gm.gs.StorageManager("mypart"+"mykind"+StorageSuffixNodes, false)
+	sm := gm.gs.StorageManager(caseSensitiveName("mypart", "mykind", StorageSuffixNodes), false)
 
 	oldroot := sm.Root(RootIDNodeHTree)
 	sm.SetRoot(RootIDNodeHTree, 5)
 	sm.(*storage.MemoryStorageManager).AccessMap[5] = storage.AccessCacheAndFetchError
 
 	_, _, err = gm.getNodeStorageHTree("mypart", "mykind", true)
-	if err.Error() != "GraphError: Failed to access graph storage component (Slot not found (test/mypartmykind.nodes - Location:5))" {
+	matched, _ := regexp.MatchString(`^\QGraphError: Failed to access graph storage component (Slot not found (test/mypartmykind\E(....)?\Q.nodes - Location:5))\E$`, err.Error())
+	if !matched {
 		t.Error(err)
 		return
 	}
@@ -267,7 +275,8 @@ func TestSanityChecks(t *testing.T) {
 	sm.(*storage.MemoryStorageManager).AccessMap[5] = storage.AccessCacheAndFetchError
 
 	_, _, err = gm.getNodeStorageHTree("mypart", "mykind", true)
-	if err.Error() != "GraphError: Failed to access graph storage component (Slot not found (test/mypartmykind.nodes - Location:5))" {
+	matched, _ = regexp.MatchString(`^\QGraphError: Failed to access graph storage component (Slot not found (test/mypartmykind\E(....)?\Q.nodes - Location:5))\E$`, err.Error())
+	if !matched {
 		t.Error(err)
 		return
 	}

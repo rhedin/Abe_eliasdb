@@ -92,17 +92,21 @@ func TestDiskGraphStorage(t *testing.T) {
 		return
 	}
 
-	if res, _ := fileutil.PathExists(diskGraphStorageTestDBDir + "/store1.nodes.db.0"); !res {
+	if res, _ := fileutil.PathExistsWildcard(diskGraphStorageTestDBDir + "/store1*.nodes.db.0"); !res {
 		t.Error("Storage file does not exist")
 		return
 	}
 
 	sm2 := dgsnew.StorageManager("store2.nodes", false)
 
-	if res, _ := fileutil.PathExists(diskGraphStorageTestDBDir + "/store2.nodes.db.0"); res {
+	if res, _ := fileutil.PathExistsWildcard(diskGraphStorageTestDBDir + "/store2*.nodes.db.0"); res {
 		t.Error("Storage file should not have been created")
 		return
 	}
+	// I changed fileutil.PathExists to fileutil.PathExistsWildcard because I was thinking the name
+	// might have the hash Grok and I introduced to keep file names distinct on systems on which
+	// Mike.txt and mike.txt are the same file.  But now I think this filename never passes
+	// through the graph helper functions.
 
 	if sm2 != nil {
 		t.Error("Unexpected result")

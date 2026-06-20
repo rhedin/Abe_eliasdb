@@ -9,6 +9,8 @@ TAGS_UNDERLOG=
 BUILD_FLAGS=-ldflags="-s -w"
 # Removes the symbol table and the DWART debugging information. 
 # Normally, you will want to say:  make enable-underlog enable-debugging build 
+VERBOSE_TEST=
+# By default, our tests aren't verbose. 
 
 all: build
 clean:
@@ -22,7 +24,8 @@ mod:
 	go mod tidy
 
 test:
-	go test -p 1 ./...
+	go clean -testcache
+	go test $(TAGS_UNDERLOG) $(BUILD_FLAGS) $(VERBOSE_TEST) -p 1 ./...
 
 test-mac:
 	GOOS=darwin GOARCH=amd64 go test -p 1 ./...
@@ -41,6 +44,9 @@ enable-underlog:
 enable-debugging:
 	$(eval BUILD_FLAGS=-gcflags="all=-N -l")
 	# Turn off compiler optimizations so source matches binary. 
+
+enable-verbose-testing:
+	$(eval VERBOSE_TEST=-v -parallel 1) 
 
 enable-symbols:
 	$(eval STRIP_SYMBOLS=)

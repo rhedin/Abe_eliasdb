@@ -12,6 +12,7 @@ package v1
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/rhedin/Abe_eliasdb/storage"
@@ -121,7 +122,8 @@ func TestBlob(t *testing.T) {
 
 	st, _, res = sendTestRequest(queryURL+"1", "PUT", []byte{0x0b, 0x0c})
 
-	if st != "500 Internal Server Error" || res != "Slot not found (mystorage/mypart.blob - Location:1)" {
+	matched, _ := regexp.MatchString(`^\QSlot not found (mystorage/mypart.blob\E(....)?\Q - Location:1)\E$`, res)
+	if st != "500 Internal Server Error" || !matched {
 		t.Error("Unexpected response:", st, res)
 		return
 	}
@@ -146,10 +148,13 @@ func TestBlob(t *testing.T) {
 
 	st, _, res = sendTestRequest(queryURL+"1", "DELETE", nil)
 
-	if st != "500 Internal Server Error" || res != "Slot not found (mystorage/mypart.blob - Location:1)" {
+	matched, _ = regexp.MatchString(`^\QSlot not found (mystorage/mypart.blob\E(....)?\Q - Location:1)\E$`, res)
+	if st != "500 Internal Server Error" || !matched {
 		t.Error("Unexpected response:", st, res)
 		return
 	}
+	// I suspect this does not pass through the graph helper functions, and so cannot have the 4-character
+	// hash.  But I covered the case anyway.
 
 	delete(msm.(*storage.MemoryStorageManager).AccessMap, 1)
 

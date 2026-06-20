@@ -13,6 +13,7 @@ package graph
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 	"sync"
 	"testing"
@@ -715,13 +716,15 @@ func TestTransBuilding(t *testing.T) {
 	node3.SetAttr("kind", "mynewkind")
 	node3.SetAttr("Name", "Node3")
 
-	sm := gm.gs.StorageManager("main"+node3.Kind()+StorageSuffixNodes, false)
+	// sm := gm.gs.StorageManager("main"+node3.Kind()+StorageSuffixNodes, false)
+	sm := gm.gs.StorageManager(caseSensitiveName("main", node3.Kind(), StorageSuffixNodes), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[1] = storage.AccessCacheAndFetchError
 
 	// Check that the update fails
 
-	if err := trans.UpdateNode("main", node3); err.Error() !=
-		"GraphError: Failed to access graph storage component (Slot not found (mystorage/mainmynewkind.nodes - Location:1))" {
+	err := trans.UpdateNode("main", node3)
+	matched, _ := regexp.MatchString(`^\QGraphError: Failed to access graph storage component (Slot not found (mystorage/mainmynewkind\E(....)?\Q.nodes - Location:1))\E$`, err.Error())
+	if !matched {
 		t.Error(err)
 		return
 	}
@@ -862,7 +865,8 @@ func TestTransErrors(t *testing.T) {
 
 	storage.MsmCallNumRollback = 0
 
-	sm := mgs.StorageManager("main"+"myedge"+StorageSuffixEdgesIndex, true).(*storage.MemoryStorageManager)
+	// DISCUSSION: Updated to caseSensitiveName. This was one of the remaining raw concatenations.
+	sm := mgs.StorageManager(caseSensitiveName("main", "myedge", StorageSuffixEdgesIndex), true).(*storage.MemoryStorageManager)
 	sm.AccessMap[3] = storage.AccessInsertError
 
 	if err := trans.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Index error") {
@@ -879,7 +883,7 @@ func TestTransErrors(t *testing.T) {
 	// Test node commit failures
 
 	resetTransAndStorage()
-	sm = mgs.StorageManager("main"+"mynode"+StorageSuffixNodes, true).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "mynode", StorageSuffixNodes), true).(*storage.MemoryStorageManager)
 	sm.AccessMap[1] = storage.AccessInsertError
 	if err := trans.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Failed to access graph storage component") {
 		t.Error("Unexpected error return:", err)
@@ -889,7 +893,7 @@ func TestTransErrors(t *testing.T) {
 
 	resetTrans("")
 
-	sm = mgs.StorageManager("main"+"mynode"+StorageSuffixNodes, true).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "mynode", StorageSuffixNodes), true).(*storage.MemoryStorageManager)
 	sm.AccessMap[4] = storage.AccessInsertError
 	if err := trans.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Could not write graph information") {
 		fmt.Println(sm)
@@ -899,7 +903,7 @@ func TestTransErrors(t *testing.T) {
 	delete(sm.AccessMap, 4)
 
 	resetTransAndStorage()
-	sm = mgs.StorageManager("main"+"mynode"+StorageSuffixNodesIndex, true).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "mynode", StorageSuffixNodesIndex), true).(*storage.MemoryStorageManager)
 	sm.AccessMap[1] = storage.AccessInsertError
 	if err := trans.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Failed to access graph storage component") {
 		t.Error("Unexpected error return:", err)
@@ -908,7 +912,7 @@ func TestTransErrors(t *testing.T) {
 	delete(sm.AccessMap, 1)
 
 	resetTransAndStorage()
-	sm = mgs.StorageManager("main"+"mynode"+StorageSuffixNodesIndex, true).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "mynode", StorageSuffixNodesIndex), true).(*storage.MemoryStorageManager)
 	sm.AccessMap[2] = storage.AccessInsertError
 	if err := trans.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Index error") {
 		t.Error("Unexpected error return:", err)
@@ -921,7 +925,7 @@ func TestTransErrors(t *testing.T) {
 		t.Error(err)
 	}
 	resetTrans("123")
-	sm = mgs.StorageManager("main"+"mynode"+StorageSuffixNodesIndex, false).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "mynode", StorageSuffixNodesIndex), false).(*storage.MemoryStorageManager)
 	sm.AccessMap[2] = storage.AccessCacheAndFetchError
 	if err := trans.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Index error") {
 		t.Error("Unexpected error return:", err)
@@ -932,7 +936,7 @@ func TestTransErrors(t *testing.T) {
 	trans2 := NewConcurrentGraphTrans(gm)
 	trans2.RemoveNode("main", "123", "mynode")
 
-	sm = mgs.StorageManager("main"+"mynode"+StorageSuffixNodesIndex, false).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "mynode", StorageSuffixNodesIndex), false).(*storage.MemoryStorageManager)
 	sm.AccessMap[1] = storage.AccessCacheAndFetchError
 	if err := trans2.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Failed to access graph storage component") {
 		t.Error("Unexpected error return:", err)
@@ -948,7 +952,7 @@ func TestTransErrors(t *testing.T) {
 	trans2 = NewConcurrentGraphTrans(gm)
 	trans2.RemoveNode("main", "123", "mynode")
 
-	sm = mgs.StorageManager("main"+"mynode"+StorageSuffixNodesIndex, false).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "mynode", StorageSuffixNodesIndex), false).(*storage.MemoryStorageManager)
 	sm.AccessMap[2] = storage.AccessCacheAndFetchError
 
 	if err := trans2.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Index error") {
@@ -966,7 +970,7 @@ func TestTransErrors(t *testing.T) {
 	trans2 = NewConcurrentGraphTrans(gm)
 	trans2.RemoveNode("main", "123", "mynode")
 
-	sm = mgs.StorageManager("main"+"mynode"+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "mynode", StorageSuffixNodes), false).(*storage.MemoryStorageManager)
 	sm.AccessMap[1] = storage.AccessCacheAndFetchError
 	if err := trans2.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Failed to access graph storage component") {
 		t.Error("Unexpected error return:", err)
@@ -987,7 +991,7 @@ func TestTransErrors(t *testing.T) {
 
 	resetTransAndStorage()
 
-	sm = mgs.StorageManager("main"+"myedge"+StorageSuffixEdgesIndex, true).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "myedge", StorageSuffixEdgesIndex), true).(*storage.MemoryStorageManager)
 	sm.AccessMap[1] = storage.AccessInsertError
 	if err := trans.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Failed to access graph storage component") {
 		t.Error("Unexpected error return:", err)
@@ -997,7 +1001,7 @@ func TestTransErrors(t *testing.T) {
 
 	resetTrans("")
 
-	sm = mgs.StorageManager("main"+"myedge"+StorageSuffixEdges, true).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "myedge", StorageSuffixEdges), true).(*storage.MemoryStorageManager)
 	sm.AccessMap[1] = storage.AccessInsertError
 	if err := trans.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Failed to access graph storage component") {
 		t.Error("Unexpected error return:", err)
@@ -1093,7 +1097,7 @@ func TestTransErrors(t *testing.T) {
 		return
 	}
 
-	sm = mgs.StorageManager("main"+"mynode"+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "mynode", StorageSuffixNodes), false).(*storage.MemoryStorageManager)
 	sm.AccessMap[1] = storage.AccessCacheAndFetchError
 	if err := trans.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Failed to access graph storage component") {
 		t.Error("Unexpected error return:", err)
@@ -1110,7 +1114,7 @@ func TestTransErrors(t *testing.T) {
 		return
 	}
 
-	sm = mgs.StorageManager("main"+"mynewnode"+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "mynewnode", StorageSuffixNodes), false).(*storage.MemoryStorageManager)
 	sm.AccessMap[1] = storage.AccessCacheAndFetchError
 	if err := trans.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Failed to access graph storage component") {
 		t.Error("Unexpected error return:", err)
@@ -1127,7 +1131,7 @@ func TestTransErrors(t *testing.T) {
 		return
 	}
 
-	sm = mgs.StorageManager("main"+"myedge"+StorageSuffixEdgesIndex, false).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "myedge", StorageSuffixEdgesIndex), false).(*storage.MemoryStorageManager)
 	sm.AccessMap[4] = storage.AccessCacheAndFetchError
 	if err := trans.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Index error") {
 		t.Error("Unexpected error return:", err)
@@ -1148,7 +1152,7 @@ func TestTransErrors(t *testing.T) {
 		return
 	}
 
-	sm = mgs.StorageManager("main"+"myedge"+StorageSuffixEdgesIndex, false).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "myedge", StorageSuffixEdgesIndex), false).(*storage.MemoryStorageManager)
 	sm.AccessMap[2] = storage.AccessCacheAndFetchError
 	if err := trans2.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Index error") {
 		t.Error("Unexpected error return:", err)
@@ -1165,7 +1169,7 @@ func TestTransErrors(t *testing.T) {
 		return
 	}
 
-	sm = mgs.StorageManager("main"+"myedge"+StorageSuffixEdgesIndex, false).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "myedge", StorageSuffixEdgesIndex), false).(*storage.MemoryStorageManager)
 	sm.AccessMap[1] = storage.AccessCacheAndFetchError
 	if err := trans2.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Failed to access graph storage component") {
 		t.Error("Unexpected error return:", err)
@@ -1179,7 +1183,7 @@ func TestTransErrors(t *testing.T) {
 		return
 	}
 
-	sm = mgs.StorageManager("main"+"myedge"+StorageSuffixEdges, false).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "myedge", StorageSuffixEdges), false).(*storage.MemoryStorageManager)
 	sm.AccessMap[1] = storage.AccessCacheAndFetchError
 	if err := trans2.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Failed to access graph storage component") {
 		t.Error("Unexpected error return:", err)
@@ -1193,7 +1197,7 @@ func TestTransErrors(t *testing.T) {
 		return
 	}
 
-	sm = mgs.StorageManager("main"+"myedge"+StorageSuffixEdges, false).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", "myedge", StorageSuffixEdges), false).(*storage.MemoryStorageManager)
 	sm.AccessMap[2] = storage.AccessCacheAndFetchError
 	if err := trans2.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Could not write graph information") {
 		t.Error("Unexpected error return:", err)
@@ -1210,7 +1214,8 @@ func TestTransErrors(t *testing.T) {
 		return
 	}
 
-	sm = mgs.StorageManager("main"+deleteEdge.End1Kind()+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	// sm = mgs.StorageManager("main"+deleteEdge.End1Kind()+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", deleteEdge.End1Kind(), StorageSuffixNodes), false).(*storage.MemoryStorageManager)
 	sm.AccessMap[1] = storage.AccessCacheAndFetchError
 	if err := trans2.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Failed to access graph storage component") {
 		t.Error("Unexpected error return:", err)
@@ -1227,7 +1232,8 @@ func TestTransErrors(t *testing.T) {
 		return
 	}
 
-	sm = mgs.StorageManager("main"+deleteEdge.End2Kind()+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	// sm = mgs.StorageManager("main"+deleteEdge.End2Kind()+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", deleteEdge.End2Kind(), StorageSuffixNodes), false).(*storage.MemoryStorageManager)
 	sm.AccessMap[1] = storage.AccessCacheAndFetchError
 	if err := trans2.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Failed to access graph storage component") {
 		t.Error("Unexpected error return:", err)
@@ -1244,7 +1250,8 @@ func TestTransErrors(t *testing.T) {
 		return
 	}
 
-	sm = mgs.StorageManager("main"+deleteEdge.End2Kind()+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	// sm = mgs.StorageManager("main"+deleteEdge.End2Kind()+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", deleteEdge.End2Kind(), StorageSuffixNodes), false).(*storage.MemoryStorageManager)
 	sm.AccessMap[5] = storage.AccessCacheAndFetchError
 	if err := trans2.Commit(); !strings.Contains(fmt.Sprint(err), "GraphError: Could not read graph information") {
 		t.Error("Unexpected error return:", err)
@@ -1294,3 +1301,16 @@ func testTransPanic(t *testing.T) {
 
 	trans.Commit()
 }
+
+/***
+I asked Grok to go through and make changes like:
+	// sm = mgs.StorageManager("main"+deleteEdge.End2Kind()+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("main", deleteEdge.End2Kind(), StorageSuffixNodes), false).(*storage.MemoryStorageManager)
+Below is the comment he made on his work.
+
+Here's the modified version of trans_test.go.
+I took a conservative approach:
+  * Updated all remaining direct StorageManager("main"+... calls that were clearly building storage names.
+  * Left already-updated lines and commented-out lines untouched.
+  * Added short // DISCUSSION: comments in a few places where I made a judgment call.
+***/

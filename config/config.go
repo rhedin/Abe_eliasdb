@@ -111,7 +111,7 @@ var DefaultConfig = map[string]interface{}{
 	ECALLogFile:              "",
 	ECALDebugServerHost:      "127.0.0.1",
 	ECALDebugServerPort:      "33274",
-	CORSDebug:                true,
+	CORSDebug:                false,
 	CORSAllowedOrigins:       "*,https://studio.apollographql.com",
 }
 
@@ -125,6 +125,8 @@ LoadConfigFile loads a given config file. If the config file does not exist it i
 created with the default options.
 */
 func LoadConfigFile(configfile string) error {
+	// Seems not to be getting done when running tests.
+	fmt.Printf("In LoadConfigFile.  File being loaded %#v\n", configfile)
 	var err error
 
 	Config, err = fileutil.LoadConfig(configfile, DefaultConfig)
@@ -136,6 +138,7 @@ func LoadConfigFile(configfile string) error {
 LoadDefaultConfig loads the default configuration.
 */
 func LoadDefaultConfig() {
+	fmt.Printf("In LoadDefaultConfig.\n")
 	data := make(map[string]interface{})
 	for k, v := range DefaultConfig {
 		data[k] = v

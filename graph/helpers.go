@@ -15,6 +15,7 @@ import (
 	"encoding/binary"
 	"encoding/gob"
 	"fmt"
+	"hash/fnv"
 	"strings"
 
 	"github.com/rhedin/Abe_common/stringutil"
@@ -210,7 +211,7 @@ func (gm *Manager) getNodeStorageHTree(part string, kind string,
 
 	// Return the actual storage
 
-	gs := gm.gs.StorageManager(part+kind+StorageSuffixNodes, create)
+	gs := gm.gs.StorageManager(caseSensitiveName(part, kind, StorageSuffixNodes), create)
 	if gs == nil {
 		return nil, nil, nil
 	}
@@ -268,7 +269,7 @@ func (gm *Manager) getEdgeStorageHTree(part string, kind string, create bool) (*
 
 	// Return the actual storage
 
-	gs := gm.gs.StorageManager(part+kind+StorageSuffixEdges, create)
+	gs := gm.gs.StorageManager(caseSensitiveName(part, kind, StorageSuffixEdges), create)
 	if gs == nil {
 		return nil, nil
 	}
@@ -313,7 +314,7 @@ func (gm *Manager) getIndexHTree(part string, kind string, create bool, name str
 		}
 	}
 
-	gs := gm.gs.StorageManager(part+kind+suffix, create)
+	gs := gm.gs.StorageManager(caseSensitiveName(part, kind, suffix), create)
 	if gs == nil {
 		return nil, nil
 	}
@@ -325,7 +326,7 @@ func (gm *Manager) getIndexHTree(part string, kind string, create bool, name str
 flushNodeStorage flushes a node storage.
 */
 func (gm *Manager) flushNodeStorage(part string, kind string) error {
-	if sm := gm.gs.StorageManager(part+kind+StorageSuffixNodes, false); sm != nil {
+	if sm := gm.gs.StorageManager(caseSensitiveName(part, kind, StorageSuffixNodes), false); sm != nil {
 		if err := sm.Flush(); err != nil {
 			return &util.GraphError{Type: util.ErrFlushing, Detail: err.Error()}
 		}
@@ -337,7 +338,7 @@ func (gm *Manager) flushNodeStorage(part string, kind string) error {
 flushNodeIndex flushes a node index.
 */
 func (gm *Manager) flushNodeIndex(part string, kind string) error {
-	if sm := gm.gs.StorageManager(part+kind+StorageSuffixNodesIndex, false); sm != nil {
+	if sm := gm.gs.StorageManager(caseSensitiveName(part, kind, StorageSuffixNodesIndex), false); sm != nil {
 		if err := sm.Flush(); err != nil {
 			return &util.GraphError{Type: util.ErrFlushing, Detail: err.Error()}
 		}
@@ -349,7 +350,7 @@ func (gm *Manager) flushNodeIndex(part string, kind string) error {
 flushEdgeStorage flushes an edge storage.
 */
 func (gm *Manager) flushEdgeStorage(part string, kind string) error {
-	if sm := gm.gs.StorageManager(part+kind+StorageSuffixEdges, false); sm != nil {
+	if sm := gm.gs.StorageManager(caseSensitiveName(part, kind, StorageSuffixEdges), false); sm != nil {
 		if err := sm.Flush(); err != nil {
 			return &util.GraphError{Type: util.ErrFlushing, Detail: err.Error()}
 		}
@@ -361,7 +362,7 @@ func (gm *Manager) flushEdgeStorage(part string, kind string) error {
 flushEdgeIndex flushes an edge index.
 */
 func (gm *Manager) flushEdgeIndex(part string, kind string) error {
-	if sm := gm.gs.StorageManager(part+kind+StorageSuffixEdgesIndex, false); sm != nil {
+	if sm := gm.gs.StorageManager(caseSensitiveName(part, kind, StorageSuffixEdgesIndex), false); sm != nil {
 		if err := sm.Flush(); err != nil {
 			return &util.GraphError{Type: util.ErrFlushing, Detail: err.Error()}
 		}
@@ -373,7 +374,7 @@ func (gm *Manager) flushEdgeIndex(part string, kind string) error {
 rollbackNodeStorage rollbacks a node storage.
 */
 func (gm *Manager) rollbackNodeStorage(part string, kind string) error {
-	if sm := gm.gs.StorageManager(part+kind+StorageSuffixNodes, false); sm != nil {
+	if sm := gm.gs.StorageManager(caseSensitiveName(part, kind, StorageSuffixNodes), false); sm != nil {
 		if err := sm.Rollback(); err != nil {
 			return &util.GraphError{Type: util.ErrRollback, Detail: err.Error()}
 		}
@@ -385,7 +386,7 @@ func (gm *Manager) rollbackNodeStorage(part string, kind string) error {
 rollbackNodeIndex rollbacks a node index.
 */
 func (gm *Manager) rollbackNodeIndex(part string, kind string) error {
-	if sm := gm.gs.StorageManager(part+kind+StorageSuffixNodesIndex, false); sm != nil {
+	if sm := gm.gs.StorageManager(caseSensitiveName(part, kind, StorageSuffixNodesIndex), false); sm != nil {
 		if err := sm.Rollback(); err != nil {
 			return &util.GraphError{Type: util.ErrRollback, Detail: err.Error()}
 		}
@@ -397,7 +398,7 @@ func (gm *Manager) rollbackNodeIndex(part string, kind string) error {
 rollbackEdgeStorage rollbacks an edge storage.
 */
 func (gm *Manager) rollbackEdgeStorage(part string, kind string) error {
-	if sm := gm.gs.StorageManager(part+kind+StorageSuffixEdges, false); sm != nil {
+	if sm := gm.gs.StorageManager(caseSensitiveName(part, kind, StorageSuffixEdges), false); sm != nil {
 		if err := sm.Rollback(); err != nil {
 			return &util.GraphError{Type: util.ErrRollback, Detail: err.Error()}
 		}
@@ -409,7 +410,7 @@ func (gm *Manager) rollbackEdgeStorage(part string, kind string) error {
 rollbackEdgeIndex rollbacks an edge index.
 */
 func (gm *Manager) rollbackEdgeIndex(part string, kind string) error {
-	if sm := gm.gs.StorageManager(part+kind+StorageSuffixEdgesIndex, false); sm != nil {
+	if sm := gm.gs.StorageManager(caseSensitiveName(part, kind, StorageSuffixEdgesIndex), false); sm != nil {
 		if err := sm.Rollback(); err != nil {
 			return &util.GraphError{Type: util.ErrRollback, Detail: err.Error()}
 		}
@@ -523,4 +524,27 @@ func stringToMap(mapString string) map[string]string {
 	}
 
 	return stringmap
+}
+
+// caseSensitiveName returns a filename that is guaranteed to be different
+// on case-insensitive filesystems (macOS, Windows) whenever two kinds differ
+// only by case.
+//
+// Example:
+//
+//	kind "Line"   → mainLine4c69.nodes
+//	kind "line"   → mainline56d1.nodes
+func caseSensitiveName(part, kind, suffix string) string {
+	h := fnv.New32a()
+	h.Write([]byte(kind))
+	hashStr := fmt.Sprintf("%08x", h.Sum32())[:4] // exactly 4 hex characters
+
+	return part + kind + hashStr + suffix
+}
+
+// In like 1 or 2 cases out of hundreds, someone assembles a filename for storage
+// outside of the graph package.  And we want them to assemble it the exact
+// same way as everyone else.  The case I've found is in api/v1/index_test.go.
+func CaseSensitiveName(part, kind, suffix string) string {
+	return caseSensitiveName(part, kind, suffix)
 }

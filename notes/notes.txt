@@ -1,0 +1,207 @@
+I discovered that the github.com/krotik version of eliasdb and ecal was missing some useful development that was done in the devt.de/krotik version. 
+I had forked the github.com/krotik versions of eliasdb and ecal to github.com/rhedin . 
+So I destroyed those github.com/rhedin versions and cloned new versions from devt.de/krotik . 
+I named the new versions Abe_eliasdb and Abe_ecal, not plain eliasdb and ecal. 
+Also, Matthias Ladkau just copied versions he felt were "significant" from devt.de/krotik to github.com/krotik. 
+All the steps in between were missing from the github version. 
+
+
+Ha!  The scripts (and probably other things) in these directories refer to other directories by name. 
+So my cleverly renamed directories (Abe_eliasdb) won't work. 
+Luckily, Grok tells me internally git keeps all the references relatively, so I can rename the directories 
+with impunity. 
+
+rickhedin@Ricks-MacBook-Pro chat % sdiff start_console.sh start.sh 
+#!/bin/sh                                                       #!/bin/sh
+cd "$(dirname "$0")"                                            cd "$(dirname "$0")"
+                                                                
+                                                              > if ! [ -d "run" ]; then
+                                                              >   mkdir -p run/web
+                                                              >   mkdir -p run/scripts
+                                                              >   cp -fR res/chat/* run/web
+                                                              >   cp -fR res/scripts/* run/scripts
+                                                              >   cp -fR res/eliasdb.config.json run
+                                                              >   cp -fR res/access.db run
+                                                              > fi
+cd run                                                          cd run
+../../../eliasdb console                                      | ../../../eliasdb server     <-----  See? 
+rickhedin@Ricks-MacBook-Pro chat % 
+rickhedin@Ricks-MacBook-Pro chat % 
+rickhedin@Ricks-MacBook-Pro chat % ./start.sh 
+./start.sh: line 13: ../../../eliasdb: No such file or directory
+rickhedin@Ricks-MacBook-Pro chat % pwd
+/Users/rickhedin/work/251222/Abe_eliasdb/examples/chat
+rickhedin@Ricks-MacBook-Pro chat % 
+rickhedin@Ricks-MacBook-Pro chat % 
+rickhedin@Ricks-MacBook-Pro chat % cd ..
+rickhedin@Ricks-MacBook-Pro examples % cd ..
+rickhedin@Ricks-MacBook-Pro Abe_eliasdb % cd ..
+rickhedin@Ricks-MacBook-Pro 251222 % 
+rickhedin@Ricks-MacBook-Pro 251222 % 
+rickhedin@Ricks-MacBook-Pro 251222 % mv Abe_eliasdb eliasdb      <-----  See? 
+rickhedin@Ricks-MacBook-Pro 251222 % mv Abe_ecal    ecal 
+
+
+
+The kinds are in alphabetical order.  The keys are not. 
+
+Processing a node: GraphNode:
+     key : 456
+    kind : Author
+    name : Hans
+
+Processing an edge: GraphEdge:
+                  key : MyOnlySong3
+                 kind : Wrote
+        end1cascading : true
+    end1cascadinglast : false
+              end1key : 456
+             end1kind : Author
+             end1role : Author
+        end2cascading : false
+    end2cascadinglast : false
+              end2key : MyOnlySong3
+             end2kind : Song
+             end2role : Song
+
+Processing a node: GraphNode:
+     key : 000
+    kind : Author
+    name : John
+
+
+----------------
+
+
+This mystified me.  I didn't see any change to Abe_common/httputil/httpserver.go 
+that involved the configuration file.  Although I saw specific, unique config 
+files in api/ac/ and in api/.
+
+diff --git a/api/ac/access_test.go b/api/ac/access_test.go
+index fedd435..012580a 100644
+--- a/api/ac/access_test.go
++++ b/api/ac/access_test.go
+@@ -29,6 +29,7 @@ import (
+        "github.com/rhedin/Abe_common/httputil/auth"
+        "github.com/rhedin/Abe_common/stringutil"
+        "github.com/rhedin/Abe_eliasdb/api"
++       "github.com/rhedin/Abe_eliasdb/config"
+ )
+ 
+ const TESTPORT = ":9090"
+@@ -154,6 +155,9 @@ func startServer() (*httputil.HTTPServer, *sync.WaitGroup) {
+        var wg sync.WaitGroup
+        wg.Add(1)
+ 
++       // I changed httputil/httpserver.go such that it needs the configuration values set.
++       config.LoadConfigFile(config.DefaultConfigFile)
++
+        go hs.RunHTTPServer(TESTPORT, &wg)
+ 
+        wg.Wait()
+diff --git a/api/rest_test.go b/api/rest_test.go
+index 6b4c5bb..dfeb1f8 100644
+--- a/api/rest_test.go
++++ b/api/rest_test.go
+@@ -262,6 +262,9 @@ func startServer() (*httputil.HTTPServer, *sync.WaitGroup) {
+        var wg sync.WaitGroup
+        wg.Add(1)
+ 
++       // I changed httputil/httpserver.go such that it needs the configuration values set.
++       config.LoadConfigFile(config.DefaultConfigFile)
++
+        go hs.RunHTTPServer(TESTPORT, &wg)
+ 
+        wg.Wait()
+
+--
+
+Lookee here.  We had some debugging writes in httpserver.go briefly.  That's why 
+access_test.go and rest_test.go were changed.  But the debugging writes were 
+removed, and the changes to accommodate them were left. 
+
+rickhedin@Ricks-MacBook-Pro Abe_eliasdb % 
+rickhedin@Ricks-MacBook-Pro Abe_eliasdb % 
+rickhedin@Ricks-MacBook-Pro Abe_eliasdb % ls -lht ../Abe_common/httputil 
+total 80
+-rw-r--r--  1 rickhedin  staff   8.5K Jun  8 19:51 httpserver.go
+-rw-r--r--  1 rickhedin  staff   9.3K Jun  8 19:50 _httpserver_260608_1950.go
+-rw-r--r--  1 rickhedin  staff   6.3K Feb 12 07:20 httpserver_test.go
+-rw-r--r--  1 rickhedin  staff   3.2K Jan  2 15:59 util_test.go
+-rw-r--r--  1 rickhedin  staff   2.4K Jan  2 15:59 util.go
+drwxr-xr-x  6 rickhedin  staff   192B Jan  2 15:59 user
+drwxr-xr-x  8 rickhedin  staff   256B Jan  2 15:59 auth
+drwxr-xr-x  4 rickhedin  staff   128B Jan  2 15:59 access
+rickhedin@Ricks-MacBook-Pro Abe_eliasdb % diff -C 5 ../Abe_common/httputil/httpserver.go ../Abe_common/httputil/_httpserver_260608_1950.go 
+*** ../Abe_common/httputil/httpserver.go	2026-06-08 19:51:04.774106550 -0500
+--- ../Abe_common/httputil/_httpserver_260608_1950.go	2026-06-08 19:50:23.062478714 -0500
+***************
+*** 200,209 ****
+--- 200,215 ----
+  			fmt.Printf("     %d. -->%s<--\n", index, origin)
+  		}
+  	}
+  	// I wasn't sure I was understanding how Go printed slices using %v.
+  
++ 	fmt.Printf("** temporary **   There's some problem with config.CORSDebug.  config.CORSDebug = -->%#v<--  config.DefaultConfig[\"CORSDebug\"] = -->%#v<--\n", config.CORSDebug, config.DefaultConfig["CORSDebug"])
++ 	fmt.Printf("** temporary **   config.CORSAllowedOrigins = -->%#v<--  config.DefaultConfig[\"CORSAllowedOrigins\"] = -->%#v<--\n", config.CORSAllowedOrigins, config.DefaultConfig["CORSAllowedOrigins"])
++ 	fmt.Printf("** temporary **   allowedOrigins = -->%#v<--\n", allowedOrigins)
++ 	fmt.Printf("** temporary **   config.Config[\"CORSDebug\"] = -->%#v<--  config.Config[\"CORSAllowedOrigins\"] = -->%#v<--\n", config.Config["CORSDebug"], config.Config["CORSAllowedOrigins"])
++ 	fmt.Printf("** temporary **   config.Bool(config.CORSDebug) = -->%#v<--\n", config.Bool(config.CORSDebug))
++ 
+  	c := cors.New(cors.Options{
+  		AllowedOrigins:   allowedOrigins,
+  		AllowedMethods:   []string{"GET", "POST", "OPTIONS", "PUT", "DELETE"},
+  		AllowedHeaders:   []string{"Accept", "Content-Type", "Authorization"},
+  		ExposedHeaders:   []string{"Link"},
+rickhedin@Ricks-MacBook-Pro Abe_eliasdb % 
+rickhedin@Ricks-MacBook-Pro Abe_eliasdb % 
+
+
+--
+
+
+Note to self:  When you have a paragraph, and multiple lines, what if you have a line that 
+hasn't yet had its 10 chars of text removed, when the 10 chars have already been removed 
+from the paragraph.  If the line "refers" to its text in the paragraph, and the paragraph 
+has already been updated, where does the text reside?  For the line. 
+
+In the piece of work.  All deletions comes with the corresponding undo operation. 
+Insertion, in this case.  The text for the insertion is in the item of work. 
+
+So the line, and the item of work together, comprise the current (full) state 
+of the line. 
+
+The work item represents time.  The piece that is missing in current time, 
+is still preserve in the bubble of past time, captured or represented by 
+the item of work. 
+
+The time of the paragraph (current)
+The time of the line (past)
+The time of the work item (bridges between past and current)
+
+Apply the redo (or in this case, the do) brings the line from the past 
+to the present (the current).  Applying the undo brings the line from 
+current to past.  All data needs for the transformation has to reside 
+in the piece of work. 
+
+There should also be a piece of work associated with the paragraph. 
+Forward and back. 
+
+For a while, the "start here and have this length" of the line will 
+be wrong.  It will not correspond to the present paragraph. 
+
+Perhaps the lines should be changed instantly.  And the items of 
+work represent a time lag, or a distance difference, between the 
+client view and the server view. 
+
+And perhaps they shouldn't be associated with 10-line blocks of lines. 
+But should be free-floating.  The work item can address the lines 
+(in the client). 
+
+It has to be a work-item anyway.  Because it has to be shipped 
+to the client. 
+
+(and the client decides whether it another ideogram going down, 
+or another letter going right?)
+

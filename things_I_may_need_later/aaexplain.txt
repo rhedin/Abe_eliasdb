@@ -1,0 +1,332 @@
+migrate.go is a file Grok made me.  It changed the names of all the files 
+the database uses. 
+
+Here is what Grok had to say about the script: 
+
+	Save this as migrate.go in the root of your Abe_eliasdb project.
+	First run it in dry-run mode (the default) on your main db/ folder.
+	Review the output carefully.
+	When you're happy, run it with -dry-run=false.
+
+	Would you like me to also add:
+
+	A confirmation prompt before doing real renames?
+	Sorting of the planned changes so it's easier to review?
+	Handling for any other partitions besides main?
+
+	Just say the word and I’ll tweak it further.
+
+I discovered that when I gave my spreadsheet endpoint 'line' as the node kind 
+I wanted the nodes for, I got different behavior than if I typed 'Line' as the 
+node kind. 
+
+The Line node type actually existed.  But when I looked for the line node type, 
+it found files that were written to the disk for the Line node type.  Then, 
+using those files, it went through all the keys for that kind, and returned 
+the corresponding nodes.  There were no corresponding nodes. 
+
+The problem is that Matthias developed Eliasdb on a linux system, and didn't 
+notice that on other systems, like Windows and Macintosh, mainLine.nodeidx.db.0 
+and mainline.nodeidx.db.0 are the same file.  So it gets stored as 
+mainLine.nodeidx.db.0 and read as mainline.nodeidx.db.0 and the program has no idea. 
+
+Grok and I inserted a hash of the kind in the filename, so that even on a 
+Windows system, the two files are distinct.  mainLine9808.nodeidx.db.0 
+
+Then we had to change the references to the file to use the revised file name. 
+Those changes were mostly in graph/helpers.go.  Then we had to change all the tests. 
+
+There were quite a few tests that needed changing.  And we were worried that 
+we would overlook some obscure reference.  So after we fixed all the tests 
+that were failing, we cross-checked multiple ways.  But I am still not confident 
+that I caught all the cases. 
+
+Mostly, we passed the three pieces of the file name -- partition, kind, and 
+type-identifying suffix -- to a function caseSensitiveName, that spit out a 
+name with a hash. 
+
+*  *  *  *  *  *  *  *  *  * 
+
+---
+
+Would you like me to also add a small main() example at the bottom of the generated glyphpaths.go showing how to use it? Or are you good to go with this?
+
+                    I think I'm good. But if an example is on offer, I should accept your offer.
+
+You're welcome — happy to add it.
+
+Here's a clean little usage example you can paste at the very bottom of the generated glyphpaths.go file (after the closing } of the map). 
+It’s commented out so it won’t interfere with importing the map, but you can uncomment it to play with it.
+
+Go
+/*
+Example usage (uncomment to test):
+
+package main
+
+import "fmt"
+
+func main() {
+	// Get the relative path data for any character
+	pathA := glyphPaths['A']
+	pathQ := glyphPaths['Q']
+	pathSpace := glyphPaths[' ']
+
+	fmt.Println("Path for 'A':", pathA)
+	fmt.Println("Path for 'Q':", pathQ)
+	fmt.Println("Path for space:", pathSpace) // usually empty or just the advance
+
+	// In your real code you would feed these strings into your
+	// drawing layer (Canvas Path2D, SVG <path>, or a custom parser).
+	// Because every string ends with "m 8 0", you can just
+	// sequentially execute them and the pen will advance automatically.
+}
+*/
+
+Just drop that at the end of glyphpaths.go and you’re set.
+You now have everything:
+
+* The full normalize_glyphs.go tool (SVG + Go map modes)
+* A ready-to-use glyphPaths map
+* A little example showing how to consume it
+
+---
+
+Quick summary of what the tool does
+
+* Reads your original character-definitions.html
+* For every <g id="asciiXX">:
+    * Bakes the old translate(tx, ty) values into the path coordinates
+    * Converts the path from absolute (M/L/Q/A) to relative (m/l/q/a)
+    * Appends m 8 0 at the end of each glyph so the pen is left at the next cell
+
+* Removes the transform attributes
+* Emits either/both:
+    * A clean character-definitions-relative.html you can use directly in the browser
+    * A glyphpaths.go file with a ready-to-compile map[rune]string
+
+The core transformation logic we built and tested earlier is unchanged — this just adds the convenient dual-output mode you asked for.
+     You now have exactly the clean “pick a spot and rattle off characters” data in both the format you were already using (SVG) 
+and the format that will be easiest if you do more of the work from Go on the server.
+     Would you like any tweaks (different map name, only printable ASCII, comments with the original character, etc.)? 
+Or are you good to compile/run it on the real file?
+
+---
+
+Writing this kind of backward, but here's what's going on.  I made a complete character set in svg. 
+I spent a lot of time tuning each character so that it lined up nicely, and all the characters, 
+which were individual svg paths, appeared to be a unified character set. 
+
+When I displayed them on the screen, I displayed them using a use with x and y coordinates attached. 
+(The paths were defined earlier in a def section)  The paths, as they came out of the tool (see 
+Abe_google-font-to-svg-path) were defined absolutely.  And I added transforms to line them up. 
+As they came out of the tool, each path was crowded to the top of its character box. 
+
+The idea was, that if I defined the paths relatively, I would be able to put the characters out there 
+wherever they should go, and wouldn't have to specify x,y coordinates.  And if I inserted a character, 
+the coordinates of cells on the right wouldn't have to be changed.  Mostly, the concern was responding 
+quickly as a person typed. 
+
+But that relies on a misconception.  If the cell on the left ends up on the pixel one to the right 
+of its top right pixel, and the cell on the right assumes it starts at its top left pixel, that doesn't 
+result in the cell on the right appearing to the right of the cell on the left.  They end up on top 
+of each other. 
+Each path is independent.  Even if the previous cell ends up in the right position, it has no 
+effect on the following cell.  (And who said the cells would be painted in left to right order?)
+
+So the whole scheme fails.  Grok says modern processors are so fast, that updating all the cells 
+to the right is no problem.  That may be true.  We'll see. 
+
+But I thought I should preserve the work.  It may be useful later. 
+Anyway, it shows how to merge a transform into the coordinates themselves.  And how to 
+transform a set of absolute coordinates into a set of relative coordinates. 
+
+So there's normalize_glyphs_v1.go, normalize_glyphs_v2.go, and normalize_glyphs.go. 
+We went through a couple of iterations before arriving at the final program. 
+
+---
+
+I realized that Grok gave me one case, worked out, step-by-step.  I thought I'd better record it, 
+since it shows what's actually happening, and how it looks. 
+
+Updated full procedure (now complete)
+
+For every glyph in character-definitions.html:
+
+    1. Read the old transform="translate(tx, ty)" on its <g>.
+    2. Bake those values into the path data (add tx to every X number, ty to every Y number). This is 
+	   exactly what we discussed before.
+    3. Convert the now-baked absolute path to relative form:
+        a. Keep a running currentX, currentY (start at 0,0 for the cell).
+        b. First M x y → m x y (relative move from wherever you place the glyph).
+        c. Every subsequent absolute point → compute delta from previous current point, output lowercase command 
+		   (l, q, a) with the deltas, update current.
+        d. Z stays z (closePath).
+        e. A arcs become a with the same rx/ry/rotation/flags but dx dy endpoint delta.
+    4. After the last command of the glyph (including any z), append one final relative move: m 8 0.
+	   This guarantees the current point ends at (8, 0) relative to the cell origin — exactly the top-left 
+	   of the next cell.
+
+Result: every character is now a self-contained relative path that:
+
+    1. Draws itself correctly positioned inside its 0–7 × 0–15 cell (because we baked the old visual offsets), and
+    2. Leaves the pen at +8 in x so the next character starts in the right place with zero extra code.
+
+Tiny worked example (apostrophe from your file)
+
+Original (with its translate):
+XML
+<g id="ascii27" transform="translate(3.30,2.35)">
+  <path d="M 0 0 L 1.408 0 Q 1.408 0.96 1.392 1.536 ... Q 0.002 1.022 0 0.198 A 108.186 108.186 0 0 1 0 0 Z"/>
+</g>
+
+After step 2 (baked):
+M 3.3 2.35 L 4.708 2.35 Q 4.708 3.31 4.692 3.886 ...
+
+After steps 3+4 (relative + final advance):
+XML
+m 3.3 2.35
+l 1.408 0
+q 0 0.96 -0.016 0.536
+q -0.016 0.576 -0.048 0.968
+q -0.048 0.968 -0.096 1.328
+q -0.096 1.328 -0.144 1.688
+q -0.144 1.688 -0.192 2.2
+l -0.864 0
+q -0.048 -0.512 -0.096 -0.872
+... (rest of the deltas)
+z
+m 8 0
+
+When your drawing code does:
+JavaScript
+ctx.translate(cellX, cellY);
+executeRelativePath(glyphData);   // the string above
+// now current point is automatically at (cellX+8, cellY)
+
+You can immediately draw the next character. No offset map, no manual cellX += 8.
+
+---
+
+Um, I forgot how large these paths for characters are. 
+
+It militates against sending the whole thing up, each time. 
+
+Here's a sample of complicated (large), of simple (small-ish), and of something that 
+seems to me should be fairly simple, but is in fact pretty large.  Be sure and 
+engage word wrap. 
+
+<svg xmlns="http://www.w3.org/2000/svg">
+   <defs>
+       <!-- ampersand -->
+       <g id="ascii26" fill-rule="evenodd" transform="translate(0.55,2.90)">
+           <path
+               d="M 7.056 9.456 L 6.032 10.288 L 5.184 8.944 Q 4.864 9.344 4.44 9.64 Q 4.016 9.936 3.536 10.088 Q 3.056 10.24 2.544 10.24 A 2.932 2.932 0 0 1 1.815 10.153 A 2.414 2.414 0 0 1 1.216 9.912 Q 0.64 9.584 0.32 9.024 Q 0 8.464 0 7.792 A 3.445 3.445 0 0 1 0.086 7.012 A 3.129 3.129 0 0 1 0.136 6.824 Q 0.272 6.368 0.52 5.96 A 3.709 3.709 0 0 1 1.079 5.255 A 4.156 4.156 0 0 1 1.136 5.2 Q 1.504 4.848 1.952 4.592 A 6.743 6.743 0 0 1 1.532 4.035 Q 1.281 3.66 1.128 3.304 Q 0.864 2.688 0.864 2.128 Q 0.864 1.68 1.04 1.288 Q 1.216 0.896 1.528 0.608 Q 1.84 0.32 2.248 0.16 A 2.359 2.359 0 0 1 3.091 0 A 2.674 2.674 0 0 1 3.12 0 Q 3.776 0 4.264 0.312 Q 4.752 0.624 5.032 1.104 Q 5.312 1.584 5.312 2.128 Q 5.312 2.544 5.184 2.952 Q 5.056 3.36 4.832 3.712 Q 4.608 4.064 4.304 4.36 Q 4 4.656 3.632 4.848 L 5.312 7.184 Q 5.488 6.976 5.608 6.784 Q 5.728 6.592 5.808 6.408 A 1.997 1.997 0 0 0 5.917 6.086 A 1.83 1.83 0 0 0 5.928 6.04 Q 5.968 5.856 5.984 5.664 A 0.302 0.302 0 0 1 6 5.568 Q 6.014 5.526 6.052 5.485 A 0.381 0.381 0 0 1 6.064 5.472 L 7.184 6.24 Q 7.008 6.576 6.816 6.888 Q 6.624 7.2 6.424 7.496 A 17.964 17.964 0 0 1 6.014 8.077 A 19.17 19.17 0 0 1 6 8.096 L 7.056 9.456 Z M 4.496 8.096 L 2.608 5.488 Q 2.304 5.664 2.08 5.912 Q 1.856 6.16 1.696 6.44 Q 1.536 6.72 1.448 7.016 Q 1.36 7.312 1.36 7.616 Q 1.36 7.936 1.464 8.2 A 1.584 1.584 0 0 0 1.691 8.6 A 1.476 1.476 0 0 0 1.744 8.664 Q 1.92 8.864 2.152 8.976 Q 2.384 9.088 2.672 9.088 Q 3.024 9.088 3.336 8.968 A 2.39 2.39 0 0 0 3.79 8.733 A 2.829 2.829 0 0 0 3.944 8.624 Q 4.24 8.4 4.496 8.096 Z M 2.992 4.016 Q 3.264 3.872 3.472 3.68 Q 3.68 3.488 3.824 3.24 Q 3.968 2.992 4.04 2.728 A 2.079 2.079 0 0 0 4.1 2.423 A 1.71 1.71 0 0 0 4.112 2.224 Q 4.112 1.744 3.832 1.416 A 0.955 0.955 0 0 0 3.55 1.186 A 0.877 0.877 0 0 0 3.136 1.088 A 1.048 1.048 0 0 0 2.778 1.148 A 0.97 0.97 0 0 0 2.616 1.224 Q 2.384 1.36 2.248 1.6 A 1.039 1.039 0 0 0 2.125 1.968 A 1.347 1.347 0 0 0 2.112 2.16 Q 2.112 2.385 2.189 2.652 A 2.531 2.531 0 0 0 2.2 2.688 Q 2.288 2.976 2.496 3.304 Q 2.704 3.632 2.992 4.016 Z" />
+       </g>
+
+       <!-- apostrophe -->
+       <g id="ascii27" fill-rule="evenodd" transform="translate(3.30,2.35)">
+           <path
+               d="M 0 0 L 1.408 0 Q 1.408 0.96 1.392 1.536 Q 1.376 2.112 1.328 2.504 Q 1.28 2.896 1.232 3.256 Q 1.184 3.616 1.136 4.128 L 0.272 4.128 Q 0.224 3.616 0.176 3.256 Q 0.128 2.896 0.08 2.512 Q 0.032 2.128 0.016 1.544 Q 0.002 1.022 0 0.198 A 108.186 108.186 0 0 1 0 0 Z" />
+       </g>
+       <!-- In this case, 2.3 was plainly too high, and 2.4 was plainly too low. 
+            At this point, instead of going to the nearest 0.1, we started going 
+            to the nearest 0.05 -->
+       <!-- I went back and fixed the previous ones.  ascii21 - ascii26 -->
+
+       <!-- asterisk -->
+          ... 
+       <!-- at_sign -->
+          ... 
+       <!-- backslash -->
+          ... 
+       <!-- capital_A -->
+          ... 
+       <!-- capital_B -->
+       <g id="ascii42" fill-rule="evenodd" transform="translate(0.70,3.00)">
+           <path
+               d="M 2.896 9.968 L 0 9.968 L 0 0 L 2.912 0 Q 3.776 0 4.416 0.176 A 3.608 3.608 0 0 1 4.933 0.359 Q 5.238 0.496 5.472 0.68 A 2.133 2.133 0 0 1 5.925 1.162 A 1.937 1.937 0 0 1 6.088 1.456 A 2.321 2.321 0 0 1 6.278 2.215 A 2.799 2.799 0 0 1 6.288 2.448 Q 6.288 2.896 6.12 3.336 Q 5.952 3.776 5.632 4.12 Q 5.312 4.464 4.832 4.64 Q 5.248 4.8 5.592 5.056 A 2.762 2.762 0 0 1 6.161 5.62 A 2.612 2.612 0 0 1 6.176 5.64 Q 6.416 5.968 6.552 6.352 Q 6.688 6.736 6.688 7.136 A 3.051 3.051 0 0 1 6.61 7.836 A 2.569 2.569 0 0 1 6.456 8.296 Q 6.224 8.816 5.76 9.192 A 2.761 2.761 0 0 1 5.195 9.542 Q 4.914 9.674 4.576 9.768 A 5.162 5.162 0 0 1 3.848 9.912 Q 3.489 9.957 3.085 9.966 A 8.877 8.877 0 0 1 2.896 9.968 Z M 1.344 5.184 L 1.344 8.816 L 3.088 8.816 A 4.139 4.139 0 0 0 3.63 8.782 Q 3.917 8.744 4.163 8.664 A 2.468 2.468 0 0 0 4.232 8.64 A 1.686 1.686 0 0 0 4.684 8.399 A 1.452 1.452 0 0 0 4.992 8.08 A 1.408 1.408 0 0 0 5.207 7.597 Q 5.255 7.402 5.263 7.174 A 2.613 2.613 0 0 0 5.264 7.088 Q 5.264 6.528 5.024 6.104 A 1.502 1.502 0 0 0 4.585 5.623 A 2.067 2.067 0 0 0 4.256 5.432 A 2.238 2.238 0 0 0 3.811 5.282 Q 3.587 5.23 3.32 5.206 A 5.547 5.547 0 0 0 2.816 5.184 L 1.344 5.184 Z M 1.344 1.12 L 1.344 4.08 L 2.752 4.08 A 5.691 5.691 0 0 0 3.229 4.061 Q 3.47 4.041 3.672 3.999 A 2.26 2.26 0 0 0 4.048 3.888 A 1.774 1.774 0 0 0 4.357 3.73 Q 4.532 3.617 4.647 3.471 A 1.01 1.01 0 0 0 4.728 3.352 Q 4.928 3.008 4.928 2.592 A 1.591 1.591 0 0 0 4.889 2.232 A 1.356 1.356 0 0 0 4.816 2.008 Q 4.704 1.744 4.472 1.544 Q 4.24 1.344 3.856 1.232 A 2.565 2.565 0 0 0 3.496 1.156 Q 3.319 1.131 3.117 1.124 A 4.882 4.882 0 0 0 2.928 1.12 L 1.344 1.12 Z" />
+       </g>
+       <!-- here's a case where 3.00 is plainly too high, but 3.05 is plainly too low. 
+            I'm sticking with my "only get it to within 0.05 of the 'correct' answer" pattern. 
+            I strongly suspect the difference won't be visible to a user, we are only 
+            concerned that the image appear within the box, and time spent to achieve 
+            greater accuracy will be time wasted. -->
+
+---
+
+Okay, I talked to Grok again.  It was incredibly hard to make him see the point 
+(you have to really stick with your guns with Grok) but eventually he said that 
+his code was wrong.  You can't just append m 8 0 at the end of any glyph drawn 
+using relative motions, and expect the resulting position to be the upper left 
+corner of the next character cell.  That only works if the glyph ends with 
+z or Z.  
+
+He made a new version of the program, so I designated the former "new version" 
+as v3. 
+
+Here is part of what Grok said to me: 
+
+      Why blindly appending m 8 0 is insufficient
+
+As you correctly pointed out, m 8 0 only moves +8 from wherever the current point happens to be. 
+If the glyph didn’t leave the current point at (0,0), then m 8 0 will not land at (8,0) relative to the origin.
+
+Better implementation in toRelative()
+
+The cleanest fix is to change the end of toRelative() so that instead of always doing:
+Go
+out = append(out, Command{Cmd: 'm', Args: []float64{8, 0}})
+
+We do something like:
+Go
+// After processing all the glyph's commands, force the current point to (8, 0)
+dx := 8 - curX
+dy := 0 - curY
+out = append(out, Command{Cmd: 'm', Args: []float64{dx, dy}})
+
+This keeps everything relative while still achieving your desired behavior: each glyph segment 
+leaves the current point at the top-left of the next cell.
+
+---
+
+Grok gave me a version of normalize_glyphs.go that just applied the transforms.  And doesn't 
+relativize it. 
+
+Grok:  You can use it like this: 
+
+# Bake transforms only, keep absolute paths
+go run normalize_glyphs.go input.html output.html --absolute
+
+# Full original behavior (bake + relative)
+go run normalize_glyphs.go input.html output.html
+
+Grok:  How to use it  (huh.  I guess Grok told me twice)
+
+# Only bake transforms, keep absolute commands (what you want now)
+go run normalize_glyphs.go character-definitions.html output.html --absolute
+
+# Original full behavior (bake + relative + positioning)
+go run normalize_glyphs.go character-definitions.html output.html
+
+---
+
+An important thing Grok told me about a transform=translate(...) on the group. 
+
+What I asked: 
+ 
+(The format of my inserted definition for B above seems to have gotten mangled. Here is is, again.
+<g id="ascii42" fill-rule="evenodd" transform="translate(0.70,3.00)">
+     <path d="..." />
+</g>)
+If I have a transform=translate(...) on the group, is it evaluated once when it is defined, or each time I =use= it?
+
+What Grok answered: 
+
+Good question — this is an important detail.
+Short answer
+The transform="translate(...)" on the <g> inside <defs> is not evaluated only once at definition time.
+It is applied every time you <use> that group. The transform travels with the definition and is re-applied 
+to each new instance created by a <use>.
+
+

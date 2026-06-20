@@ -13,8 +13,8 @@ package graph
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"strconv"
-	"strings"
 	"testing"
 
 	"github.com/rhedin/Abe_eliasdb/graph/data"
@@ -420,31 +420,29 @@ func TestSimpleNodeStorageErrorCases(t *testing.T) {
 		return
 	}
 
-	msm := mgs.StorageManager("testpart"+"testkind"+StorageSuffixNodes,
+	// msm := mgs.StorageManager("testpart"+"testkind"+StorageSuffixNodes,
+	msm := mgs.StorageManager(caseSensitiveName("testpart", "testkind", StorageSuffixNodes),
 		true).(*storage.MemoryStorageManager)
 
 	msm.AccessMap[4] = storage.AccessCacheAndFetchError
 
-	if res, err := gm.readNode("123", "testkind", nil, attTree, valTree); res != nil ||
-		err.Error() != "GraphError: Could not read graph information "+
-			"(Slot not found (mystorage/testparttestkind.nodes - Location:4))" {
-
+	res, err := gm.readNode("123", "testkind", nil, attTree, valTree)
+	matched, _ := regexp.MatchString(`^\QGraphError: Could not read graph information (Slot not found (mystorage/testparttestkind\E(....)?\Q.nodes - Location:4))\E$`, err.Error())
+	if res != nil || !matched {
 		t.Error("Unexpected result:", res, err)
 		return
 	}
 
-	if res, err := gm.writeNode(node1, true, attTree, valTree, nodeAttributeFilter); res != nil ||
-		err.Error() != "GraphError: Could not read graph information "+
-			"(Slot not found (mystorage/testparttestkind.nodes - Location:4))" {
-
+	res, err = gm.writeNode(node1, true, attTree, valTree, nodeAttributeFilter)
+	matched, _ = regexp.MatchString(`^\QGraphError: Could not read graph information (Slot not found (mystorage/testparttestkind\E(....)?\Q.nodes - Location:4))\E$`, err.Error())
+	if res != nil || !matched {
 		t.Error("Unexpected result:", res, err)
 		return
 	}
 
-	if res, err := gm.RemoveNode("testpart", "123", "testkind"); res != nil ||
-		err.Error() != "GraphError: Could not write graph information "+
-			"(Slot not found (mystorage/testparttestkind.nodes - Location:4))" {
-
+	res, err = gm.RemoveNode("testpart", "123", "testkind")
+	matched, _ = regexp.MatchString(`^\QGraphError: Could not write graph information (Slot not found (mystorage/testparttestkind\E(....)?\Q.nodes - Location:4))\E$`, err.Error())
+	if res != nil || !matched {
 		t.Error("Unexpected result:", res, err)
 		return
 	}
@@ -458,18 +456,16 @@ func TestSimpleNodeStorageErrorCases(t *testing.T) {
 
 	msm.AccessMap[3] = storage.AccessCacheAndFetchError
 
-	if res, err := gm.readNode("123", "testkind", nil, attTree, valTree); res != nil ||
-		err.Error() != "GraphError: Could not read graph information "+
-			"(Slot not found (mystorage/testparttestkind.nodes - Location:3))" {
-
+	res, err = gm.readNode("123", "testkind", nil, attTree, valTree)
+	matched, _ = regexp.MatchString(`^\QGraphError: Could not read graph information (Slot not found (mystorage/testparttestkind\E(....)?\Q.nodes - Location:3))\E$`, err.Error())
+	if res != nil || !matched {
 		t.Error("Unexpected result:", res, err)
 		return
 	}
 
-	if res, err := gm.readNode("123", "testkind", []string{"Name"}, attTree, valTree); res != nil ||
-		err.Error() != "GraphError: Could not read graph information "+
-			"(Slot not found (mystorage/testparttestkind.nodes - Location:3))" {
-
+	res, err = gm.readNode("123", "testkind", []string{"Name"}, attTree, valTree)
+	matched, _ = regexp.MatchString(`^\QGraphError: Could not read graph information (Slot not found (mystorage/testparttestkind\E(....)?\Q.nodes - Location:3))\E$`, err.Error())
+	if res != nil || !matched {
 		t.Error("Unexpected result:", res, err)
 		return
 	}
@@ -514,25 +510,28 @@ func TestSimpleNodeStorageErrorCases(t *testing.T) {
 
 	delete(mgs.MainDB(), MainDBNodeCount+"testkind")
 
-	sm := mgs.StorageManager("testpart"+node2.Kind()+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	// sm := mgs.StorageManager("testpart"+node2.Kind()+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	sm := mgs.StorageManager(caseSensitiveName("testpart", node2.Kind(), StorageSuffixNodes), false).(*storage.MemoryStorageManager)
 	sm.AccessMap[1] = storage.AccessCacheAndFetchError
 
-	if err := gm.StoreNode("testpart", node2); err.Error() !=
-		"GraphError: Failed to access graph storage component (Slot not found (mystorage/testparttestkind.nodes - Location:1))" {
-
+	err = gm.StoreNode("testpart", node2)
+	matched, _ = regexp.MatchString(`^\QGraphError: Failed to access graph storage component (Slot not found (mystorage/testparttestkind\E(....)?\Q.nodes - Location:1))\E$`, err.Error())
+	if !matched {
 		t.Error(err)
 		return
 	}
 
 	delete(sm.AccessMap, 1)
 
-	sm = mgs.StorageManager("testpart"+edge.Kind()+StorageSuffixEdges, true).(*storage.MemoryStorageManager)
+	// sm = mgs.StorageManager("testpart"+edge.Kind()+StorageSuffixEdges, true).(*storage.MemoryStorageManager)
+	sm = mgs.StorageManager(caseSensitiveName("testpart", edge.Kind(), StorageSuffixEdges), true).(*storage.MemoryStorageManager)
 	sm.AccessMap[1] = storage.AccessCacheAndFetchError
 
 	sm.SetRoot(RootIDNodeHTree, 1)
 
-	if err := gm.StoreEdge("testpart", edge); err.Error() !=
-		"GraphError: Failed to access graph storage component (Slot not found (mystorage/testpartmyedge.edges - Location:1))" {
+	err = gm.StoreEdge("testpart", edge)
+	matched, _ = regexp.MatchString(`^\QGraphError: Failed to access graph storage component (Slot not found (mystorage/testpartmyedge\E(....)?\Q.edges - Location:1))\E$`, err.Error())
+	if !matched {
 		t.Error(err)
 		return
 	}
@@ -566,9 +565,9 @@ func TestSimpleNodeStorageErrorCases(t *testing.T) {
 
 	msm.AccessMap[3] = storage.AccessFreeError
 
-	if err := gm.StoreNode("testpart", node2); err.Error() !=
-		"GraphError: Could not write graph information (Slot not found (mystorage/testparttestkind.nodes - Location:3))" {
-
+	err = gm.StoreNode("testpart", node2)
+	matched, _ = regexp.MatchString(`^\QGraphError: Could not write graph information (Slot not found (mystorage/testparttestkind\E(....)?\Q.nodes - Location:3))\E$`, err.Error())
+	if !matched {
 		t.Error(err)
 		return
 	}
@@ -589,7 +588,8 @@ func TestSimpleNodeStorageErrorCases(t *testing.T) {
 
 	graphstorage.MgsRetFlushMain = nil
 
-	is := gm.gs.StorageManager("testpart"+"testkind"+StorageSuffixNodesIndex,
+	// is := gm.gs.StorageManager("testpart"+"testkind"+StorageSuffixNodesIndex,
+	is := gm.gs.StorageManager(caseSensitiveName("testpart", "testkind", StorageSuffixNodesIndex),
 		false).(*storage.MemoryStorageManager)
 
 	for i := 0; i < 10; i++ {
@@ -618,9 +618,11 @@ func TestSimpleNodeStorageErrorCases(t *testing.T) {
 		is.AccessMap[uint64(i)] = storage.AccessUpdateError
 	}
 
-	if res, err := gm.RemoveNode("testpart", "789", "testkind"); !strings.Contains(err.Error(),
-		"GraphError: Index error (Slot not found (mystorage/testparttestkind.nodeidx") {
-
+	res, err = gm.RemoveNode("testpart", "789", "testkind")
+	matched, _ = regexp.MatchString(`\QGraphError: Index error (Slot not found (mystorage/testparttestkind\E(....)?\Q.nodeidx\E`, err.Error())
+	// if res, err := gm.RemoveNode("testpart", "789", "testkind"); !strings.Contains(err.Error(), "GraphError . . .
+	// Replacing a Contains.  Thus no anchors at the beginning and end of the regex.
+	if !matched {
 		t.Error("Unexpected result:", res, err)
 		return
 	}
@@ -634,11 +636,11 @@ func TestSimpleNodeStorageErrorCases(t *testing.T) {
 	// This call does delete the node by blowing
 	// away the attribute list - the node is removed though its attribute
 	// values remain in the datastore
+	// rmh  The above was written by Matthias.  Um, is that good?
 
-	if res, err := gm.deleteNode("123", "testkind", attTree, valTree); err.Error() !=
-		"GraphError: Could not write graph information "+
-			"(Slot not found (mystorage/testparttestkind.nodes - Location:9))" {
-
+	res, err = gm.deleteNode("123", "testkind", attTree, valTree)
+	matched, _ = regexp.MatchString(`^\QGraphError: Could not write graph information (Slot not found (mystorage/testparttestkind\E(....)?\Q.nodes - Location:9))\E$`, err.Error())
+	if !matched {
 		t.Error("Unexpected result:", res, err)
 		return
 	}

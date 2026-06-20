@@ -13,7 +13,7 @@ package interpreter
 import (
 	"errors"
 	"fmt"
-	"strings"
+	"regexp"
 	"testing"
 
 	"github.com/rhedin/Abe_eliasdb/eql/parser"
@@ -219,12 +219,14 @@ func TestErrors(t *testing.T) {
 
 	// Test datastore errors
 
-	msm := mgs.StorageManager("main"+"mynode"+graph.StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	// msm := mgs.StorageManager("main"+"mynode"+graph.StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	msm := mgs.StorageManager(graph.CaseSensitiveName("main", "mynode", graph.StorageSuffixNodes), false).(*storage.MemoryStorageManager)
 
 	msm.AccessMap[1] = storage.AccessCacheAndFetchError
 
-	if err := runSearch("get mynode", "", rt); err.Error() !=
-		"GraphError: Failed to access graph storage component (Slot not found (mystorage/mainmynode.nodes - Location:1))" {
+	err = runSearch("get mynode", "", rt)
+	matched, _ := regexp.MatchString(`^\QGraphError: Failed to access graph storage component (Slot not found (mystorage/mainmynode\E(....)?\Q.nodes - Location:1))\E$`, err.Error())
+	if !matched {
 		t.Error(err)
 		return
 	}
@@ -246,8 +248,9 @@ func TestErrors(t *testing.T) {
 
 	msm.AccessMap[3] = storage.AccessCacheAndFetchError
 
-	if err := runSearch("get mynode", "", rt); err.Error() !=
-		"GraphError: Could not read graph information (Slot not found (mystorage/mainmynode.nodes - Location:3))" {
+	err = runSearch("get mynode", "", rt)
+	matched, _ = regexp.MatchString(`^\QGraphError: Could not read graph information (Slot not found (mystorage/mainmynode\E(....)?\Q.nodes - Location:3))\E$`, err.Error())
+	if !matched {
 		t.Error(err)
 		return
 	}
@@ -256,12 +259,14 @@ func TestErrors(t *testing.T) {
 
 	// Test TraverseMulti errors
 
-	msm = mgs.StorageManager("main"+"mynewnode"+graph.StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	// msm = mgs.StorageManager("main"+"mynewnode"+graph.StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	msm = mgs.StorageManager(graph.CaseSensitiveName("main", "mynewnode", graph.StorageSuffixNodes), false).(*storage.MemoryStorageManager)
 
 	msm.AccessMap[5] = storage.AccessCacheAndFetchError // Node 3 attribute lookup
 
-	if err := runSearch("get mynode traverse :::mynewnode traverse :::mynewnode end end", "", rt); err.Error() !=
-		"GraphError: Could not read graph information (Slot not found (mystorage/mainmynewnode.nodes - Location:5))" {
+	err = runSearch("get mynode traverse :::mynewnode traverse :::mynewnode end end", "", rt)
+	matched, _ = regexp.MatchString(`^\QGraphError: Could not read graph information (Slot not found (mystorage/mainmynewnode\E(....)?\Q.nodes - Location:5))\E$`, err.Error())
+	if !matched {
 		t.Error(err)
 		return
 	}
@@ -270,15 +275,17 @@ func TestErrors(t *testing.T) {
 
 	msm.AccessMap[11] = storage.AccessCacheAndFetchError // Traversal spec error
 
-	if err := runSearch("get mynode traverse :::mynewnode traverse :::mynewnode end end", "", rt); err.Error() !=
-		"GraphError: Could not read graph information (Slot not found (mystorage/mainmynewnode.nodes - Location:11))" {
+	err = runSearch("get mynode traverse :::mynewnode traverse :::mynewnode end end", "", rt)
+	matched, _ = regexp.MatchString(`^\QGraphError: Could not read graph information (Slot not found (mystorage/mainmynewnode\E(....)?\Q.nodes - Location:11))\E$`, err.Error())
+	if !matched {
 		t.Error(err)
 		return
 	}
 
 	delete(msm.AccessMap, 11)
 
-	msm = mgs.StorageManager("main"+"myedge"+graph.StorageSuffixEdges, false).(*storage.MemoryStorageManager)
+	// msm = mgs.StorageManager("main"+"myedge"+graph.StorageSuffixEdges, false).(*storage.MemoryStorageManager)
+	msm = mgs.StorageManager(graph.CaseSensitiveName("main", "myedge", graph.StorageSuffixEdges), false).(*storage.MemoryStorageManager)
 
 	msmtree, _ := hash.LoadHTree(msm, msm.Root(graph.RootIDNodeHTree))
 	nm := util.NewNamesManager(mgs.MainDB())
@@ -286,11 +293,20 @@ func TestErrors(t *testing.T) {
 
 	msm.AccessMap[slot] = storage.AccessCacheAndFetchError // Edge attribute
 
-	if err := runSearch("get mynode traverse :::mynewnode end show 1:n:key, 2:n:key, 2:e:key, 2:e:name", "", rt); strings.HasPrefix(err.Error(),
-		"GraphError: Could not read graph information (Slot not found (mystorage/mainmynewnode.nodes - ") {
+	err = runSearch("get mynode traverse :::mynewnode end show 1:n:key, 2:n:key, 2:e:key, 2:e:name", "", rt)
+	matched, _ = regexp.MatchString(`^\QGraphError: Could not read graph information (Slot not found (mystorage/mainmyedge\E(....)?\Q.edges - \E`, err.Error())
+	if !matched {
 		t.Error(err)
 		return
-	}
+	} // Prefix.  ^ front anchor, but not $ back anchor
+	// We got this error when we ran the test.
+	// === RUN   TestErrors
+	//     runtime_test.go:299: GraphError: Could not read graph information (Slot not found (mystorage/mainmyedge7e90.edges - Location:8))
+	// --- FAIL: TestErrors (0.00s)
+	// The way the match was written when the test failed.
+	// matched, _ = regexp.MatchString(`^\QGraphError: Could not read graph information (Slot not found (mystorage/mainmynewnode\E(....)?\Q.nodes - \E`, err.Error())
+	// Grok and I aren't sure why it started reporting the edge where the error actually occurred, rather than the node that was
+	// associated with the edge.
 
 	delete(msm.AccessMap, slot)
 

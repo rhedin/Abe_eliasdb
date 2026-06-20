@@ -224,11 +224,14 @@ Shutting down
 [Cluster] member1: Housekeeping stopped
 [Cluster] member1: Shutdown rpc server on: 127.0.0.1:9030
 [Cluster] member1: Connection closed: 127.0.0.1:9030
+Closing application
 Closing datastore` {
 		t.Error("Unexpected log:", logString)
 		return
 	}
 }
+
+// rmh added Closing application on 6/8/26.
 
 func TestMainErrorCases(t *testing.T) {
 

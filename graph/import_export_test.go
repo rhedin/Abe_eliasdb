@@ -90,7 +90,8 @@ func TestImportExportError(t *testing.T) {
 
 	// Error when reading a node
 
-	msm := gs.StorageManager("main"+"bla"+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	// msm := gs.StorageManager("main"+"bla"+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	msm := gs.StorageManager(caseSensitiveName("main", "bla", StorageSuffixNodes), false).(*storage.MemoryStorageManager)
 	msm.AccessMap[1] = storage.AccessCacheAndFetchSeriousError
 
 	res.Reset()
@@ -108,7 +109,8 @@ func TestImportExportError(t *testing.T) {
 		"test": data.NewGraphNode,
 	}))
 
-	msm = gs.StorageManager("main"+"bla"+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	// msm = gs.StorageManager("main"+"bla"+StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	msm = gs.StorageManager(caseSensitiveName("main", "bla", StorageSuffixNodes), false).(*storage.MemoryStorageManager)
 	msm.AccessMap[6] = storage.AccessCacheAndFetchSeriousError
 
 	res.Reset()
@@ -159,7 +161,8 @@ func TestImportExportError(t *testing.T) {
 
 	// Lookup of relationship should fail
 
-	msm = gs.StorageManager("main"+"xxx"+StorageSuffixEdges, false).(*storage.MemoryStorageManager)
+	// msm = gs.StorageManager("main"+"xxx"+StorageSuffixEdges, false).(*storage.MemoryStorageManager)
+	msm = gs.StorageManager(caseSensitiveName("main", "xxx", StorageSuffixEdges), false).(*storage.MemoryStorageManager)
 
 	msm.AccessMap[1] = storage.AccessCacheAndFetchSeriousError
 

@@ -13,6 +13,7 @@ package graph
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -545,7 +546,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 
 	// Test storage access failures
 
-	sm := gm.gs.StorageManager("main"+"myedge"+StorageSuffixEdgesIndex, false)
+	// sm := gm.gs.StorageManager("main"+"myedge"+StorageSuffixEdgesIndex, false)
+	sm := gm.gs.StorageManager(caseSensitiveName("main", "myedge", StorageSuffixEdgesIndex), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[1] = storage.AccessCacheAndFetchError
 
 	if err := gm.StoreEdge("main", edge); err == nil {
@@ -576,7 +578,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 
 	// Test high level errors
 
-	sm = gm.gs.StorageManager("main"+"mykind"+StorageSuffixNodes, false)
+	// sm = gm.gs.StorageManager("main"+"mykind"+StorageSuffixNodes, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", "mykind", StorageSuffixNodes), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[1] = storage.AccessCacheAndFetchError
 
 	if err := gm.StoreEdge("main", edge); err == nil {
@@ -591,7 +594,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 
 	delete(sm.(*storage.MemoryStorageManager).AccessMap, 1)
 
-	sm = gm.gs.StorageManager("main"+"myedge"+StorageSuffixEdges, false)
+	// sm = gm.gs.StorageManager("main"+"myedge"+StorageSuffixEdges, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", "myedge", StorageSuffixEdges), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[1] = storage.AccessCacheAndFetchError
 
 	if _, err := gm.RemoveEdge("main", edge.Key(), edge.Kind()); err == nil {
@@ -606,7 +610,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 
 	delete(sm.(*storage.MemoryStorageManager).AccessMap, 1)
 
-	sm = gm.gs.StorageManager("main"+"mynewkind"+StorageSuffixNodes, false)
+	// sm = gm.gs.StorageManager("main"+"mynewkind"+StorageSuffixNodes, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", "mynewkind", StorageSuffixNodes), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[1] = storage.AccessCacheAndFetchError
 
 	if err := gm.StoreEdge("main", edge); err == nil {
@@ -636,7 +641,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 		return
 	}
 
-	sm = gm.gs.StorageManager("main"+"myedge"+StorageSuffixEdges, false)
+	// sm = gm.gs.StorageManager("main"+"myedge"+StorageSuffixEdges, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", "myedge", StorageSuffixEdges), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[1] = storage.AccessCacheAndFetchError
 
 	traverseSpec := edge.End2Role() + ":" + edge.Kind() + ":" + edge.End1Role() + ":" + edge.End1Kind()
@@ -649,7 +655,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 
 	delete(sm.(*storage.MemoryStorageManager).AccessMap, 1)
 
-	sm = gm.gs.StorageManager("main"+"myedge"+StorageSuffixEdgesIndex, false)
+	// sm = gm.gs.StorageManager("main"+"myedge"+StorageSuffixEdgesIndex, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", "myedge", StorageSuffixEdgesIndex), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[5] = storage.AccessInsertError
 
 	edge.SetAttr("name", "New edge name")
@@ -687,7 +694,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 
 	// Test error case of index lookup
 
-	sm = gm.gs.StorageManager("main"+edge.Kind()+StorageSuffixEdgesIndex, false)
+	// sm = gm.gs.StorageManager("main"+edge.Kind()+StorageSuffixEdgesIndex, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", edge.Kind(), StorageSuffixEdgesIndex), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[1] = storage.AccessCacheAndFetchError
 
 	if _, err := gm.EdgeIndexQuery("main", "myedge"); err == nil {
@@ -700,7 +708,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 	_, nodeTree, _ := gm.getNodeStorageHTree("main", edge.End2Kind(), false)
 	_, loc, _ := nodeTree.GetValueAndLocation([]byte(specsNode2Key))
 
-	sm = gm.gs.StorageManager("main"+edge.End2Kind()+StorageSuffixNodes, false)
+	// sm = gm.gs.StorageManager("main"+edge.End2Kind()+StorageSuffixNodes, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", edge.End2Kind(), StorageSuffixNodes), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[loc] = storage.AccessCacheAndFetchError
 
 	if _, err := gm.RemoveEdge("main", edge.Key(), edge.Kind()); !strings.Contains(err.Error(), "Slot not found") {
@@ -730,7 +739,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 	_, nodeTree, _ = gm.getNodeStorageHTree("main", edge.End2Kind(), false)
 	_, loc, _ = nodeTree.GetValueAndLocation([]byte(specsNode2Key))
 
-	sm = gm.gs.StorageManager("main"+edge.End2Kind()+StorageSuffixNodes, false)
+	// sm = gm.gs.StorageManager("main"+edge.End2Kind()+StorageSuffixNodes, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", edge.End2Kind(), StorageSuffixNodes), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[loc] = storage.AccessFreeError
 
 	if _, err := gm.RemoveEdge("main", edge.Key(), edge.Kind()); !strings.Contains(err.Error(), "Slot not found") {
@@ -746,7 +756,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 	val, loc, _ := nodeTree.GetValueAndLocation([]byte(specsNode1Key))
 	val.(map[string]string)["test2"] = "test3"
 
-	sm = gm.gs.StorageManager("main"+edge.End1Kind()+StorageSuffixNodes, false)
+	// sm = gm.gs.StorageManager("main"+edge.End1Kind()+StorageSuffixNodes, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", edge.End1Kind(), StorageSuffixNodes), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[loc] = storage.AccessUpdateError
 
 	if _, err := gm.RemoveEdge("main", edge.Key(), edge.Kind()); !strings.Contains(err.Error(), "Slot not found") {
@@ -766,7 +777,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 	_, nodeTree, _ = gm.getNodeStorageHTree("main", edge.End2Kind(), false)
 	_, loc, _ = nodeTree.GetValueAndLocation([]byte(edgeInfo2Key))
 
-	sm = gm.gs.StorageManager("main"+edge.End2Kind()+StorageSuffixNodes, false)
+	// sm = gm.gs.StorageManager("main"+edge.End2Kind()+StorageSuffixNodes, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", edge.End2Kind(), StorageSuffixNodes), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[loc] = storage.AccessCacheAndFetchError
 
 	if _, err := gm.RemoveEdge("main", edge.Key(), edge.Kind()); !strings.Contains(err.Error(), "Slot not found") {
@@ -813,7 +825,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 	_, nodeTree, _ = gm.getNodeStorageHTree("main", edge.End2Kind(), false)
 	_, loc, _ = nodeTree.GetValueAndLocation([]byte(edgeInfo2Key))
 
-	sm = gm.gs.StorageManager("main"+edge.End2Kind()+StorageSuffixNodes, false)
+	// sm = gm.gs.StorageManager("main"+edge.End2Kind()+StorageSuffixNodes, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", edge.End2Kind(), StorageSuffixNodes), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[loc] = storage.AccessFreeError
 
 	if _, err := gm.RemoveEdge("main", edge.Key(), edge.Kind()); !strings.Contains(err.Error(), "Slot not found") {
@@ -829,7 +842,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 	val, loc, _ = nodeTree.GetValueAndLocation([]byte(edgeInfo1Key))
 	val.(map[string]*edgeTargetInfo)["test2"] = nil
 
-	sm = gm.gs.StorageManager("main"+edge.End1Kind()+StorageSuffixNodes, false)
+	// sm = gm.gs.StorageManager("main"+edge.End1Kind()+StorageSuffixNodes, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", edge.End1Kind(), StorageSuffixNodes), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[loc] = storage.AccessUpdateError
 
 	if _, err := gm.RemoveEdge("main", edge.Key(), edge.Kind()); !strings.Contains(err.Error(), "Slot not found") {
@@ -863,7 +877,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 	gm.StoreNode("main", node1)
 	gm.StoreNode("main", node2)
 
-	sm = gm.gs.StorageManager("main"+edge.Kind()+StorageSuffixEdges, true)
+	// sm = gm.gs.StorageManager("main"+edge.Kind()+StorageSuffixEdges, true)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", edge.Kind(), StorageSuffixEdges), true)
 	sm.(*storage.MemoryStorageManager).AccessMap[11] = storage.AccessInsertError
 
 	if err := gm.StoreEdge("main", edge); !strings.Contains(err.Error(), "Could not write graph information") {
@@ -875,7 +890,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 
 	resetStorage()
 
-	sm = gm.gs.StorageManager("main"+edge.Kind()+StorageSuffixEdges, false)
+	// sm = gm.gs.StorageManager("main"+edge.Kind()+StorageSuffixEdges, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", edge.Kind(), StorageSuffixEdges), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[11] = storage.AccessCacheAndFetchError
 
 	traverseSpec = edge.End1Role() + ":" + edge.Kind() + ":" + edge.End2Role() + ":" + edge.End2Kind()
@@ -897,7 +913,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 
 	resetStorage()
 
-	sm = gm.gs.StorageManager("main"+edge.End1Kind()+StorageSuffixNodes, false)
+	// sm = gm.gs.StorageManager("main"+edge.End1Kind()+StorageSuffixNodes, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", edge.End1Kind(), StorageSuffixNodes), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[1] = storage.AccessCacheAndFetchError
 
 	if _, err := gm.RemoveEdge("main", edge.Key(), edge.Kind()); !strings.Contains(err.Error(), "Failed to access graph storage component") {
@@ -909,7 +926,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 
 	resetStorage()
 
-	sm = gm.gs.StorageManager("main"+edge.End2Kind()+StorageSuffixNodes, false)
+	// sm = gm.gs.StorageManager("main"+edge.End2Kind()+StorageSuffixNodes, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", edge.End2Kind(), StorageSuffixNodes), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[1] = storage.AccessCacheAndFetchError
 
 	traverseSpec = edge.End1Role() + ":" + edge.Kind() + ":" + edge.End2Role() + ":" + edge.End2Kind()
@@ -929,7 +947,8 @@ func TestSimpleGraphStorageErrorCases(t *testing.T) {
 
 	resetStorage()
 
-	sm = gm.gs.StorageManager("main"+edge.Kind()+StorageSuffixEdgesIndex, false)
+	// sm = gm.gs.StorageManager("main"+edge.Kind()+StorageSuffixEdgesIndex, false)
+	sm = gm.gs.StorageManager(caseSensitiveName("main", edge.Kind(), StorageSuffixEdgesIndex), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[2] = storage.AccessFreeError
 
 	if _, err := gm.RemoveEdge("main", edge.Key(), edge.Kind()); !strings.Contains(err.Error(), "Index error") {
@@ -1019,17 +1038,20 @@ func TestEdgeOperations(t *testing.T) {
 		return
 	}
 
-	sm := gm.gs.StorageManager("main"+node1.Kind()+StorageSuffixNodes, false)
+	// sm := gm.gs.StorageManager("main"+node1.Kind()+StorageSuffixNodes, false)
+	sm := gm.gs.StorageManager(caseSensitiveName("main", node1.Kind(), StorageSuffixNodes), false)
 	sm.(*storage.MemoryStorageManager).AccessMap[1] = storage.AccessCacheAndFetchError
 
 	_, err = gm.FetchNodeEdgeSpecs("main", node1.Key(), node1.Kind())
-	if err.Error() != "GraphError: Failed to access graph storage component (Slot not found (mystorage/mainmykind.nodes - Location:1))" {
+	matched, _ := regexp.MatchString(`^\QGraphError: Failed to access graph storage component (Slot not found (mystorage/mainmykind\E(....)?\Q.nodes - Location:1))\E$`, err.Error())
+	if !matched {
 		t.Error("Unexpected error:", err)
 		return
 	}
 
 	_, _, err = gm.TraverseMulti("main", node1.Key(), node1.Kind(), ":::", false)
-	if err.Error() != "GraphError: Failed to access graph storage component (Slot not found (mystorage/mainmykind.nodes - Location:1))" {
+	matched, _ = regexp.MatchString(`^\QGraphError: Failed to access graph storage component (Slot not found (mystorage/mainmykind\E(....)?\Q.nodes - Location:1))\E$`, err.Error())
+	if !matched {
 		t.Error("Unexpected error:", err)
 		return
 	}

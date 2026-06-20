@@ -13,6 +13,7 @@ package interpreter
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/rhedin/Abe_eliasdb/eql/parser"
@@ -209,22 +210,24 @@ Data: 1:n:key, 1:n:name, 1:n:ranking
 
 	// Test special error case with groups
 
-	msm := mgs.StorageManager("main"+"group"+graph.StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	// msm := mgs.StorageManager("main"+"group"+graph.StorageSuffixNodes, false).(*storage.MemoryStorageManager)
+	msm := mgs.StorageManager(graph.CaseSensitiveName("main", "group", graph.StorageSuffixNodes), false).(*storage.MemoryStorageManager)
 
 	msm.AccessMap[1] = storage.AccessCacheAndFetchError
 
-	if _, err := getResult("get Song from group Best", "", rt, true); err.Error() !=
-		"GraphError: Failed to access graph storage component (Slot not found (mystorage/maingroup.nodes - Location:1))" {
+	_, err = getResult("get Song from group Best", "", rt, true)
+	matched, _ := regexp.MatchString(`^\QGraphError: Failed to access graph storage component (Slot not found (mystorage/maingroup\E(....)?\Q.nodes - Location:1))\E$`, err.Error())
+	if !matched {
 		t.Error(err)
 		return
 	}
 
-	if _, err := getResult("lookup Song '1' from group Best", "", rt2, true); err.Error() !=
-		"GraphError: Failed to access graph storage component (Slot not found (mystorage/maingroup.nodes - Location:1))" {
+	_, err = getResult("lookup Song '1' from group Best", "", rt2, true)
+	matched, _ = regexp.MatchString(`^\QGraphError: Failed to access graph storage component (Slot not found (mystorage/maingroup\E(....)?\Q.nodes - Location:1))\E$`, err.Error())
+	if !matched {
 		t.Error(err)
 		return
 	}
-
 	delete(msm.AccessMap, 1)
 
 	if _, err := getResult("lookup Song 'non', 'Aria1', 'MyOnlySong3' from group Best", `

@@ -16,6 +16,7 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/rhedin/Abe_eliasdb/api"
+	"github.com/rhedin/Abe_eliasdb/graph"
 	"github.com/rhedin/Abe_eliasdb/graph/data"
 	"github.com/rhedin/Abe_eliasdb/storage"
 )
@@ -216,7 +217,10 @@ func TestGraphQLSubscription(t *testing.T) {
 
 	// Insert an error into the db
 
-	sm := gmMSM.StorageManager("mainAuthor.nodes", false)
+	// sm := gmMSM.StorageManager("mainAuthor.nodes", false)  Some other operation already created this storage manager
+	//                                                        with a name that contains a hash.  We can't find this name.
+	// msm := sm.(*storage.MemoryStorageManager)  This panics because sm is nil.
+	sm := gmMSM.StorageManager(graph.CaseSensitiveName("main", "Author", ".nodes"), false)
 	msm := sm.(*storage.MemoryStorageManager)
 	msm.AccessMap[8] = storage.AccessCacheAndFetchSeriousError
 

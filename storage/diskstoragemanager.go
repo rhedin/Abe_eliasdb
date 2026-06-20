@@ -751,6 +751,27 @@ func initByteDiskStorageManager(bdsm *ByteDiskStorageManager) error {
 	return nil
 }
 
+/***
+There is a concurrency issue that results in this error message being emitted.
+2026/06/06 17:30:58 http: panic serving [::1]:54835: Could not take ownership of
+lockfile db/mainline.nodes: Could not write lockfile - read result after writing:
+1780785031576181000(expected: 1780785057933496000)<nil>
+This is a flaw people have encountered before; Matthias hasn't fixed it.
+https://github.com/krotik/eliasdb/issues/39 Crashing the server while checking out the tutorial
+https://github.com/krotik/eliasdb/issues/47 Could not take ownership of lockfile
+
+After talking to Grok, we can fix this, or make it much better, by replacing
+this concurrency piece with an implementation based on flock.  Specifically,
+github.com/alexflint/go-filemutex.  Grok says this library is reliable and
+cross-platform.
+
+I don't want to stop progress on the actual implementation of the program
+wer'e building to improve this.  We'll improve it later in the process.
+
+Full details of my conversation with Grok are in an email sent Jun 7, 2026, 8:41 AM.
+To and From cubsno1@gmail.com.  Title Eliasdb. How to fix the lockfile with flock.
+***/
+
 /*
 createFileAndPager creates a storagefile and a pager.
 */

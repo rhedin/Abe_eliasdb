@@ -29,6 +29,7 @@ import (
 	"github.com/rhedin/Abe_common/httputil/auth"
 	"github.com/rhedin/Abe_common/stringutil"
 	"github.com/rhedin/Abe_eliasdb/api"
+	"github.com/rhedin/Abe_eliasdb/config"
 )
 
 const TESTPORT = ":9090"
@@ -153,6 +154,9 @@ func startServer() (*httputil.HTTPServer, *sync.WaitGroup) {
 
 	var wg sync.WaitGroup
 	wg.Add(1)
+
+	// I changed httputil/httpserver.go such that it needs the configuration values set.
+	config.LoadConfigFile(config.DefaultConfigFile)
 
 	go hs.RunHTTPServer(TESTPORT, &wg)
 

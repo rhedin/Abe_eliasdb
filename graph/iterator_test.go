@@ -91,7 +91,8 @@ func TestNodeKeyIterator(t *testing.T) {
 		return
 	}
 
-	msm := mgs.StorageManager("main"+"mykind"+StorageSuffixNodes, false)
+	// msm := mgs.StorageManager("main"+"mykind"+StorageSuffixNodes, false)
+	msm := mgs.StorageManager(caseSensitiveName("main", "mykind", StorageSuffixNodes), false)
 
 	tree, _, _ := gm.getNodeStorageHTree("main", "mykind", false)
 	_, loc, _ := tree.GetValueAndLocation([]byte(PrefixNSAttrs + "123"))
