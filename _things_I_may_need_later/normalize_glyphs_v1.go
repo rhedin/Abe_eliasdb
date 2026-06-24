@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -193,64 +192,16 @@ func ProcessGlyphPath(originalD string, tx, ty float64) string {
 }
 
 func main() {
-	if len(os.Args) < 3 {
-		fmt.Println("Usage: go run normalize_glyphs.go input.html output.html")
-		fmt.Println("Example: go run normalize_glyphs.go /path/to/character-definitions.html character-definitions-relative.html")
-		return
-	}
-	inputFile := os.Args[1]
-	outputFile := os.Args[2]
+	// Demo on the apostrophe from your file
+	apostropheD := `M 0 0 L 1.408 0 Q 1.408 0.96 1.392 1.536 Q 1.376 2.112 1.328 2.504 Q 1.28 2.896 1.232 3.256 Q 1.184 3.616 1.136 4.128 L 0.272 4.128 Q 0.224 3.616 0.176 3.256 Q 0.128 2.896 0.08 2.512 Q 0.032 2.128 0.016 1.544 Q 0.002 1.022 0 0.198 A 108.186 108.186 0 0 1 0 0 Z`
+	tx, ty := 3.30, 2.35
 
-	data, err := os.ReadFile(inputFile)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error reading input %s: %v\n", inputFile, err)
-		os.Exit(1)
-	}
-	content := string(data)
+	result := ProcessGlyphPath(apostropheD, tx, ty)
+	fmt.Println("Apostrophe relative + advance:")
+	fmt.Println(result)
+	fmt.Println()
 
-	// Regex to capture each ascii g block with its transform translate(tx,ty)
-	re := regexp.MustCompile(`(?s)<g\s+id="(ascii[0-9a-f]+)"([^>]*)transform="translate\(([0-9.-]+),([0-9.-]+)\)"([^>]*)>(.*?)</g>`)
-
-	newContent := re.ReplaceAllStringFunc(content, func(match string) string {
-		subs := re.FindStringSubmatch(match)
-		if len(subs) != 7 {
-			return match
-		}
-		id := subs[1]
-		beforeTx := subs[2]
-		txStr := subs[3]
-		tyStr := subs[4]
-		afterTx := subs[5]
-		inner := subs[6]
-
-		tx, _ := strconv.ParseFloat(txStr, 64)
-		ty, _ := strconv.ParseFloat(tyStr, 64)
-
-		// Process every <path d="..."> inside this g
-		pathRe := regexp.MustCompile(`<path([^>]*)\sd="([^"]*)"([^>]*)>`)
-		newInner := pathRe.ReplaceAllStringFunc(inner, func(pmatch string) string {
-			ps := pathRe.FindStringSubmatch(pmatch)
-			if len(ps) < 4 {
-				return pmatch
-			}
-			beforeD := ps[1]
-			oldD := ps[2]
-			afterD := ps[3]
-
-			newD := ProcessGlyphPath(oldD, tx, ty)
-			return fmt.Sprintf(`<path%s d="%s"%s>`, beforeD, newD, afterD)
-		})
-
-		// Rebuild <g> without the transform attribute
-		newG := fmt.Sprintf(`<g id="%s"%s%s>%s</g>`, id, beforeTx, afterTx, newInner)
-		return newG
-	})
-
-	err = os.WriteFile(outputFile, []byte(newContent), 0644)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error writing %s: %v\n", outputFile, err)
-		os.Exit(1)
-	}
-	fmt.Printf("Success! Wrote %s\n", outputFile)
-	fmt.Println("All transforms baked in, paths converted to relative, each glyph ends with 'm 8 0'.")
+	// You can extend main() to read the full SVG file, find every g + its transform + paths,
+	// call ProcessGlyphPath for each, and rebuild a new SVG or emit a Go map[rune]string.
+	fmt.Println("To process the whole file, extend this program with xml parsing + loop over g elements.")
 }

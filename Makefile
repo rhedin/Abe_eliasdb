@@ -16,7 +16,23 @@ all: build
 clean:
 	rm -f eliasdb
 
-process-files:
+# This worked, but it built the tool every time I asked it to rebuild Abe_eliasdb. 
+# build_time_programs:
+# 	go build -o ../Abe_editor/build_time_programs/html_include ../Abe_editor/build_time_source/html_include/source/html_include.go
+
+# Grok's suggestion. 
+# $(HTML_INCLUDE): $(HTML_INCLUDE_SRC)
+# 	mkdir -p $(BUILD_TIME_DIR)
+# 	go build -o $@ $(HTML_INCLUDE_SRC)
+
+build_time_programs: ../Abe_editor/build_time_programs/html_include
+	@echo "Found the build_time_programs target."
+
+../Abe_editor/build_time_programs/html_include: ../Abe_editor/build_time_source/html_include/source/html_include.go
+	@echo "Building the html_include program."
+	go build -o $@ ../Abe_editor/build_time_source/html_include/source/html_include.go
+
+process-files: build_time_programs
 	../Abe_editor/build_time_programs/html_include ../Abe_editor/build_time_data/index.html.pp ../Abe_editor/static/index.html
 
 mod:
