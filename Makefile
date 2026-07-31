@@ -75,7 +75,9 @@ vet:
 	go env GOVERSION GOOS GOARCH 
 	go vet $(TAGS_UNDERLOG) ./...
 
-build: clean process-files mod fmt vet
+# build: clean process-files mod fmt vet  Removing process-files. 
+# We no longer include a file of character shape definitions in our html file. 
+build: clean mod fmt vet
 	go build $(TAGS_UNDERLOG) $(BUILD_FLAGS) -o $(NAME) cli/eliasdb.go
 
 build-mac: clean process-files mod fmt vet
