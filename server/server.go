@@ -374,6 +374,8 @@ func StartServerWithSingleOp(singleOperation func(*graph.Manager) bool) {
 	api.RegisterRestEndpoints(v1.V1EndpointMap)
 
 	if config.Bool(config.EnableApplication) {
+		fmt.Printf(`About to do api.RegisterRestEndpoints(app.HttpEndpointMap\n`)
+		fmt.Printf(`app.HttpEndpointMap = %v\n`, app.HttpEndpointMap)
 		api.RegisterRestEndpoints(app.HttpEndpointMap)
 	}
 
