@@ -126,6 +126,12 @@ func TestMainNormalCase(t *testing.T) {
 
 	config.LoadDefaultConfig()
 
+	// This test is set up to test the eliasdb server.  Not also
+	// the application (Abe_editor) running on top of the server.
+	// With the application running, the test fails.
+
+	config.Config[config.EnableApplication] = false
+
 	// Start ECAL scripting by default
 
 	config.Config[config.EnableECALScripts] = true
@@ -224,8 +230,11 @@ Shutting down
 [Cluster] member1: Housekeeping stopped
 [Cluster] member1: Shutdown rpc server on: 127.0.0.1:9030
 [Cluster] member1: Connection closed: 127.0.0.1:9030
-Closing application
-Closing datastore` {
+`+
+		// When the application is disabled, the expected log string is different.
+		// `Closing application
+		// ` +
+		`Closing datastore` {
 		t.Error("Unexpected log:", logString)
 		return
 	}
@@ -264,6 +273,11 @@ func TestMainErrorCases(t *testing.T) {
 
 	printLog = []string{}
 	errorLog = []string{}
+
+	// The TestMainNormalCase function and the TestMainErrorCases
+	// function set up their configuration separately.
+
+	config.Config[config.EnableApplication] = false
 
 	// Test db access error
 
@@ -319,6 +333,8 @@ func TestMainErrorCases(t *testing.T) {
 
 	config.Config[config.HTTPSKey] = invalidFileName
 
+	// fmt.Printf("About to test running the server with an invalid value for config.HTTPSKey.\n")
+
 	runServer()
 
 	// Check that an error happened
@@ -335,6 +351,8 @@ func TestMainErrorCases(t *testing.T) {
 
 	printLog = []string{}
 	errorLog = []string{}
+
+	// fmt.Printf("Finished testing running the server with an invalid value for config.HTTPSKey.\n")
 
 	// Special error when closing the store
 
@@ -428,7 +446,15 @@ func TestMainErrorCases(t *testing.T) {
 		return
 	}
 
-	config.Config = nil
+	// fmt.Printf("About to set config.Config to nil (first time).\n")
+	// config.Config = nil
+
+	// This section used to set config.Config to nil before it called
+	// StartServerWithSingleOp.  Because it knew that if config.Config
+	// was nil, StartServerWithSingleOp would set it to default.
+	// Now we want it to be not quite default, so we set it ourselves.
+	config.LoadDefaultConfig()
+	config.Config[config.EnableApplication] = false
 
 	SOPExecuted := false
 
@@ -444,6 +470,7 @@ func TestMainErrorCases(t *testing.T) {
 		return
 	}
 
+	// fmt.Printf("About to set config.Config to nil (second time).\n")
 	config.Config = nil
 }
 
