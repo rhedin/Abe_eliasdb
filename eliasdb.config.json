@@ -12,7 +12,7 @@
     "ECALScriptFolder": "scripts",
     "ECALWorkerCount": 10,
     "EnableAccessControl": false,
-    "EnableApplication": false,
+    "EnableApplication": true,
     "EnableCluster": false,
     "EnableClusterTerminal": false,
     "EnableECALDebugServer": false,
