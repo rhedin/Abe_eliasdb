@@ -44,6 +44,8 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"strings"
@@ -62,6 +64,24 @@ import (
 
 func main() {
 	abelog.UnderPrintf("\n")
+
+	// This may not be the right place to do it, but I'm going
+	// to set it up so that we are using the new structured logging
+	// stuff.  Old log.Print's will appear in the msg field.
+
+	log.SetFlags(log.Lshortfile)
+	handler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+		AddSource: true,
+		Level:     slog.LevelInfo,
+		// ReplaceAttr: callback function  // allows you to, for example,
+		// change the msg key to message.
+	})
+	logger := slog.New(handler)
+	slog.SetDefault(logger)
+
+	// We are experimentally enabling printing the file and line number
+	// along with the message.  Old style logs use their own file name
+	// and line number mechanism.  (Involves counting back stack frames)
 
 	// Initialize the default command line parser
 
