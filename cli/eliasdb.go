@@ -67,21 +67,35 @@ func main() {
 
 	// This may not be the right place to do it, but I'm going
 	// to set it up so that we are using the new structured logging
-	// stuff.  Old log.Print's will appear in the msg field.
+	// stuff.  Our old logging will continue to work.
 
 	log.SetFlags(log.Lshortfile)
 	handler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 		AddSource: true,
 		Level:     slog.LevelInfo,
-		// ReplaceAttr: callback function  // allows you to, for example,
-		// change the msg key to message.
+		ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
+			// Check if we are currently processing the "source" key
+			if a.Key == slog.SourceKey {
+				source, ok := a.Value.Any().(*slog.Source)
+				if ok && source != nil {
+					source.File = filepath.Base(source.File)
+					if idx := strings.LastIndex(source.Function, "/"); idx != -1 {
+						source.Function = source.Function[idx+1:]
+					}
+				}
+			}
+			return a
+		},
 	})
 	logger := slog.New(handler)
 	slog.SetDefault(logger)
 
-	// We are experimentally enabling printing the file and line number
-	// along with the message.  Old style logs use their own file name
-	// and line number mechanism.  (Involves counting back stack frames)
+	// We had to set the Lshortfile flag in the old logging system,
+	// so it would keep track of the stack frames, so the new logging
+	// system could skip over the right number of stack frames,
+	// and report who called them.  And we had to define a ReplaceAttr
+	// callback function, because the short names option was not
+	// available in the new system.
 
 	// Initialize the default command line parser
 
